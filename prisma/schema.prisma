@@ -13,6 +13,8 @@ datasource db {
 
 model Guild {
   id                 BigInt       @id
+  /// The channel for suggestions
+  channel            BigInt?
   /// The roles that are allowed to update suggestions.
   /// If empty, it will require KickMembers permission.
   allowedRolesUpdate BigInt[]
@@ -23,6 +25,8 @@ model Guild {
   addButtons         Boolean      @default(true)
   /// Whether or not updates should be appended.
   addUpdateHistory   Boolean      @default(false)
+  /// Whether or not the suggestions should be shown as an embed.
+  useEmbed           Boolean      @default(true)
   /// The suggestions available
   suggestions        Suggestion[]
 }
@@ -32,6 +36,7 @@ model Suggestion {
   guild      Guild     @relation(fields: [guildId], references: [id])
   guildId    BigInt
   authorId   BigInt
+  messageId  BigInt
   createdAt  DateTime  @default(now())
   repliedAt  DateTime?
   archivedAt DateTime?

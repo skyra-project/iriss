@@ -5,7 +5,15 @@
 	"suggestOptionsSuggestionDescription": "The suggestion to be posted",
 	"suggestOptionsIdName": "id",
 	"suggestOptionsIdDescription": "The suggestion's number to edit",
-	"suggestModifyDoesNotExist": "The suggestion you specified does not exist",
-	"suggestModifyArchived": "You cannot modify a suggestion that is archived",
-	"suggestModifyReplied": "You cannot modify a suggestion that was replied"
+	"suggestModifyDoesNotExist": "The suggestion you specified does not exist.",
+	"suggestModifyArchived": "You cannot modify a suggestion that is archived. You may reference it with a new suggestion.",
+	"suggestModifyReplied": "You cannot modify a suggestion that was replied. You may follow it up in the discussion channel.",
+	"suggestNewNotConfigured": "This server has not configured the suggestions channel yet. Please contact the administrators to set it up!",
+	"suggestNewMessageContent": "**[`#{{id}}`] [{{timestamp}}] {{user.mention}} suggested**:\n{{message}}",
+	"suggestNewMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"suggestComponentsAccept": "Accept",
+	"suggestComponentsConsider": "Consider",
+	"suggestComponentsDeny": "Deny",
+	"suggestComponentsCreateThread": "Create Thread",
+	"suggestComponentsArchive": "Archive"
 }
