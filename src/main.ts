@@ -1,12 +1,12 @@
 import { registerCommands } from '#lib/utilities/register-commands';
+import { PrismaClient } from '@prisma/client';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client, container } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
 import { setInvite, setRepository } from '@skyra/shared-http-pieces';
 import '@skyra/shared-http-pieces/register';
 import { createBanner } from '@skyra/start-banner';
-import { yellow, bold, yellowBright } from 'colorette';
-import { PrismaClient } from '@prisma/client';
+import { bold, yellow, yellowBright } from 'colorette';
 
 container.prisma = new PrismaClient();
 

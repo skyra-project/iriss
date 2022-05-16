@@ -22,7 +22,7 @@
 		"lint": "eslint --fix --ext ts src",
 		"format": "prettier --write --loglevel=warn \"src/**/*.{js,ts,json}\"",
 		"update": "yarn upgrade-interactive",
-		"prepare": "husky install .github/husky"
+		"postinstall": "husky install .github/husky"
 	},
 	"dependencies": {
 		"@discordjs/builders": "0.13.0",
