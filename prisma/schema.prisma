@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id                 BigInt       @id
+  /// The roles that are allowed to update suggestions.
+  /// If empty, it will require KickMembers permission.
+  allowedRolesUpdate BigInt[]
+  /// Whether or not to automatically create a thread.
+  /// If set to true, the create thread button will not be added.
+  addThread          Boolean      @default(false)
+  /// Whether or not to show management buttons.
+  addButtons         Boolean      @default(true)
+  /// Whether or not updates should be appended.
+  addUpdateHistory   Boolean      @default(false)
+  /// The suggestions available
+  suggestions        Suggestion[]
+}
+
+model Suggestion {
+  id         Int
+  guild      Guild     @relation(fields: [guildId], references: [id])
+  guildId    BigInt
+  authorId   BigInt
+  createdAt  DateTime  @default(now())
+  repliedAt  DateTime?
+  archivedAt DateTime?
+
+  @@id([id, guildId])
+}

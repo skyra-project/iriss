@@ -1,0 +1,11 @@
+{
+	"suggestName": "suggest",
+	"suggestDescription": "Create a new suggestion for this server",
+	"suggestOptionsSuggestionName": "suggestion",
+	"suggestOptionsSuggestionDescription": "The suggestion to be posted",
+	"suggestOptionsIdName": "id",
+	"suggestOptionsIdDescription": "The suggestion's number to edit",
+	"suggestModifyDoesNotExist": "The suggestion you specified does not exist",
+	"suggestModifyArchived": "You cannot modify a suggestion that is archived",
+	"suggestModifyReplied": "You cannot modify a suggestion that was replied"
+}
