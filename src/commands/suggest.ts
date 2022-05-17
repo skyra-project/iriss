@@ -1,6 +1,7 @@
-import { ButtonValue, CustomId, SuggestionStatusColors } from '#lib/common/constants';
+import { SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { applyNameAndDescription } from '#lib/utilities/add-builder-localizations';
+import { ButtonValue, CustomId } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { getMessage, patchMessage, postMessage } from '#lib/utilities/rest';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
@@ -103,9 +104,9 @@ export class UserCommand extends Command {
 					type: ComponentType.SelectMenu,
 					custom_id: CustomId.SuggestionsResolve,
 					options: [
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: ButtonValue.SuggestionResolveAccept },
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: ButtonValue.SuggestionResolveConsider },
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: ButtonValue.SuggestionResolveDeny }
+						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: ButtonValue.Accept },
+						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: ButtonValue.Consider },
+						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: ButtonValue.Deny }
 					]
 				}
 			]

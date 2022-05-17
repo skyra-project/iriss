@@ -1,5 +1,7 @@
 import { container } from '@skyra/http-framework';
 import {
+	RESTPostAPIChannelThreadsJSONBody,
+	RESTPostAPIChannelThreadsResult,
 	Routes,
 	type RESTGetAPIChannelMessageResult,
 	type RESTPatchAPIChannelMessageJSONBody,
@@ -35,4 +37,13 @@ export function patchMessage(channelId: Snowflake, messageId: Snowflake, body: p
 export namespace patchMessage {
 	export type Body = RESTPatchAPIChannelMessageJSONBody;
 	export type Result = RESTGetAPIChannelMessageResult;
+}
+
+export function postThread(channelId: Snowflake, messageId: Snowflake, body: postThread.Body): Promise<postThread.Result> {
+	return container.rest.post(Routes.threads(channelId.toString(), messageId.toString()), { body }) as Promise<postThread.Result>;
+}
+
+export namespace postThread {
+	export type Body = RESTPostAPIChannelThreadsJSONBody;
+	export type Result = RESTPostAPIChannelThreadsResult;
 }

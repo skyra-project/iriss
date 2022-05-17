@@ -9,15 +9,3 @@ export const enum SuggestionStatusColors {
 	Denied = 0xe91e63,
 	Accepted = 0x8bc34a
 }
-
-export const enum CustomId {
-	SuggestionsArchive = 'suggestions:archive',
-	SuggestionsThread = 'suggestions:thread',
-	SuggestionsResolve = 'suggestions:resolve'
-}
-
-export const enum ButtonValue {
-	SuggestionResolveAccept = 'suggestions:resolve:accept',
-	SuggestionResolveConsider = 'suggestions:resolve:consider',
-	SuggestionResolveDeny = 'suggestions:resolve:deny'
-}
