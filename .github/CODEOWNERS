@@ -1,0 +1,11 @@
+# Kyra & Favna
+/src/ @favna @kyranet
+/tsconfig.base.json @favna @kyranet
+/tsconfig.eslint.json @favna @kyranet
+
+# Just Kyra
+/LICENSE @kyranet
+
+# Just Favna
+/.github/ @favna
+/.gitignore @favna
