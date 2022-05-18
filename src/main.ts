@@ -40,6 +40,7 @@ console.log(
 			bold(yellowBright(String.raw`\_______/`))
 		],
 		name: [
+			'',
 			bold(yellowBright(String.raw`d888888b d8888b. d888888b .d8888.`)),
 			bold(yellowBright(String.raw`  '88'   88  '8D   '88'   88'  YP`)),
 			yellowBright(String.raw`   88    88oobY'    88    '8bo.`),

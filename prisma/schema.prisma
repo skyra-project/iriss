@@ -15,9 +15,6 @@ model Guild {
   id                 BigInt       @id
   /// The channel for suggestions
   channel            BigInt?
-  /// The roles that are allowed to update suggestions.
-  /// If empty, it will require KickMembers permission.
-  allowedRolesUpdate BigInt[]
   /// Whether or not to automatically create a thread.
   /// If set to true, the create thread button will not be added.
   addThread          Boolean      @default(false)

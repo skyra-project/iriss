@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
+import { get } from '#lib/utilities/command-permissions';
 import { CustomId, IdParserSuggestionsResult, makeCustomId } from '#lib/utilities/id-creator';
 import { has } from '#lib/utilities/permissions';
 import { patchMessage, postThread } from '#lib/utilities/rest';
 import { channelMention } from '@discordjs/builders';
-import type { Guild } from '@prisma/client';
 import { fromAsync } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { getSupportedUserLanguageName, getT, resolveUserKey } from '@skyra/http-framework-i18n';
@@ -28,9 +28,10 @@ export class Handler extends InteractionHandler {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		const updatePermissionsError = this.getInvalidPermissionsMessage(interaction, settings);
-		if (updatePermissionsError !== null) {
-			return this.message({ content: resolveUserKey(interaction, updatePermissionsError), flags: MessageFlags.Ephemeral });
+		const canRun = await this.hasPermissions(interaction);
+		if (!canRun) {
+			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.MissingResolvePermissions);
+			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		if (action === 'archive') return this.handleArchive(interaction, guildId, Number(idString));
@@ -85,7 +86,7 @@ export class Handler extends InteractionHandler {
 		const threadCreationResult = await fromAsync(
 			postThread(interaction.channel_id, interaction.message.id, {
 				type: ChannelType.GuildPrivateThread,
-				name: '',
+				name: 'temp', // TODO: Assign better name
 				auto_archive_duration: 1440 // 1 day
 			})
 		);
@@ -111,15 +112,12 @@ export class Handler extends InteractionHandler {
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private getInvalidPermissionsMessage(interaction: APIMessageComponentInteraction, settings: Guild) {
-		if (settings.allowedRolesUpdate.length === 0) {
-			return has(interaction.member!.permissions, PermissionFlagsBits.ManageMessages)
-				? null
-				: LanguageKeys.InteractionHandlers.Suggestions.MissingManageMessagesPermissions;
-		}
+	private async hasPermissions(interaction: APIMessageComponentInteraction) {
+		// TODO: Complete this before deploying:
+		// const { permissions } = await get(interaction.guild_id!, 'resolve');
+		// permissions[0].
+		console.log(await get(interaction.guild_id!, 'resolve'));
 
-		return interaction.member!.roles.some((role) => settings.allowedRolesUpdate.includes(BigInt(role)))
-			? null
-			: LanguageKeys.InteractionHandlers.Suggestions.MissingAllowedRoles;
+		return has(interaction.member!.permissions, PermissionFlagsBits.Administrator);
 	}
 }

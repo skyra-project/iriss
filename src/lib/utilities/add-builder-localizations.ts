@@ -25,4 +25,4 @@ export interface NamedBuilder {
 	setDescriptionLocalizations(localizedDescriptions: LocalizationMap | null): this;
 }
 
-export type LocalePrefixKey = `commands:${string}/${string}`;
+export type LocalePrefixKey = `commands/${string}:${string}`;

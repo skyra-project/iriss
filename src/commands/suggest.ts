@@ -4,6 +4,7 @@ import { applyNameAndDescription } from '#lib/utilities/add-builder-localization
 import { ButtonValue, CustomId } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { getMessage, patchMessage, postMessage } from '#lib/utilities/rest';
+import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { fromAsync } from '@sapphire/result';
@@ -17,6 +18,7 @@ type MessageData = LanguageKeys.Commands.Suggestions.MessageData;
 	applyNameAndDescription(LanguageKeys.Commands.Suggestions.Suggest, builder) //
 		.addStringOption((option) => applyNameAndDescription(LanguageKeys.Commands.Suggestions.SuggestOptionsSuggestion, option).setRequired(true))
 		.addIntegerOption((option) => applyNameAndDescription(LanguageKeys.Commands.Suggestions.SuggestOptionsId, option))
+		.setDMPermission(false)
 )
 export class UserCommand extends Command {
 	public override chatInputRun(interaction: Command.Interaction, options: Options): Command.AsyncResponse {
@@ -41,6 +43,8 @@ export class UserCommand extends Command {
 			where: { guildId }
 		});
 
+		// TODO: Resolve suggestion links in input
+
 		const id = count + 1;
 		const user = this.makeUserData(interaction);
 		const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
@@ -49,6 +53,8 @@ export class UserCommand extends Command {
 		await this.container.prisma.suggestion.create({
 			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) }
 		});
+
+		// TODO: Create thread automatically if addThread: true
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewSuccess, { id });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
@@ -97,6 +103,7 @@ export class UserCommand extends Command {
 			});
 		}
 
+		components.push(manageRow);
 		components.push({
 			type: ComponentType.ActionRow,
 			components: [
@@ -116,8 +123,11 @@ export class UserCommand extends Command {
 	}
 
 	private makeEmbedMessage(interaction: Command.Interaction, data: MessageData): postMessage.Body {
-		const title = resolveKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewMessageEmbedTitle, data);
-		const embed = new EmbedBuilder().setColor(SuggestionStatusColors.Unresolved).setTitle(title).setDescription(data.message);
+		const name = resolveKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewMessageEmbedTitle, data);
+		const embed = new EmbedBuilder()
+			.setColor(SuggestionStatusColors.Unresolved)
+			.setAuthor({ name, iconURL: displayAvatarURL(interaction.member!.user) })
+			.setDescription(data.message);
 		return { embeds: [embed.toJSON()] };
 	}
 

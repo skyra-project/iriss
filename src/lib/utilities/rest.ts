@@ -1,5 +1,8 @@
+import { envParseString } from '@skyra/env-utilities';
 import { container } from '@skyra/http-framework';
 import {
+	RESTGetAPIApplicationCommandPermissionsResult,
+	RESTGetAPIApplicationCommandsResult,
 	RESTPostAPIChannelThreadsJSONBody,
 	RESTPostAPIChannelThreadsResult,
 	Routes,
@@ -46,4 +49,30 @@ export function postThread(channelId: Snowflake, messageId: Snowflake, body: pos
 export namespace postThread {
 	export type Body = RESTPostAPIChannelThreadsJSONBody;
 	export type Result = RESTPostAPIChannelThreadsResult;
+}
+
+export namespace Applications.Id {
+	const applicationId = envParseString('DISCORD_CLIENT_ID');
+
+	export namespace Commands {
+		export function get(): Promise<get.Result> {
+			const route = Routes.applicationCommands(applicationId);
+			return container.rest.get(route) as Promise<get.Result>;
+		}
+
+		export namespace get {
+			export type Result = RESTGetAPIApplicationCommandsResult;
+		}
+	}
+
+	export namespace Guilds.Id.Commands.Id.Permissions {
+		export function get(guildId: Snowflake, commandId: Snowflake): Promise<get.Result> {
+			const route = Routes.applicationCommandPermissions(applicationId, guildId.toString(), commandId.toString());
+			return container.rest.get(route) as Promise<get.Result>;
+		}
+
+		export namespace get {
+			export type Result = RESTGetAPIApplicationCommandPermissionsResult;
+		}
+	}
 }
