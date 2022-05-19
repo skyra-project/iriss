@@ -1,0 +1,12 @@
+{
+	"notConfigured": "The suggestions channel is not longer configured, please contact this server's administrators if this is an error.",
+	"missingResolvePermissions": "You must have permissions to run /resolve in order to use this button.",
+	"modalTitle": "Suggestion #{{id}}",
+	"modalFieldLabel": "Message",
+	"modalFieldPlaceholder": "I am accepting/considering/denying this suggestion because...",
+	"archiveSuccess": "The suggestion has been archived successfully.",
+	"archiveFailure": "I was not able to archive the message, it may have been deleted.",
+	"threadChannelCreationFailure": "I was not able to create the thread, you might need to contact an administrator to give me permissions, or a moderator to create a thread, sorry! :'(",
+	"threadMessageUpdateSuccess": "Successfully created the thread {{channel}} and removed the thread button from the suggestion message.",
+	"threadMessageUpdateFailure": "I was able to successfully create the thread {{channel}}, however, I had a small issue updating the suggestion message, so I wasn't able to remove the button. :("
+}

@@ -2,7 +2,7 @@ import { Collection } from '@discordjs/collection';
 import { getT, loadedLocales, type TypedT } from '@skyra/http-framework-i18n';
 import type { LocalizationMap } from 'discord-api-types/v10';
 
-export function applyNameAndDescription<T extends NamedBuilder>(prefix: LocalePrefixKey, builder: T): T {
+export function applyLocalizations<T extends NamedBuilder>(prefix: LocalePrefixKey, builder: T): T {
 	const locales = new Collection([...loadedLocales].map((locale) => [locale, getT(locale)]));
 
 	const defaultT = locales.get('en-US');

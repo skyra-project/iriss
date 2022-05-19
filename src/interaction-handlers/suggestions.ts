@@ -1,19 +1,17 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { get } from '#lib/utilities/command-permissions';
-import { CustomId, IdParserSuggestionsResult, makeCustomId } from '#lib/utilities/id-creator';
-import { has } from '#lib/utilities/permissions';
-import { patchMessage, postThread } from '#lib/utilities/rest';
+import { has } from '#lib/utilities/command-permissions';
+import { CustomId, makeCustomId, type IdParserSuggestionsResult } from '#lib/utilities/id-creator';
+import { ChannelId } from '#lib/utilities/rest';
 import { channelMention } from '@discordjs/builders';
 import { fromAsync } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { getSupportedUserLanguageName, getT, resolveUserKey } from '@skyra/http-framework-i18n';
 import {
-	APIMessage,
 	ChannelType,
 	ComponentType,
 	MessageFlags,
-	PermissionFlagsBits,
 	TextInputStyle,
+	type APIMessage,
 	type APIMessageComponentInteraction,
 	type APIMessageComponentSelectMenuInteraction
 } from 'discord-api-types/v10';
@@ -28,7 +26,7 @@ export class Handler extends InteractionHandler {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		const canRun = await this.hasPermissions(interaction);
+		const canRun = await has(interaction, 'resolve');
 		if (!canRun) {
 			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.MissingResolvePermissions);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
@@ -36,7 +34,7 @@ export class Handler extends InteractionHandler {
 
 		if (action === 'archive') return this.handleArchive(interaction, guildId, Number(idString));
 		if (action === 'resolve') return this.handleResolve(interaction as APIMessageComponentSelectMenuInteraction, idString);
-		if (action === 'thread') return this.handleThread(interaction);
+		if (action === 'thread') return this.handleThread(interaction, idString);
 		throw new TypeError('Unreachable');
 	}
 
@@ -47,7 +45,7 @@ export class Handler extends InteractionHandler {
 			select: null
 		});
 
-		const result = await fromAsync(patchMessage(interaction.channel_id, interaction.message.id, { components: [] }));
+		const result = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components: [] }));
 
 		const key = result.success
 			? LanguageKeys.InteractionHandlers.Suggestions.ArchiveSuccess
@@ -59,7 +57,7 @@ export class Handler extends InteractionHandler {
 	private handleResolve(interaction: APIMessageComponentSelectMenuInteraction, id: string): InteractionHandler.Response {
 		const [action] = interaction.data.values as [makeCustomId.SuggestionsModalAction];
 		const t = getT(getSupportedUserLanguageName(interaction));
-		const title = t(LanguageKeys.InteractionHandlers.Suggestions.ModalTitle);
+		const title = t(LanguageKeys.InteractionHandlers.Suggestions.ModalTitle, { id });
 		return this.modal({
 			custom_id: makeCustomId(CustomId.SuggestionsModal, action, id),
 			title,
@@ -82,11 +80,11 @@ export class Handler extends InteractionHandler {
 		});
 	}
 
-	private async handleThread(interaction: APIMessageComponentInteraction): InteractionHandler.AsyncResponse {
+	private async handleThread(interaction: APIMessageComponentInteraction, idString: string): InteractionHandler.AsyncResponse {
 		const threadCreationResult = await fromAsync(
-			postThread(interaction.channel_id, interaction.message.id, {
+			ChannelId.MessageId.Threads.post(interaction.channel_id, interaction.message.id, {
 				type: ChannelType.GuildPrivateThread,
-				name: 'temp', // TODO: Assign better name
+				name: `${idString}-temporary-name`, // TODO: Assign better name
 				auto_archive_duration: 1440 // 1 day
 			})
 		);
@@ -102,22 +100,12 @@ export class Handler extends InteractionHandler {
 			...interaction.message.components!.slice(1)
 		];
 
-		const patchResult = await fromAsync(patchMessage(interaction.channel_id, interaction.message.id, { components }));
-		const content = patchResult.success
-			? resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess, {
-					channel: channelMention(threadCreationResult.value.id)
-			  })
-			: resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure);
+		const patchResult = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components }));
 
+		const key = patchResult.success
+			? LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess
+			: LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure;
+		const content = resolveUserKey(interaction, key, { channel: channelMention(threadCreationResult.value.id) });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
-	}
-
-	private async hasPermissions(interaction: APIMessageComponentInteraction) {
-		// TODO: Complete this before deploying:
-		// const { permissions } = await get(interaction.guild_id!, 'resolve');
-		// permissions[0].
-		console.log(await get(interaction.guild_id!, 'resolve'));
-
-		return has(interaction.member!.permissions, PermissionFlagsBits.Administrator);
 	}
 }

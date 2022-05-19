@@ -1,5 +1,11 @@
 import { FT, T } from '@skyra/http-framework-i18n';
 
+export const Resolve = 'commands/suggestions:resolve';
+export const ResolveAccept = 'commands/suggestions:resolveAccept';
+export const ResolveConsider = 'commands/suggestions:resolveConsider';
+export const ResolveDeny = 'commands/suggestions:resolveDeny';
+export const ResolveOptionsId = 'commands/suggestions:resolveOptionsId';
+export const ResolveOptionsResponse = 'commands/suggestions:resolveOptionsResponse';
 export const Suggest = 'commands/suggestions:suggest';
 export const SuggestComponentsAccept = T('commands/suggestions:suggestComponentsAccept');
 export const SuggestComponentsArchive = T('commands/suggestions:suggestComponentsArchive');

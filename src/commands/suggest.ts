@@ -1,9 +1,9 @@
 import { SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { applyNameAndDescription } from '#lib/utilities/add-builder-localizations';
+import { applyLocalizations } from '#lib/utilities/add-builder-localizations';
 import { ButtonValue, CustomId } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
-import { getMessage, patchMessage, postMessage } from '#lib/utilities/rest';
+import { ChannelId } from '#lib/utilities/rest';
 import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -15,9 +15,9 @@ import { ButtonStyle, ComponentType, MessageFlags } from 'discord-api-types/v10'
 type MessageData = LanguageKeys.Commands.Suggestions.MessageData;
 
 @RegisterCommand((builder) =>
-	applyNameAndDescription(LanguageKeys.Commands.Suggestions.Suggest, builder) //
-		.addStringOption((option) => applyNameAndDescription(LanguageKeys.Commands.Suggestions.SuggestOptionsSuggestion, option).setRequired(true))
-		.addIntegerOption((option) => applyNameAndDescription(LanguageKeys.Commands.Suggestions.SuggestOptionsId, option))
+	applyLocalizations(LanguageKeys.Commands.Suggestions.Suggest, builder) //
+		.addStringOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.SuggestOptionsSuggestion, option).setRequired(true))
+		.addIntegerOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.SuggestOptionsId, option))
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
@@ -48,7 +48,7 @@ export class UserCommand extends Command {
 		const id = count + 1;
 		const user = this.makeUserData(interaction);
 		const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
-		const message = await postMessage(settings.channel, body);
+		const message = await ChannelId.Messages.post(settings.channel, body);
 
 		await this.container.prisma.suggestion.create({
 			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) }
@@ -71,7 +71,7 @@ export class UserCommand extends Command {
 		};
 	}
 
-	private makeMessage(interaction: Command.Interaction, settings: Guild, data: MessageData): postMessage.Body {
+	private makeMessage(interaction: Command.Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
 		const resolved = settings.useEmbed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
 		return { ...resolved, components: this.makeComponents(interaction, settings) };
 	}
@@ -122,7 +122,7 @@ export class UserCommand extends Command {
 		return components;
 	}
 
-	private makeEmbedMessage(interaction: Command.Interaction, data: MessageData): postMessage.Body {
+	private makeEmbedMessage(interaction: Command.Interaction, data: MessageData): ChannelId.Messages.post.Body {
 		const name = resolveKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewMessageEmbedTitle, data);
 		const embed = new EmbedBuilder()
 			.setColor(SuggestionStatusColors.Unresolved)
@@ -131,7 +131,7 @@ export class UserCommand extends Command {
 		return { embeds: [embed.toJSON()] };
 	}
 
-	private makeContentMessage(interaction: Command.Interaction, data: MessageData): postMessage.Body {
+	private makeContentMessage(interaction: Command.Interaction, data: MessageData): ChannelId.Messages.post.Body {
 		const content = resolveKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewMessageContent, data);
 		return { content };
 	}
@@ -180,7 +180,7 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		const result = await fromAsync(getMessage(settings.channel, suggestion.messageId));
+		const result = await fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
 		if (!result.success) {
 			await this.container.prisma.suggestion.update({
 				where: { id_guildId: suggestion },
@@ -192,13 +192,13 @@ export class UserCommand extends Command {
 		}
 
 		const message = result.value;
-		let data: patchMessage.Body;
+		let data: ChannelId.MessageId.patch.Body;
 		if (message.embeds.length) {
 			data = { embeds: [{ ...message.embeds[0], description: input }] };
 		} else {
 			data = { content: message.content.slice(0, message.content.indexOf('\n')) + input };
 		}
-		await patchMessage(message.channel_id, message.id, data);
+		await ChannelId.MessageId.patch(message.channel_id, message.id, data);
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifySuccess, { id });
 		return this.message({ content, flags: MessageFlags.Ephemeral });

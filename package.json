@@ -8,8 +8,7 @@
 	"main": "dist/main.js",
 	"type": "module",
 	"imports": {
-		"#lib/*": "./dist/lib/*.js",
-		"#lib/structures": "./dist/lib/structures/index.js"
+		"#lib/*": "./dist/lib/*.js"
 	},
 	"scripts": {
 		"build": "tsc -b src",
