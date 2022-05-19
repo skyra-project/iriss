@@ -41,18 +41,21 @@ export class Handler extends InteractionHandler {
 	}
 
 	private async handleArchive(interaction: APIMessageComponentInteraction, guildId: bigint, id: number): InteractionHandler.AsyncResponse {
+		const result = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components: [] }));
+		if (!result.success) {
+			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ArchiveFailure);
+			return this.message({ content, flags: MessageFlags.Ephemeral });
+		}
+
+		// TODO: Archive thread if any
+
 		await this.container.prisma.suggestion.update({
 			where: { id_guildId: { id, guildId } },
 			data: { archivedAt: new Date() },
 			select: null
 		});
 
-		const result = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components: [] }));
-
-		const key = result.success
-			? LanguageKeys.InteractionHandlers.Suggestions.ArchiveSuccess
-			: LanguageKeys.InteractionHandlers.Suggestions.ArchiveFailure;
-		const content = resolveUserKey(interaction, key);
+		const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ArchiveSuccess);
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
@@ -71,7 +74,9 @@ export class Handler extends InteractionHandler {
 							custom_id: Id.SuggestionsModalField,
 							type: ComponentType.TextInput,
 							style: TextInputStyle.Paragraph,
+							// TODO: Action-specific label
 							label: t(LanguageKeys.InteractionHandlers.Suggestions.ModalFieldLabel),
+							// TODO: Action-specific placeholders
 							placeholder: t(LanguageKeys.InteractionHandlers.Suggestions.ModalFieldPlaceholder),
 							max_length: 1024
 						}
