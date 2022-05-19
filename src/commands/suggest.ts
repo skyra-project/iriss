@@ -1,7 +1,7 @@
 import { SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { applyLocalizations } from '#lib/utilities/add-builder-localizations';
-import { ButtonValue, CustomId } from '#lib/utilities/id-creator';
+import { Action, Id, makeCustomId, makeIntegerString } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
 import { displayAvatarURL } from '#lib/utilities/user';
@@ -43,7 +43,7 @@ export class UserCommand extends Command {
 			where: { guildId }
 		});
 
-		// TODO: Resolve suggestion links in input
+		input = this.sanitizeInput(input);
 
 		const id = count + 1;
 		const user = this.makeUserData(interaction);
@@ -54,6 +54,8 @@ export class UserCommand extends Command {
 			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) }
 		});
 
+		// TODO: Defer if any of the two following conditions are true:
+		// TODO: Add reactions if defined
 		// TODO: Create thread automatically if addThread: true
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewSuccess, { id });
@@ -73,22 +75,23 @@ export class UserCommand extends Command {
 
 	private makeMessage(interaction: Command.Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
 		const resolved = settings.useEmbed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
-		return { ...resolved, components: this.makeComponents(interaction, settings) };
+		return { ...resolved, components: this.makeComponents(interaction, settings, data) };
 	}
 
-	private makeComponents(interaction: Command.Interaction, settings: Guild) {
+	private makeComponents(interaction: Command.Interaction, settings: Guild, data: MessageData) {
 		type MessageComponent = NonNullable<Command.MessageResponseOptions['components']>[number];
 
 		const components: MessageComponent[] = [];
 		if (!settings.addButtons) return components;
 
+		const id = makeIntegerString(data.id);
 		const t = getT(getSupportedLanguageName(interaction));
 		const manageRow: MessageComponent = {
 			type: ComponentType.ActionRow,
 			components: [
 				{
 					type: ComponentType.Button,
-					custom_id: CustomId.SuggestionsArchive,
+					custom_id: makeCustomId(Id.Suggestions, 'archive', id),
 					style: ButtonStyle.Danger,
 					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsArchive)
 				}
@@ -97,7 +100,7 @@ export class UserCommand extends Command {
 		if (!settings.addThread) {
 			manageRow.components.unshift({
 				type: ComponentType.Button,
-				custom_id: CustomId.SuggestionsThread,
+				custom_id: makeCustomId(Id.Suggestions, 'thread', id),
 				style: ButtonStyle.Primary,
 				label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsCreateThread)
 			});
@@ -109,11 +112,11 @@ export class UserCommand extends Command {
 			components: [
 				{
 					type: ComponentType.SelectMenu,
-					custom_id: CustomId.SuggestionsResolve,
+					custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
 					options: [
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: ButtonValue.Accept },
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: ButtonValue.Consider },
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: ButtonValue.Deny }
+						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: Action.Accept },
+						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: Action.Consider },
+						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: Action.Deny }
 					]
 				}
 			]
@@ -191,6 +194,8 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
+		input = this.sanitizeInput(input);
+
 		const message = result.value;
 		let data: ChannelId.MessageId.patch.Body;
 		if (message.embeds.length) {
@@ -202,6 +207,11 @@ export class UserCommand extends Command {
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifySuccess, { id });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
+	}
+
+	private sanitizeInput(input: string) {
+		// TODO: Resolve suggestion links in input
+		return input.replaceAll('\u200B', '');
 	}
 }
 

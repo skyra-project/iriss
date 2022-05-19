@@ -12,20 +12,22 @@ datasource db {
 }
 
 model Guild {
-  id                 BigInt       @id
+  id               BigInt       @id
   /// The channel for suggestions
-  channel            BigInt?
+  channel          BigInt?
   /// Whether or not to automatically create a thread.
   /// If set to true, the create thread button will not be added.
-  addThread          Boolean      @default(false)
+  addThread        Boolean      @default(false)
   /// Whether or not to show management buttons.
-  addButtons         Boolean      @default(true)
+  addButtons       Boolean      @default(true)
   /// Whether or not updates should be appended.
-  addUpdateHistory   Boolean      @default(false)
+  addUpdateHistory Boolean      @default(false)
   /// Whether or not the suggestions should be shown as an embed.
-  useEmbed           Boolean      @default(true)
+  useEmbed         Boolean      @default(true)
+  /// The reactions to use, if any.
+  useReactions     String[]
   /// The suggestions available
-  suggestions        Suggestion[]
+  suggestions      Suggestion[]
 }
 
 model Suggestion {

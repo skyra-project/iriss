@@ -41,12 +41,12 @@ console.log(
 		],
 		name: [
 			'',
-			bold(yellowBright(String.raw`d888888b d8888b. d888888b .d8888.`)),
-			bold(yellowBright(String.raw`  '88'   88  '8D   '88'   88'  YP`)),
-			yellowBright(String.raw`   88    88oobY'    88    '8bo.`),
-			yellowBright(String.raw`   88    88'8b      88      'Y8b.`),
-			yellow(String.raw`  .88.   88 '88.   .88.   db   8D`),
-			yellow(String.raw`Y888888P 88   YD Y888888P '8888Y'`)
+			bold(yellowBright(String.raw`d888888b d8888b. d888888b .d8888. .d8888.`)),
+			bold(yellowBright(String.raw`  '88'   88  '8D   '88'   88'  YP 88'  YP`)),
+			yellowBright(String.raw`   88    88oobY'    88    '8bo.   '8bo.`),
+			yellowBright(String.raw`   88    88'8b      88      'Y8b.   'Y8b.`),
+			yellow(String.raw`  .88.   88 '88.   .88.   db   8D db   8D`),
+			yellow(String.raw`Y888888P 88   YD Y888888P '8888Y' '8888Y'`)
 		],
 		extra: [`Listening on ${address}:${port}`]
 	})

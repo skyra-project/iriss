@@ -1,6 +1,6 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { has } from '#lib/utilities/command-permissions';
-import { CustomId, makeCustomId, type IdParserSuggestionsResult } from '#lib/utilities/id-creator';
+import { Action, Id, makeCustomId, type Get, type IntegerString, type Values } from '#lib/utilities/id-creator';
 import { ChannelId } from '#lib/utilities/rest';
 import { channelMention } from '@discordjs/builders';
 import { fromAsync } from '@sapphire/result';
@@ -16,8 +16,10 @@ import {
 	type APIMessageComponentSelectMenuInteraction
 } from 'discord-api-types/v10';
 
+type IdParserResult = Values<Get<Id.Suggestions>>;
+
 export class Handler extends InteractionHandler {
-	public async run(interaction: APIMessageComponentInteraction, [action, idString]: IdParserSuggestionsResult): InteractionHandler.AsyncResponse {
+	public async run(interaction: APIMessageComponentInteraction, [action, idString]: IdParserResult): InteractionHandler.AsyncResponse {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id: guildId } });
 
@@ -54,25 +56,24 @@ export class Handler extends InteractionHandler {
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private handleResolve(interaction: APIMessageComponentSelectMenuInteraction, id: string): InteractionHandler.Response {
-		const [action] = interaction.data.values as [makeCustomId.SuggestionsModalAction];
+	private handleResolve(interaction: APIMessageComponentSelectMenuInteraction, id: IntegerString): InteractionHandler.Response {
+		const [action] = interaction.data.values as [Action];
 		const t = getT(getSupportedUserLanguageName(interaction));
 		const title = t(LanguageKeys.InteractionHandlers.Suggestions.ModalTitle, { id });
 		return this.modal({
-			custom_id: makeCustomId(CustomId.SuggestionsModal, action, id),
+			custom_id: makeCustomId(Id.SuggestionsModal, action, id),
 			title,
 			components: [
 				{
 					type: ComponentType.ActionRow,
 					components: [
 						{
-							custom_id: CustomId.SuggestionsModalField,
+							custom_id: Id.SuggestionsModalField,
 							type: ComponentType.TextInput,
 							style: TextInputStyle.Paragraph,
 							label: t(LanguageKeys.InteractionHandlers.Suggestions.ModalFieldLabel),
 							placeholder: t(LanguageKeys.InteractionHandlers.Suggestions.ModalFieldPlaceholder),
-							max_length: 1024,
-							required: true
+							max_length: 1024
 						}
 					]
 				}

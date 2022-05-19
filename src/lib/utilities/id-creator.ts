@@ -1,29 +1,43 @@
-export const enum CustomId {
-	SuggestionsArchive = 'suggestions.archive',
-	SuggestionsThread = 'suggestions.thread',
-	SuggestionsResolve = 'suggestions.resolve',
+import { SuggestionStatusColors } from '#lib/common/constants';
+
+export const enum Id {
+	Suggestions = 'suggestions',
 	SuggestionsModal = 'suggestions-modal',
 	SuggestionsModalField = 'suggestions-modal.field'
 }
 
-export function makeCustomId(prefix: makeCustomId.SuggestionsModalPrefix, action: makeCustomId.SuggestionsModalAction, id: string): string;
-export function makeCustomId(prefix: makeCustomId.SuggestionsPrefix, id: string): string;
-export function makeCustomId(prefix: string, ...parts: string[]): string {
-	return parts.length === 0 ? prefix : `${prefix}.${parts.join('.')}`;
+export type IntegerString = `${bigint}`;
+
+export function makeIntegerString(value: number | bigint): IntegerString {
+	return value.toString() as IntegerString;
 }
 
-export namespace makeCustomId {
-	export type SuggestionsPrefix = CustomId.SuggestionsArchive | CustomId.SuggestionsThread | CustomId.SuggestionsResolve;
-	export type SuggestionsModalPrefix = CustomId.SuggestionsModal;
-	export type SuggestionsModalAction = ButtonValue.Accept | ButtonValue.Consider | ButtonValue.Deny;
+export type CustomIdEntries =
+	| [name: Id.Suggestions, action: 'archive' | 'thread' | 'resolve', id: IntegerString] //
+	| [name: Id.SuggestionsModal, type: Action, id: IntegerString];
+
+export type Get<I extends Id> = Extract<CustomIdEntries, [name: I, ...tail: any[]]>;
+export type Key<E extends CustomIdEntries> = E[0];
+export type Values<E extends CustomIdEntries> = E extends [key: any, ...tail: infer Tail] ? Tail : never;
+
+export function makeCustomId<E extends CustomIdEntries>(key: Key<E>, ...values: Values<E>) {
+	// return values.length === 0 ? key : `${key}.${values.join('.')}`;
+	return `${key}.${values.join('.')}`;
 }
 
-export const enum ButtonValue {
+export const enum Action {
 	Accept = 'accept',
 	Consider = 'consider',
 	Deny = 'deny'
 }
 
-export type IdParserSuggestionsResult = ['archive' | 'thread' | 'resolve', `${bigint}`];
-
-export type IdParserResult = IdParserSuggestionsResult;
+export function getColor(action: Action) {
+	switch (action) {
+		case Action.Accept:
+			return SuggestionStatusColors.Accepted;
+		case Action.Consider:
+			return SuggestionStatusColors.Considered;
+		case Action.Deny:
+			return SuggestionStatusColors.Denied;
+	}
+}
