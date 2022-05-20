@@ -2,6 +2,7 @@ import { envParseString } from '@skyra/env-utilities';
 import { container } from '@skyra/http-framework';
 import {
 	Routes,
+	type RESTDeleteAPIChannelAllMessageReactionsResult,
 	type RESTGetAPIApplicationCommandPermissionsResult,
 	type RESTGetAPIApplicationCommandsResult,
 	type RESTGetAPIApplicationGuildCommandsResult,
@@ -59,6 +60,17 @@ export namespace ChannelId {
 		export namespace patch {
 			export type Body = RESTPatchAPIChannelMessageJSONBody;
 			export type Result = RESTGetAPIChannelMessageResult;
+		}
+
+		export namespace Reactions {
+			export function remove(channelId: Snowflake, messageId: Snowflake) {
+				const route = Routes.channelMessageAllReactions(channelId.toString(), messageId.toString());
+				return container.rest.delete(route) as Promise<remove.Result>;
+			}
+
+			export namespace remove {
+				export type Result = RESTDeleteAPIChannelAllMessageReactionsResult;
+			}
 		}
 
 		export namespace Threads {

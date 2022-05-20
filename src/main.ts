@@ -20,6 +20,7 @@ await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false }
 
 const client = new Client();
 await client.load();
+client.on('error', (error) => console.error(error));
 
 void registerCommands();
 

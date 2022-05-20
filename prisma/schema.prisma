@@ -31,6 +31,8 @@ model Guild {
   useCompact       Boolean      @default(false)
   /// The reactions to use, if any.
   useReactions     String[]
+  /// Whether or not reactions should be removed automatically on archive.
+  removeReactions  Boolean      @default(false)
   /// The suggestions available
   suggestions      Suggestion[]
 }

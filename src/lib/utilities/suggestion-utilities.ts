@@ -10,7 +10,7 @@ import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { err, fromAsync, ok } from '@sapphire/result';
 import { container } from '@skyra/http-framework';
-import { resolveKey } from '@skyra/http-framework-i18n';
+import { resolveKey, type TypedT } from '@skyra/http-framework-i18n';
 import { ChannelType, type APIMessage } from 'discord-api-types/v10';
 import slug from 'limax';
 
@@ -44,6 +44,8 @@ export function addCount(guildId: Snowflake) {
 	if (entry !== undefined) countCache.set(guildId, entry + 1);
 }
 
+const contentSeparator = '\u200B\n\n';
+
 export function getOriginalContent(message: APIMessage) {
 	if (message.embeds.length) {
 		return ensure(message.embeds[0].description);
@@ -52,7 +54,7 @@ export function getOriginalContent(message: APIMessage) {
 	const newLine = message.content.indexOf('\n');
 	if (newLine === -1) throw new Error('Expected message to have a newline');
 
-	const index = message.content.indexOf('\u200B\n\n', newLine);
+	const index = message.content.indexOf(contentSeparator, newLine);
 	return index === -1 ? message.content : message.content.slice(newLine, index);
 }
 
@@ -89,21 +91,35 @@ function removeMaskedHyperlinks(input: string) {
 	return input.replaceAll(maskedLinkRegExp, '$1');
 }
 
-export async function useArchive(interaction: AnyInteraction, message?: APIMessage) {
-	message ??= ensure(interaction.message);
+export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
+	const message = options.message ?? ensure(interaction.message);
+	const settings = options.settings ?? (await container.prisma.guild.findUnique({ where: { id: BigInt(message.guild_id!) } }));
 
 	const channelId = message.channel_id;
 	const messageId = message.id;
 
+	const errors: TypedT[] = [];
 	if (message.thread) {
-		const threadArchiveResult = await fromAsync(ChannelId.patch(message.thread.id, { archived: true }));
-		if (!threadArchiveResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
+		const result = await fromAsync(ChannelId.patch(message.thread.id, { archived: true }));
+		if (!result.success) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
+	}
+
+	if (settings!.removeReactions) {
+		const result = await fromAsync(ChannelId.MessageId.Reactions.remove(message.channel_id, message.id));
+		if (!result.success) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ReactionRemovalFailure);
 	}
 
 	const messageUpdateResult = await fromAsync(ChannelId.MessageId.patch(channelId, messageId, { components: [] }));
 	if (!messageUpdateResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure);
 
-	return ok();
+	return ok({ errors });
+}
+
+export namespace useArchive {
+	export interface Options {
+		message?: APIMessage;
+		settings?: Guild;
+	}
 }
 
 const referenceRegExp = /#(\d+)/g;
@@ -172,14 +188,14 @@ function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, a
 
 	const user = getUser(interaction);
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
-	const formattedHeader = `\u200B\n\n${bold(header)}:\n`;
+	const formattedHeader = `${contentSeparator}${bold(header)}:\n`;
 	const { content } = interaction.message!;
 	if (settings.addUpdateHistory) {
-		// TODO: Limit to 3
-		return { content: `${content}${formattedHeader}${input}` };
+		const [original, ...entries] = content.split(contentSeparator).concat(`${formattedHeader}${input}`);
+		return { content: `${original}${entries.slice(-3).join(contentSeparator)}` };
 	}
 
-	const index = content.indexOf('\u200B\n\n');
+	const index = content.indexOf(contentSeparator);
 	return { content: `${index === -1 ? content : content.slice(0, index)}${formattedHeader}${input}` };
 }
 
@@ -191,7 +207,7 @@ async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guil
 	const [embed] = interaction.message!.embeds;
 
 	const fields = settings.addUpdateHistory //
-		? [...embed.fields!, { name: header, value: input }].slice(0, 3)
+		? [...embed.fields!, { name: header, value: input }].slice(-3)
 		: [{ name: header, value: input }];
 	const color = getColor(action);
 

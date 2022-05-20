@@ -4,9 +4,10 @@ import { Id, makeCustomId, Status, type Get, type IntegerString, type Values } f
 import { ChannelId } from '#lib/utilities/rest';
 import { useArchive, useThread } from '#lib/utilities/suggestion-utilities';
 import { channelMention } from '@discordjs/builders';
+import type { Guild } from '@prisma/client';
 import { fromAsync } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
-import { getSupportedUserLanguageName, getT, resolveUserKey } from '@skyra/http-framework-i18n';
+import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
 import {
 	ComponentType,
 	MessageFlags,
@@ -34,7 +35,7 @@ export class Handler extends InteractionHandler {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		if (action === 'archive') return this.handleArchive(interaction, guildId, Number(idString));
+		if (action === 'archive') return this.handleArchive(interaction, settings, Number(idString));
 		if (action === 'thread') return this.handleThread(interaction, idString);
 		if (action === 'resolve') {
 			status ??= this.getResolveSelectMenuValue(interaction as APIMessageComponentSelectMenuInteraction);
@@ -43,25 +44,29 @@ export class Handler extends InteractionHandler {
 		throw new TypeError('Unreachable');
 	}
 
-	private async handleArchive(interaction: APIMessageComponentInteraction, guildId: bigint, id: number): InteractionHandler.AsyncResponse {
-		const result = await useArchive(interaction);
+	private async handleArchive(interaction: APIMessageComponentInteraction, settings: Guild, id: number): InteractionHandler.AsyncResponse {
+		const t = getSupportedUserLanguageT(interaction);
+
+		const result = await useArchive(interaction, { settings });
 		if (!result.success) {
-			const content = resolveUserKey(interaction, result.error);
+			const content = t(result.error);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		await this.container.prisma.suggestion.update({
-			where: { id_guildId: { id, guildId } },
+			where: { id_guildId: { id, guildId: settings.id } },
 			data: { archivedAt: new Date() },
 			select: null
 		});
 
-		const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ArchiveSuccess);
+		const header = t(LanguageKeys.InteractionHandlers.Suggestions.ArchiveSuccess);
+		const warnings = result.value.errors.length === 0 ? '' : `\n\n- ${result.value.errors.map((error) => t(error)).join('\n- ')}`;
+		const content = header + warnings;
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private handleResolve(interaction: APIMessageComponentInteraction, id: IntegerString, status: Status): InteractionHandler.Response {
-		const t = getT(getSupportedUserLanguageName(interaction));
+		const t = getSupportedUserLanguageT(interaction);
 		const title = t(LanguageKeys.InteractionHandlers.Suggestions.ModalTitle, { id });
 		const information = this.getResolveModalInformation(status);
 		return this.modal({

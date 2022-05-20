@@ -11,6 +11,7 @@ export const ModalFieldPlaceholderConsider = T('interaction-handlers/suggestions
 export const ModalFieldPlaceholderDeny = T('interaction-handlers/suggestions:modalFieldPlaceholderDeny');
 export const ArchiveSuccess = T('interaction-handlers/suggestions:archiveSuccess');
 export const ArchiveThreadFailure = T('interaction-handlers/suggestions:archiveThreadFailure');
+export const ReactionRemovalFailure = T('interaction-handlers/suggestions:reactionRemovalFailure');
 export const ArchiveMessageFailure = T('interaction-handlers/suggestions:archiveMessageFailure');
 export const ThreadChannelCreationFailure = T('interaction-handlers/suggestions:threadChannelCreationFailure');
 export const ThreadMessageUpdateSuccess = FT<{ channel: string }>('interaction-handlers/suggestions:threadMessageUpdateSuccess');
