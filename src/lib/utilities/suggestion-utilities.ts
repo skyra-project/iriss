@@ -1,21 +1,70 @@
 import type { AnyInteraction } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { ensure } from '#lib/utilities/assertions';
+import { getColor, Status } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
-import { ChannelId, Snowflake } from '#lib/utilities/rest';
-import { hyperlink, inlineCode } from '@discordjs/builders';
+import { ChannelId, type Snowflake } from '#lib/utilities/rest';
+import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
+import { Collection } from '@discordjs/collection';
+import type { Guild } from '@prisma/client';
 import { err, fromAsync, ok } from '@sapphire/result';
 import { container } from '@skyra/http-framework';
-import { APIMessage, ChannelType } from 'discord-api-types/v10';
+import { resolveKey } from '@skyra/http-framework-i18n';
+import { ChannelType, type APIMessage } from 'discord-api-types/v10';
+import slug from 'limax';
 
-export async function useThread(interaction: AnyInteraction, options: useThread.Options) {
-	const channelId = options.channelId ?? ensure(interaction.channel_id);
-	const messageId = options.messageId ?? ensure(interaction.message?.id);
+const countCache = new Collection<bigint, number>();
+const promiseCountCache = new Collection<bigint, Promise<number>>();
+export async function useCount(guildId: Snowflake): Promise<number> {
+	guildId = BigInt(guildId);
+
+	const cachedCount = countCache.get(guildId);
+	if (cachedCount !== undefined) return cachedCount;
+
+	const promiseEntry = promiseCountCache.get(guildId);
+	if (promiseEntry !== undefined) return promiseEntry;
+
+	try {
+		const promise = container.prisma.suggestion
+			.count({ where: { guildId } }) //
+			.then((count) => (countCache.set(guildId as bigint, count), count));
+		promiseCountCache.set(guildId, promise);
+
+		return await promise;
+	} finally {
+		promiseCountCache.delete(guildId);
+	}
+}
+
+export function addCount(guildId: Snowflake) {
+	guildId = BigInt(guildId);
+
+	const entry = countCache.get(guildId);
+	if (entry !== undefined) countCache.set(guildId, entry + 1);
+}
+
+export function getOriginalContent(message: APIMessage) {
+	if (message.embeds.length) {
+		return ensure(message.embeds[0].description);
+	}
+
+	const newLine = message.content.indexOf('\n');
+	if (newLine === -1) throw new Error('Expected message to have a newline');
+
+	const index = message.content.indexOf('\u200B\n\n', newLine);
+	return index === -1 ? message.content : message.content.slice(newLine, index);
+}
+
+export async function useThread(interaction: AnyInteraction, id: string | number, options: useThread.Options = {}) {
+	const message = options.message ?? ensure(interaction.message);
+	const input = options.input ?? getOriginalContent(message);
+
+	const name = `${id}-${slug(removeMaskedHyperlinks(input))}`.slice(0, 100);
 	const threadCreationResult = await fromAsync(
-		ChannelId.MessageId.Threads.post(channelId, messageId, {
+		ChannelId.MessageId.Threads.post(message.channel_id, message.id, {
 			type: ChannelType.GuildPrivateThread,
-			name: `${options.id}-temporary-name`, // TODO: Assign better name
+			name,
 			auto_archive_duration: 1440 // 1 day,
 		})
 	);
@@ -30,10 +79,14 @@ export async function useThread(interaction: AnyInteraction, options: useThread.
 
 export namespace useThread {
 	export interface Options {
-		channelId?: Snowflake;
-		messageId?: Snowflake;
-		id: string | number;
+		message?: APIMessage;
+		input?: string;
 	}
+}
+
+const maskedLinkRegExp = /\[([^\]]+)\]\(https?\:[^\)]+\)/g;
+function removeMaskedHyperlinks(input: string) {
+	return input.replaceAll(maskedLinkRegExp, '$1');
 }
 
 export async function useArchive(interaction: AnyInteraction, message?: APIMessage) {
@@ -65,7 +118,7 @@ export async function useEmbedContent(content: string, guildId: Snowflake, chann
 	if (content.length < 2) return content;
 
 	guildId = BigInt(guildId);
-	lastId ??= await container.prisma.suggestion.count({ where: { guildId } });
+	lastId ??= await useCount(guildId);
 
 	const references = new Set<number>();
 	const parts: (string | number)[] = [];
@@ -104,4 +157,54 @@ export async function useEmbedContent(content: string, guildId: Snowflake, chann
 
 	const urls = new Map(entries.map((entry) => [entry.id, hyperlink(inlineCode(`#${entry.id}`), url(guildId, channelId, entry.messageId))]));
 	return parts.map((part) => (typeof part === 'string' ? part : urls.get(part)!)).join('');
+}
+
+export async function useMessageUpdate(interaction: AnyInteraction, message: APIMessage, action: Status, input: string, settings?: Guild) {
+	settings ??= (await container.prisma.guild.findUnique({ where: { id: BigInt(message.guild_id!) } }))!;
+
+	return message.embeds.length === 0
+		? useMessageUpdateContent(interaction, settings, action, input)
+		: useMessageUpdateEmbed(interaction, settings, action, input);
+}
+
+function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, action: Status, input: string) {
+	input = usePlainContent(input);
+
+	const user = getUser(interaction);
+	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
+	const formattedHeader = `\u200B\n\n${bold(header)}:\n`;
+	const { content } = interaction.message!;
+	if (settings.addUpdateHistory) {
+		// TODO: Limit to 3
+		return { content: `${content}${formattedHeader}${input}` };
+	}
+
+	const index = content.indexOf('\u200B\n\n');
+	return { content: `${index === -1 ? content : content.slice(0, index)}${formattedHeader}${input}` };
+}
+
+async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guild, action: Status, input: string) {
+	input = await useEmbedContent(input, settings.id, settings.channel!);
+
+	const user = getUser(interaction);
+	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
+	const [embed] = interaction.message!.embeds;
+
+	const fields = settings.addUpdateHistory //
+		? [...embed.fields!, { name: header, value: input }].slice(0, 3)
+		: [{ name: header, value: input }];
+	const color = getColor(action);
+
+	return { embeds: [{ ...embed, fields, color }] };
+}
+
+function makeHeader(action: Status) {
+	switch (action) {
+		case Status.Accept:
+			return LanguageKeys.InteractionHandlers.SuggestionsModals.ContentAccepted;
+		case Status.Consider:
+			return LanguageKeys.InteractionHandlers.SuggestionsModals.ContentConsidered;
+		case Status.Deny:
+			return LanguageKeys.InteractionHandlers.SuggestionsModals.ContentDenied;
+	}
 }

@@ -15,3 +15,4 @@ export const ArchiveMessageFailure = T('interaction-handlers/suggestions:archive
 export const ThreadChannelCreationFailure = T('interaction-handlers/suggestions:threadChannelCreationFailure');
 export const ThreadMessageUpdateSuccess = FT<{ channel: string }>('interaction-handlers/suggestions:threadMessageUpdateSuccess');
 export const ThreadMessageUpdateFailure = FT<{ channel: string }>('interaction-handlers/suggestions:threadMessageUpdateFailure');
+export const ThreadMemberAddFailure = T('interaction-handlers/suggestions:threadMemberAddFailure');

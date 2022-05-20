@@ -114,7 +114,7 @@ export class Handler extends InteractionHandler {
 	}
 
 	private async handleThread(interaction: APIMessageComponentInteraction, idString: string): InteractionHandler.AsyncResponse {
-		const threadResult = await useThread(interaction, { id: idString });
+		const threadResult = await useThread(interaction, idString);
 		if (!threadResult.success) {
 			const content = resolveUserKey(interaction, threadResult.error);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
@@ -132,8 +132,12 @@ export class Handler extends InteractionHandler {
 		const key = patchResult.success
 			? LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess
 			: LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure;
-		const content = resolveUserKey(interaction, key, { channel: channelMention(threadResult.value.thread.id) });
-		// TODO: Use threadResult thread member error
+		const responseContent = resolveUserKey(interaction, key, { channel: channelMention(threadResult.value.thread.id) });
+		const warningContent = threadResult.value.memberAddResult.success
+			? ''
+			: `\n${resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure)}`;
+
+		const content = responseContent + warningContent;
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 }

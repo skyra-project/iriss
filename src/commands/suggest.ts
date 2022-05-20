@@ -4,7 +4,7 @@ import { apply } from '#lib/utilities/add-builder-localizations';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
-import { useEmbedContent, usePlainContent, useThread } from '#lib/utilities/suggestion-utilities';
+import { addCount, useCount, useEmbedContent, usePlainContent, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -22,13 +22,15 @@ type MessageData = LanguageKeys.Commands.Suggestions.MessageData;
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
-	public override chatInputRun(interaction: Command.Interaction, options: Options): Command.AsyncResponse {
+	public override chatInputRun(interaction: Command.Interaction, options: Options): Command.GeneratorResponse {
 		return options.id === undefined
 			? this.handleNew(interaction, options.suggestion)
 			: this.handleEdit(interaction, options.id, options.suggestion);
 	}
 
-	private async handleNew(interaction: Command.Interaction, input: string) {
+	private async *handleNew(interaction: Command.Interaction, rawInput: string): Command.GeneratorResponse {
+		yield this.defer({ flags: MessageFlags.Ephemeral });
+
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({
 			where: { id: guildId }
@@ -39,12 +41,9 @@ export class UserCommand extends Command {
 		}
 
 		// TODO: Add sync system
-		// TODO: Cache guild suggestion count
-		const count = await this.container.prisma.suggestion.count({
-			where: { guildId }
-		});
+		const count = await useCount(guildId);
 
-		input = settings.useEmbed ? await useEmbedContent(input, guildId, settings.channel, count) : usePlainContent(input);
+		const input = settings.useEmbed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
 
 		const id = count + 1;
 		const user = this.makeUserData(interaction);
@@ -52,15 +51,16 @@ export class UserCommand extends Command {
 		const message = await ChannelId.Messages.post(settings.channel, body);
 
 		await this.container.prisma.suggestion.create({
-			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) }
+			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) },
+			select: null
 		});
+		addCount(guildId);
 
-		// TODO: Defer if any of the two following conditions are true:
 		// TODO: Add reactions if defined
-		if (settings.addThread) await useThread(interaction, { channelId: settings.channel, messageId: message.id, id });
+		if (settings.addThread) await useThread(interaction, id, { message, input: rawInput });
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewSuccess, { id });
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private makeUserData(interaction: Command.Interaction): MessageData['user'] {
@@ -164,7 +164,9 @@ export class UserCommand extends Command {
 		return { content };
 	}
 
-	private async handleEdit(interaction: Command.Interaction, id: number, input: string) {
+	private async *handleEdit(interaction: Command.Interaction, id: number, input: string): Command.GeneratorResponse {
+		yield this.defer({ flags: MessageFlags.Ephemeral });
+
 		const guildId = BigInt(interaction.guild_id!);
 		const suggestion = await this.container.prisma.suggestion.findUnique({
 			where: { id_guildId: { id, guildId } }
@@ -231,7 +233,11 @@ export class UserCommand extends Command {
 		await ChannelId.MessageId.patch(message.channel_id, message.id, data);
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifySuccess, { id });
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
+	}
+
+	private updateMessage(data: Command.MessageResponseOptions) {
+		return data;
 	}
 }
 

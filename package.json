@@ -35,6 +35,7 @@
 		"@skyra/start-banner": "^1.0.0",
 		"discord-api-types": "^0.33.0",
 		"gradient-string": "^2.0.1",
+		"limax": "^3.0.0",
 		"tslib": "^2.4.0"
 	},
 	"devDependencies": {

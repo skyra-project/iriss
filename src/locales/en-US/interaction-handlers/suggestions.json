@@ -13,5 +13,6 @@
 	"archiveMessageFailure": "I was not able to archive the message, it may have been deleted.",
 	"threadChannelCreationFailure": "I was not able to create the thread, you might need to contact an administrator to give me permissions, or a moderator to create a thread, sorry! :'(",
 	"threadMessageUpdateSuccess": "Successfully created the thread {{channel}} and removed the thread button from the suggestion message.",
-	"threadMessageUpdateFailure": "I was able to successfully create the thread {{channel}}, however, I had a small issue updating the suggestion message, so I wasn't able to remove the button. :("
+	"threadMessageUpdateFailure": "I was able to successfully create the thread {{channel}}, however, I had a small issue updating the suggestion message, so I wasn't able to remove the button. :(",
+	"threadMemberAddFailure": "Also, I was unable to add you to the thread, so you might need to join manually. Sorry for the inconvenience. :("
 }
