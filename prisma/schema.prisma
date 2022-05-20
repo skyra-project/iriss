@@ -24,6 +24,11 @@ model Guild {
   addUpdateHistory Boolean      @default(false)
   /// Whether or not the suggestions should be shown as an embed.
   useEmbed         Boolean      @default(true)
+  /// Whether or not to use compact mode.
+  ///
+  /// Compact suggestions have the following differences:
+  /// - Swap the suggestion select menu to three buttons (one row versus two).
+  useCompact       Boolean      @default(false)
   /// The reactions to use, if any.
   useReactions     String[]
   /// The suggestions available

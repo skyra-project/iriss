@@ -1,8 +1,8 @@
 import { has as hasPermissions } from '#lib/utilities/permissions';
 import { ApplicationId } from '#lib/utilities/rest';
-import { DiscordAPIError } from '@discordjs/rest';
+import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import { APIApplicationCommand, APIInteraction, PermissionFlagsBits, RESTJSONErrorCodes } from 'discord-api-types/v10';
+import { APIApplicationCommand, APIInteraction, PermissionFlagsBits } from 'discord-api-types/v10';
 
 let commands: ApplicationId.Commands.get.Result;
 
@@ -36,17 +36,11 @@ export async function get(guildId: string, commandName: string) {
 }
 
 async function makeCall(guildId: string, command: APIApplicationCommand) {
-	try {
-		const entry = await ApplicationId.GuildId.CommandId.Permissions.get(guildId, command.id);
-		return entry.permissions;
-	} catch (error) {
-		// If the error isn't a Discord API error, re-throw:
-		if (!(error instanceof DiscordAPIError)) throw error;
+	const result = await fromDiscord(
+		ApplicationId.GuildId.CommandId.Permissions.get(guildId, command.id),
+		ErrorCodes.UnknownApplicationCommandPermissions
+	);
 
-		// If the error isn't an "Unknown application command permissions", re-throw:
-		if (error.code !== RESTJSONErrorCodes.UnknownApplicationCommandPermissions) throw error;
-
-		// Else, return an empty array as expected:
-		return [];
-	}
+	if (result.success) return result.value?.permissions ?? [];
+	throw result.error;
 }

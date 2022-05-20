@@ -1,13 +1,13 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { has } from '#lib/utilities/command-permissions';
-import { Action, Id, makeCustomId, type Get, type IntegerString, type Values } from '#lib/utilities/id-creator';
+import { Id, makeCustomId, Status, type Get, type IntegerString, type Values } from '#lib/utilities/id-creator';
 import { ChannelId } from '#lib/utilities/rest';
+import { useArchive, useThread } from '#lib/utilities/suggestion-utilities';
 import { channelMention } from '@discordjs/builders';
 import { fromAsync } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { getSupportedUserLanguageName, getT, resolveUserKey } from '@skyra/http-framework-i18n';
 import {
-	ChannelType,
 	ComponentType,
 	MessageFlags,
 	TextInputStyle,
@@ -19,7 +19,7 @@ import {
 type IdParserResult = Values<Get<Id.Suggestions>>;
 
 export class Handler extends InteractionHandler {
-	public async run(interaction: APIMessageComponentInteraction, [action, idString]: IdParserResult): InteractionHandler.AsyncResponse {
+	public async run(interaction: APIMessageComponentInteraction, [action, idString, status]: IdParserResult): InteractionHandler.AsyncResponse {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id: guildId } });
 
@@ -35,19 +35,20 @@ export class Handler extends InteractionHandler {
 		}
 
 		if (action === 'archive') return this.handleArchive(interaction, guildId, Number(idString));
-		if (action === 'resolve') return this.handleResolve(interaction as APIMessageComponentSelectMenuInteraction, idString);
 		if (action === 'thread') return this.handleThread(interaction, idString);
+		if (action === 'resolve') {
+			status ??= this.getResolveSelectMenuValue(interaction as APIMessageComponentSelectMenuInteraction);
+			return this.handleResolve(interaction as APIMessageComponentSelectMenuInteraction, idString, status);
+		}
 		throw new TypeError('Unreachable');
 	}
 
 	private async handleArchive(interaction: APIMessageComponentInteraction, guildId: bigint, id: number): InteractionHandler.AsyncResponse {
-		const result = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components: [] }));
+		const result = await useArchive(interaction);
 		if (!result.success) {
-			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ArchiveFailure);
+			const content = resolveUserKey(interaction, result.error);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
-
-		// TODO: Archive thread if any
 
 		await this.container.prisma.suggestion.update({
 			where: { id_guildId: { id, guildId } },
@@ -59,12 +60,12 @@ export class Handler extends InteractionHandler {
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private handleResolve(interaction: APIMessageComponentSelectMenuInteraction, id: IntegerString): InteractionHandler.Response {
-		const [action] = interaction.data.values as [Action];
+	private handleResolve(interaction: APIMessageComponentInteraction, id: IntegerString, status: Status): InteractionHandler.Response {
 		const t = getT(getSupportedUserLanguageName(interaction));
 		const title = t(LanguageKeys.InteractionHandlers.Suggestions.ModalTitle, { id });
+		const information = this.getResolveModalInformation(status);
 		return this.modal({
-			custom_id: makeCustomId(Id.SuggestionsModal, action, id),
+			custom_id: makeCustomId(Id.SuggestionsModal, status, id),
 			title,
 			components: [
 				{
@@ -74,10 +75,8 @@ export class Handler extends InteractionHandler {
 							custom_id: Id.SuggestionsModalField,
 							type: ComponentType.TextInput,
 							style: TextInputStyle.Paragraph,
-							// TODO: Action-specific label
-							label: t(LanguageKeys.InteractionHandlers.Suggestions.ModalFieldLabel),
-							// TODO: Action-specific placeholders
-							placeholder: t(LanguageKeys.InteractionHandlers.Suggestions.ModalFieldPlaceholder),
+							label: t(information.label),
+							placeholder: t(information.placeholder),
 							max_length: 1024
 						}
 					]
@@ -86,16 +85,38 @@ export class Handler extends InteractionHandler {
 		});
 	}
 
+	private getResolveModalInformation(status: Status) {
+		switch (status) {
+			case Status.Accept: {
+				return {
+					label: LanguageKeys.InteractionHandlers.Suggestions.ModalFieldLabelAccept,
+					placeholder: LanguageKeys.InteractionHandlers.Suggestions.ModalFieldPlaceholderAccept
+				};
+			}
+			case Status.Consider: {
+				return {
+					label: LanguageKeys.InteractionHandlers.Suggestions.ModalFieldLabelConsider,
+					placeholder: LanguageKeys.InteractionHandlers.Suggestions.ModalFieldPlaceholderConsider
+				};
+			}
+			case Status.Deny: {
+				return {
+					label: LanguageKeys.InteractionHandlers.Suggestions.ModalFieldLabelDeny,
+					placeholder: LanguageKeys.InteractionHandlers.Suggestions.ModalFieldPlaceholderDeny
+				};
+			}
+		}
+	}
+
+	private getResolveSelectMenuValue(interaction: APIMessageComponentSelectMenuInteraction): Status {
+		const [status] = interaction.data.values as [Status];
+		return status;
+	}
+
 	private async handleThread(interaction: APIMessageComponentInteraction, idString: string): InteractionHandler.AsyncResponse {
-		const threadCreationResult = await fromAsync(
-			ChannelId.MessageId.Threads.post(interaction.channel_id, interaction.message.id, {
-				type: ChannelType.GuildPrivateThread,
-				name: `${idString}-temporary-name`, // TODO: Assign better name
-				auto_archive_duration: 1440 // 1 day
-			})
-		);
-		if (!threadCreationResult.success) {
-			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
+		const threadResult = await useThread(interaction, { id: idString });
+		if (!threadResult.success) {
+			const content = resolveUserKey(interaction, threadResult.error);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -111,7 +132,8 @@ export class Handler extends InteractionHandler {
 		const key = patchResult.success
 			? LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess
 			: LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure;
-		const content = resolveUserKey(interaction, key, { channel: channelMention(threadCreationResult.value.id) });
+		const content = resolveUserKey(interaction, key, { channel: channelMention(threadResult.value.thread.id) });
+		// TODO: Use threadResult thread member error
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 }

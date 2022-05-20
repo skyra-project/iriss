@@ -80,7 +80,10 @@
 	},
 	"prettier": "@sapphire/prettier-config",
 	"eslintConfig": {
-		"extends": "@sapphire"
+		"extends": "@sapphire",
+		"rules": {
+			"@typescript-eslint/no-base-to-string": "off"
+		}
 	},
 	"packageManager": "yarn@3.2.1",
 	"volta": {

@@ -1,9 +1,10 @@
 import { SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { applyLocalizations } from '#lib/utilities/add-builder-localizations';
-import { Action, Id, makeCustomId, makeIntegerString } from '#lib/utilities/id-creator';
+import { apply } from '#lib/utilities/add-builder-localizations';
+import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
+import { useContent, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -15,9 +16,9 @@ import { ButtonStyle, ComponentType, MessageFlags } from 'discord-api-types/v10'
 type MessageData = LanguageKeys.Commands.Suggestions.MessageData;
 
 @RegisterCommand((builder) =>
-	applyLocalizations(LanguageKeys.Commands.Suggestions.Suggest, builder) //
-		.addStringOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.SuggestOptionsSuggestion, option).setRequired(true))
-		.addIntegerOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.SuggestOptionsId, option))
+	apply(builder, LanguageKeys.Commands.Suggestions.Suggest) //
+		.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggestions.SuggestOptionsSuggestion).setRequired(true))
+		.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggestions.SuggestOptionsId))
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
@@ -43,7 +44,7 @@ export class UserCommand extends Command {
 			where: { guildId }
 		});
 
-		input = this.sanitizeInput(input);
+		input = await useContent(input, guildId, settings.channel, count);
 
 		const id = count + 1;
 		const user = this.makeUserData(interaction);
@@ -56,7 +57,7 @@ export class UserCommand extends Command {
 
 		// TODO: Defer if any of the two following conditions are true:
 		// TODO: Add reactions if defined
-		// TODO: Create thread automatically if addThread: true
+		if (settings.addThread) await useThread(interaction, { channelId: settings.channel, messageId: message.id, id });
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewSuccess, { id });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
@@ -107,20 +108,44 @@ export class UserCommand extends Command {
 		}
 
 		components.push(manageRow);
-		components.push({
-			type: ComponentType.ActionRow,
-			components: [
+
+		if (settings.useCompact) {
+			manageRow.components.push(
 				{
-					type: ComponentType.SelectMenu,
-					custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
-					options: [
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: Action.Accept },
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: Action.Consider },
-						{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: Action.Deny }
-					]
+					type: ComponentType.Button,
+					custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Accept),
+					style: ButtonStyle.Success,
+					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept)
+				},
+				{
+					type: ComponentType.Button,
+					custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Consider),
+					style: ButtonStyle.Secondary,
+					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider)
+				},
+				{
+					type: ComponentType.Button,
+					custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Deny),
+					style: ButtonStyle.Danger,
+					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny)
 				}
-			]
-		});
+			);
+		} else {
+			components.push({
+				type: ComponentType.ActionRow,
+				components: [
+					{
+						type: ComponentType.SelectMenu,
+						custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
+						options: [
+							{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: Status.Accept },
+							{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: Status.Consider },
+							{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: Status.Deny }
+						]
+					}
+				]
+			});
+		}
 
 		return components;
 	}
@@ -194,7 +219,7 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		input = this.sanitizeInput(input);
+		input = await useContent(input, guildId, settings.channel);
 
 		const message = result.value;
 		let data: ChannelId.MessageId.patch.Body;
@@ -207,11 +232,6 @@ export class UserCommand extends Command {
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifySuccess, { id });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
-	}
-
-	private sanitizeInput(input: string) {
-		// TODO: Resolve suggestion links in input
-		return input.replaceAll('\u200B', '');
 	}
 }
 

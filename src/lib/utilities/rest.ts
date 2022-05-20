@@ -6,16 +6,29 @@ import {
 	type RESTGetAPIApplicationCommandsResult,
 	type RESTGetAPIApplicationGuildCommandsResult,
 	type RESTGetAPIChannelMessageResult,
+	type RESTPatchAPIChannelJSONBody,
 	type RESTPatchAPIChannelMessageJSONBody,
+	type RESTPatchAPIChannelResult,
 	type RESTPostAPIChannelMessageJSONBody,
 	type RESTPostAPIChannelMessageResult,
 	type RESTPostAPIChannelThreadsJSONBody,
-	type RESTPostAPIChannelThreadsResult
+	type RESTPostAPIChannelThreadsResult,
+	type RESTPutAPIChannelThreadMembersResult
 } from 'discord-api-types/v10';
 
 export type Snowflake = string | bigint;
 
 export namespace ChannelId {
+	export function patch(channelId: Snowflake, body: patch.Body) {
+		const route = Routes.channel(channelId.toString());
+		return container.rest.post(route, { body }) as Promise<patch.Result>;
+	}
+
+	export namespace patch {
+		export type Body = RESTPatchAPIChannelJSONBody;
+		export type Result = RESTPatchAPIChannelResult;
+	}
+
 	export namespace Messages {
 		export function post(channelId: Snowflake, body: post.Body) {
 			const route = Routes.channelMessages(channelId.toString());
@@ -58,6 +71,17 @@ export namespace ChannelId {
 				export type Body = RESTPostAPIChannelThreadsJSONBody;
 				export type Result = RESTPostAPIChannelThreadsResult;
 			}
+		}
+	}
+
+	export namespace ThreadMemberId {
+		export function put(channelId: Snowflake, userId: Snowflake) {
+			const route = Routes.threadMembers(channelId.toString(), userId.toString());
+			return container.rest.post(route) as Promise<put.Result>;
+		}
+
+		export namespace put {
+			export type Result = RESTPutAPIChannelThreadMembersResult;
 		}
 	}
 }

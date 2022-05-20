@@ -1,7 +1,8 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { Action, getColor, type Get, type Id, type Values } from '#lib/utilities/id-creator';
+import { getColor, Status, type Get, type Id, type Values } from '#lib/utilities/id-creator';
 import { url } from '#lib/utilities/message';
 import { ChannelId } from '#lib/utilities/rest';
+import { useContent } from '#lib/utilities/suggestion-utilities';
 import { hyperlink, inlineCode, time } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { fromAsync } from '@sapphire/result';
@@ -16,7 +17,7 @@ export class Handler extends InteractionHandler {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = (await this.container.prisma.guild.findUnique({ where: { id: guildId } }))!;
 
-		const input = this.sanitizeInput(interaction.data.components![0].components[0].value);
+		const input = await useContent(interaction.data.components![0].components[0].value, guildId, settings.channel!);
 		const body =
 			interaction.message!.embeds.length === 0
 				? this.handleContent(interaction, settings, action, input)
@@ -45,7 +46,7 @@ export class Handler extends InteractionHandler {
 	private handleContent(
 		interaction: APIModalSubmitGuildInteraction,
 		settings: Guild,
-		action: Action,
+		action: Status,
 		input: string
 	): ChannelId.MessageId.patch.Body {
 		const header = resolveKey(interaction, this.makeHeader(action), {
@@ -61,7 +62,7 @@ export class Handler extends InteractionHandler {
 		return { content: `${index === -1 ? content : content.slice(0, index)}\u200B\n\n${header}${input}` };
 	}
 
-	private handleEmbed(interaction: APIModalSubmitGuildInteraction, settings: Guild, action: Action, input: string): ChannelId.MessageId.patch.Body {
+	private handleEmbed(interaction: APIModalSubmitGuildInteraction, settings: Guild, action: Status, input: string): ChannelId.MessageId.patch.Body {
 		const header = resolveKey(interaction, this.makeHeader(action), {
 			tag: `${interaction.member.user.username}#${interaction.member.user.discriminator}`,
 			time: time()
@@ -73,19 +74,14 @@ export class Handler extends InteractionHandler {
 		return { embeds: [{ ...embed, fields, color }] };
 	}
 
-	private makeHeader(action: Action) {
+	private makeHeader(action: Status) {
 		switch (action) {
-			case Action.Accept:
+			case Status.Accept:
 				return LanguageKeys.InteractionHandlers.SuggestionsModals.ContentAccepted;
-			case Action.Consider:
+			case Status.Consider:
 				return LanguageKeys.InteractionHandlers.SuggestionsModals.ContentConsidered;
-			case Action.Deny:
+			case Status.Deny:
 				return LanguageKeys.InteractionHandlers.SuggestionsModals.ContentDenied;
 		}
-	}
-
-	private sanitizeInput(input: string) {
-		// TODO: Resolve suggestion links in input
-		return input.replaceAll('\u200B', '');
 	}
 }

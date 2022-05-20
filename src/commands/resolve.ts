@@ -1,18 +1,18 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { applyLocalizations } from '#lib/utilities/add-builder-localizations';
+import { apply } from '#lib/utilities/add-builder-localizations';
 import { Command, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
 import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
-	applyLocalizations(LanguageKeys.Commands.Suggestions.Resolve, builder)
+	apply(builder, LanguageKeys.Commands.Suggestions.Resolve) //
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
 	@RegisterSubCommand((builder) =>
-		applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveAccept, builder)
-			.addIntegerOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveOptionsId, option).setRequired(true))
-			.addStringOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveOptionsResponse, option))
+		apply(builder, LanguageKeys.Commands.Suggestions.ResolveAccept)
+			.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggestions.ResolveOptionsId).setRequired(true))
+			.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggestions.ResolveOptionsResponse))
 	)
 	public handleAccept(_interaction: Command.Interaction, _options: Options): Command.AsyncResponse {
 		// TODO: Finish logic
@@ -20,9 +20,9 @@ export class UserCommand extends Command {
 	}
 
 	@RegisterSubCommand((builder) =>
-		applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveConsider, builder)
-			.addIntegerOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveOptionsId, option).setRequired(true))
-			.addStringOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveOptionsResponse, option))
+		apply(builder, LanguageKeys.Commands.Suggestions.ResolveConsider)
+			.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggestions.ResolveOptionsId).setRequired(true))
+			.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggestions.ResolveOptionsResponse))
 	)
 	public handleConsider(_interaction: Command.Interaction, _options: Options): Command.AsyncResponse {
 		// TODO: Finish logic
@@ -30,9 +30,9 @@ export class UserCommand extends Command {
 	}
 
 	@RegisterSubCommand((builder) =>
-		applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveDeny, builder)
-			.addIntegerOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveOptionsId, option).setRequired(true))
-			.addStringOption((option) => applyLocalizations(LanguageKeys.Commands.Suggestions.ResolveOptionsResponse, option))
+		apply(builder, LanguageKeys.Commands.Suggestions.ResolveDeny)
+			.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggestions.ResolveOptionsId).setRequired(true))
+			.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggestions.ResolveOptionsResponse))
 	)
 	public handleDeny(_interaction: Command.Interaction, _options: Options): Command.AsyncResponse {
 		// TODO: Finish logic

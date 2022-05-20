@@ -13,8 +13,8 @@ export function makeIntegerString(value: number | bigint): IntegerString {
 }
 
 export type CustomIdEntries =
-	| [name: Id.Suggestions, action: 'archive' | 'thread' | 'resolve', id: IntegerString] //
-	| [name: Id.SuggestionsModal, type: Action, id: IntegerString];
+	| [name: Id.Suggestions, action: 'archive' | 'thread' | 'resolve', id: IntegerString, status?: Status] //
+	| [name: Id.SuggestionsModal, status: Status, id: IntegerString];
 
 export type Get<I extends Id> = Extract<CustomIdEntries, [name: I, ...tail: any[]]>;
 export type Key<E extends CustomIdEntries> = E[0];
@@ -25,19 +25,19 @@ export function makeCustomId<E extends CustomIdEntries>(key: Key<E>, ...values: 
 	return `${key}.${values.join('.')}`;
 }
 
-export const enum Action {
+export const enum Status {
 	Accept = 'accept',
 	Consider = 'consider',
 	Deny = 'deny'
 }
 
-export function getColor(action: Action) {
+export function getColor(action: Status) {
 	switch (action) {
-		case Action.Accept:
+		case Status.Accept:
 			return SuggestionStatusColors.Accepted;
-		case Action.Consider:
+		case Status.Consider:
 			return SuggestionStatusColors.Considered;
-		case Action.Deny:
+		case Status.Deny:
 			return SuggestionStatusColors.Denied;
 	}
 }
