@@ -7,7 +7,7 @@ import { ChannelId, Snowflake } from '#lib/utilities/rest';
 import { hyperlink, inlineCode } from '@discordjs/builders';
 import { err, fromAsync, ok } from '@sapphire/result';
 import { container } from '@skyra/http-framework';
-import { ChannelType } from 'discord-api-types/v10';
+import { APIMessage, ChannelType } from 'discord-api-types/v10';
 
 export async function useThread(interaction: AnyInteraction, options: useThread.Options) {
 	const channelId = options.channelId ?? ensure(interaction.channel_id);
@@ -36,12 +36,16 @@ export namespace useThread {
 	}
 }
 
-export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
-	const channelId = options.channelId ?? ensure(interaction.channel_id);
-	const messageId = options.messageId ?? ensure(interaction.message?.id);
+export async function useArchive(interaction: AnyInteraction, message?: APIMessage) {
+	message ??= ensure(interaction.message);
 
-	const threadArchiveResult = await fromAsync(ChannelId.patch(channelId, { archived: true }));
-	if (!threadArchiveResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
+	const channelId = message.channel_id;
+	const messageId = message.id;
+
+	if (message.thread) {
+		const threadArchiveResult = await fromAsync(ChannelId.patch(message.thread.id, { archived: true }));
+		if (!threadArchiveResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
+	}
 
 	const messageUpdateResult = await fromAsync(ChannelId.MessageId.patch(channelId, messageId, { components: [] }));
 	if (!messageUpdateResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure);
@@ -49,19 +53,14 @@ export async function useArchive(interaction: AnyInteraction, options: useArchiv
 	return ok();
 }
 
-export namespace useArchive {
-	export interface Options {
-		channelId?: Snowflake;
-		messageId?: Snowflake;
-	}
+const referenceRegExp = /#(\d+)/g;
+
+export function usePlainContent(content: string) {
+	// Sanitize ZWS, as they are used as content separators.
+	return content.replaceAll('\u200B', '');
 }
 
-const referenceRegExp = /#(\d)+/g;
-
-export async function useContent(content: string, guildId: Snowflake, channelId: Snowflake, lastId?: number) {
-	// Sanitize ZWS, as they are used as content separators.
-	content = content.replaceAll('\u200B', '');
-
+export async function useEmbedContent(content: string, guildId: Snowflake, channelId: Snowflake, lastId?: number) {
 	// Short circuit empty and one-character contents, as it needs at least 2 characters to do a reference.
 	if (content.length < 2) return content;
 
@@ -78,11 +77,10 @@ export async function useContent(content: string, guildId: Snowflake, channelId:
 		if (id > lastId) continue;
 
 		if (result.index !== lastIndex) {
-			buffer += content.slice(lastId, result.index);
-			if (buffer.length) parts.push(buffer + content.slice(lastId, result.index));
+			buffer += content.slice(lastIndex, result.index);
+			if (buffer.length) parts.push(buffer + content.slice(lastIndex, result.index));
 
 			buffer = '';
-			continue;
 		}
 
 		lastIndex = result.index + result[0].length;

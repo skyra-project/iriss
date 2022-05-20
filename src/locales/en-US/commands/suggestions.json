@@ -25,7 +25,7 @@
 	"suggestModifyNotConfigured": "This server has removed the suggestions channel from the configuration, and as such, all suggestions are now read-only. Please contact the server's administrators about this incident if this was supposed to work.",
 	"suggestModifyReplied": "You cannot modify a suggestion that was replied. You may follow it up in the discussion channel.",
 	"suggestModifySuccess": "Successfully updated your suggestion (`#{{id}}`)!",
-	"suggestNewMessageContent": "**[`#{{id}}`] [{{timestamp}}] {{user.mention}} suggested**:\n{{message}}",
+	"suggestNewMessageContent": "[`#{{id}}`] **{{user.mention}} suggested on {{timestamp}}**:\n{{message}}",
 	"suggestNewMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"suggestNewNotConfigured": "This server has not configured the suggestions channel yet. Please contact the administrators to set it up!",
 	"suggestNewSuccess": "Successfully sent your suggestion (`#{{id}}`)!",

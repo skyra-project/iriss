@@ -1,4 +1,4 @@
-import { T } from '@skyra/http-framework-i18n';
+import { FT, T } from '@skyra/http-framework-i18n';
 
 // Root
 export const RootName = T('commands/config:name');
@@ -47,3 +47,8 @@ export const ResetUseReactionsDescription = T('commands/config:resetUseReactions
 export const SharedValue = 'commands/config:sharedValue';
 export const SharedSecondValue = 'commands/config:sharedSecondValue';
 export const SharedThirdValue = 'commands/config:sharedThirdValue';
+
+// Logic
+export const EditSuccess = T('commands/config:editSuccess');
+export const EditFailure = T('commands/config:editFailure');
+export const ViewContent = FT<{ value: string }>('commands/config:viewContent');

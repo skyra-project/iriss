@@ -21,7 +21,7 @@ export type Snowflake = string | bigint;
 export namespace ChannelId {
 	export function patch(channelId: Snowflake, body: patch.Body) {
 		const route = Routes.channel(channelId.toString());
-		return container.rest.post(route, { body }) as Promise<patch.Result>;
+		return container.rest.patch(route, { body }) as Promise<patch.Result>;
 	}
 
 	export namespace patch {

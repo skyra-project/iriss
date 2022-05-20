@@ -44,5 +44,9 @@
 	"sharedSecondValueName": "second-value",
 	"sharedSecondValueDescription": "The second value for the configuration key",
 	"sharedThirdValueName": "third-value",
-	"sharedThirdValueDescription": "The third value for the configuration key"
+	"sharedThirdValueDescription": "The third value for the configuration key",
+
+	"editSuccess": "Successfully edited the configuration for this server.",
+	"editFailure": "I wasn't able to save your changes, sorry :(",
+	"viewContent": "The current value for that configuration key is: {{value}}."
 }

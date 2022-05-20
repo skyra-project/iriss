@@ -4,7 +4,7 @@ import { apply } from '#lib/utilities/add-builder-localizations';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
-import { useContent, useThread } from '#lib/utilities/suggestion-utilities';
+import { useEmbedContent, usePlainContent, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -44,7 +44,7 @@ export class UserCommand extends Command {
 			where: { guildId }
 		});
 
-		input = await useContent(input, guildId, settings.channel, count);
+		input = settings.useEmbed ? await useEmbedContent(input, guildId, settings.channel, count) : usePlainContent(input);
 
 		const id = count + 1;
 		const user = this.makeUserData(interaction);
@@ -219,7 +219,7 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		input = await useContent(input, guildId, settings.channel);
+		input = await useEmbedContent(input, guildId, settings.channel);
 
 		const message = result.value;
 		let data: ChannelId.MessageId.patch.Body;

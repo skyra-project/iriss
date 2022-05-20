@@ -1,9 +1,8 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { getColor, Status, type Get, type Id, type Values } from '#lib/utilities/id-creator';
 import { url } from '#lib/utilities/message';
-import { ChannelId } from '#lib/utilities/rest';
-import { useContent } from '#lib/utilities/suggestion-utilities';
-import { hyperlink, inlineCode, time } from '@discordjs/builders';
+import { useEmbedContent, usePlainContent } from '#lib/utilities/suggestion-utilities';
+import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { fromAsync } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
@@ -13,16 +12,15 @@ import { MessageFlags, type APIModalSubmitGuildInteraction } from 'discord-api-t
 type IdParserResult = Values<Get<Id.SuggestionsModal>>;
 
 export class Handler extends InteractionHandler {
-	public async run(interaction: APIModalSubmitGuildInteraction, [action, idString]: IdParserResult): InteractionHandler.AsyncResponse {
+	public async *run(interaction: APIModalSubmitGuildInteraction, [action, idString]: IdParserResult): InteractionHandler.GeneratorResponse {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = (await this.container.prisma.guild.findUnique({ where: { id: guildId } }))!;
 
-		const input = await useContent(interaction.data.components![0].components[0].value, guildId, settings.channel!);
 		const body =
 			interaction.message!.embeds.length === 0
-				? this.handleContent(interaction, settings, action, input)
-				: this.handleEmbed(interaction, settings, action, input);
-		await ChannelId.MessageId.patch(interaction.channel_id!, interaction.message!.id, body);
+				? this.handleContent(interaction, settings, action)
+				: await this.handleEmbed(interaction, settings, action);
+		yield this.updateMessage(body);
 
 		const result = await fromAsync(
 			this.container.prisma.suggestion.update({
@@ -46,23 +44,29 @@ export class Handler extends InteractionHandler {
 	private handleContent(
 		interaction: APIModalSubmitGuildInteraction,
 		settings: Guild,
-		action: Status,
-		input: string
-	): ChannelId.MessageId.patch.Body {
+		action: Status
+	): InteractionHandler.UpdateMessageResponseOptions {
+		const input = usePlainContent(interaction.data.components![0].components[0].value);
 		const header = resolveKey(interaction, this.makeHeader(action), {
 			tag: `${interaction.member.user.username}#${interaction.member.user.discriminator}`,
 			time: time()
 		});
+		const formattedHeader = `\u200B\n\n${bold(header)}:\n`;
 		const { content } = interaction.message!;
 		if (settings.addUpdateHistory) {
-			return { content: `${content}\u200B\n\n${header}${input}` };
+			return { content: `${content}${formattedHeader}${input}` };
 		}
 
 		const index = content.indexOf('\u200B\n\n');
-		return { content: `${index === -1 ? content : content.slice(0, index)}\u200B\n\n${header}${input}` };
+		return { content: `${index === -1 ? content : content.slice(0, index)}${formattedHeader}${input}` };
 	}
 
-	private handleEmbed(interaction: APIModalSubmitGuildInteraction, settings: Guild, action: Status, input: string): ChannelId.MessageId.patch.Body {
+	private async handleEmbed(
+		interaction: APIModalSubmitGuildInteraction,
+		settings: Guild,
+		action: Status
+	): Promise<InteractionHandler.UpdateMessageResponseOptions> {
+		const input = await useEmbedContent(interaction.data.components![0].components[0].value, settings.id, settings.channel!);
 		const header = resolveKey(interaction, this.makeHeader(action), {
 			tag: `${interaction.member.user.username}#${interaction.member.user.discriminator}`,
 			time: time()
