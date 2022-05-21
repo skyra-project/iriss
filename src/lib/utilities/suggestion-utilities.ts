@@ -207,7 +207,7 @@ async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guil
 	const [embed] = interaction.message!.embeds;
 
 	const fields = settings.addUpdateHistory //
-		? [...embed.fields!, { name: header, value: input }].slice(-3)
+		? [...(embed.fields ?? []), { name: header, value: input }].slice(-3)
 		: [{ name: header, value: input }];
 	const color = getColor(action);
 

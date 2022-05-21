@@ -5,8 +5,7 @@ import type { Guild } from '@prisma/client';
 import { fromAsync } from '@sapphire/result';
 import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
 import { resolveUserKey } from '@skyra/http-framework-i18n';
-import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
-import { ChannelType } from 'discord-api-types/v9';
+import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
 	apply(builder, LanguageKeys.Commands.Config.RootName, LanguageKeys.Commands.Config.RootDescription)
