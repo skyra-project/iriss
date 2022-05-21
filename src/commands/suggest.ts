@@ -4,7 +4,7 @@ import { apply } from '#lib/utilities/add-builder-localizations';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
-import { addCount, useCount, useEmbedContent, usePlainContent, useThread } from '#lib/utilities/suggestion-utilities';
+import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -56,7 +56,7 @@ export class UserCommand extends Command {
 		});
 		addCount(guildId);
 
-		// TODO: Add reactions if defined
+		if (settings.useReactions.length) await useReactions(settings, message);
 		if (settings.addThread) await useThread(interaction, id, { message, input: rawInput });
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewSuccess, { id });

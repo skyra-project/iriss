@@ -1,12 +1,11 @@
 import { SuggestionStatusColors } from '#lib/common/constants';
+import type { IntegerString } from '#lib/common/types';
 
 export const enum Id {
 	Suggestions = 'suggestions',
 	SuggestionsModal = 'suggestions-modal',
 	SuggestionsModalField = 'suggestions-modal.field'
 }
-
-export type IntegerString = `${bigint}`;
 
 export function makeIntegerString(value: number | bigint): IntegerString {
 	return value.toString() as IntegerString;

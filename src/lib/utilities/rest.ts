@@ -1,13 +1,13 @@
 import { envParseString } from '@skyra/env-utilities';
 import { container } from '@skyra/http-framework';
 import {
-	RESTGetAPIGuildRolesResult,
 	Routes,
 	type RESTDeleteAPIChannelAllMessageReactionsResult,
 	type RESTGetAPIApplicationCommandPermissionsResult,
 	type RESTGetAPIApplicationCommandsResult,
 	type RESTGetAPIApplicationGuildCommandsResult,
 	type RESTGetAPIChannelMessageResult,
+	type RESTGetAPIGuildRolesResult,
 	type RESTPatchAPIChannelJSONBody,
 	type RESTPatchAPIChannelMessageJSONBody,
 	type RESTPatchAPIChannelResult,
@@ -15,6 +15,7 @@ import {
 	type RESTPostAPIChannelMessageResult,
 	type RESTPostAPIChannelThreadsJSONBody,
 	type RESTPostAPIChannelThreadsResult,
+	type RESTPutAPIChannelMessageReactionResult,
 	type RESTPutAPIChannelThreadMembersResult
 } from 'discord-api-types/v10';
 
@@ -110,6 +111,17 @@ export namespace ChannelId {
 
 			export namespace remove {
 				export type Result = RESTDeleteAPIChannelAllMessageReactionsResult;
+			}
+		}
+
+		export namespace ReactionId {
+			export function put(channelId: Snowflake, messageId: Snowflake, emoji: string) {
+				const route = Routes.channelMessageOwnReaction(channelId.toString(), messageId.toString(), emoji);
+				return container.rest.put(route) as Promise<put.Result>;
+			}
+
+			export namespace put {
+				export type Result = RESTPutAPIChannelMessageReactionResult;
 			}
 		}
 

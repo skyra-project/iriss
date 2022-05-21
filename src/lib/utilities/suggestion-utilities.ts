@@ -5,13 +5,15 @@ import { getColor, Status } from '#lib/utilities/id-creator';
 import { getGuildId, getUser } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ChannelId, type Snowflake } from '#lib/utilities/rest';
+import { fromDiscord } from '#lib/utilities/result-utilities';
+import { getReactionFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { err, fromAsync, ok } from '@sapphire/result';
 import { container } from '@skyra/http-framework';
 import { resolveKey, type TypedT } from '@skyra/http-framework-i18n';
-import { ChannelType, type APIMessage } from 'discord-api-types/v10';
+import { ChannelType, RESTJSONErrorCodes, type APIMessage } from 'discord-api-types/v10';
 import slug from 'limax';
 
 const countCache = new Collection<bigint, number>();
@@ -42,6 +44,29 @@ export function addCount(guildId: Snowflake) {
 
 	const entry = countCache.get(guildId);
 	if (entry !== undefined) countCache.set(guildId, entry + 1);
+}
+
+export async function useReactions(settings: Guild, message: APIMessage) {
+	const failed: string[] = [];
+	for (const reaction of settings.useReactions) {
+		const result = await fromDiscord(
+			ChannelId.MessageId.ReactionId.put(message.channel_id, message.id, getReactionFormat(reaction as SerializedEmoji)),
+			RESTJSONErrorCodes.UnknownMessage,
+			RESTJSONErrorCodes.UnknownChannel,
+			RESTJSONErrorCodes.UnknownGuild,
+			RESTJSONErrorCodes.MaximumNumberOfReactionsReached
+		);
+
+		// The reaction failed, likely because the emoji is invalid or has been deleted. Mark as failed for removal:
+		if (!result.success) failed.push(reaction);
+		// Reaction is valid, but cannot react any more, return early and stop all processing:
+		else if (!result.value.exists) return;
+	}
+
+	if (!failed.length) return;
+
+	const passing = settings.useReactions.filter((reaction) => !failed.includes(reaction));
+	await container.prisma.guild.update({ where: { id: settings.id }, data: { useReactions: passing }, select: null });
 }
 
 const contentSeparator = '\u200B\n\n';

@@ -1,6 +1,7 @@
+import type { IntegerString } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { has } from '#lib/utilities/command-permissions';
-import { Id, makeCustomId, Status, type Get, type IntegerString, type Values } from '#lib/utilities/id-creator';
+import { Id, makeCustomId, Status, type Get, type Values } from '#lib/utilities/id-creator';
 import { ChannelId } from '#lib/utilities/rest';
 import { useArchive, useThread } from '#lib/utilities/suggestion-utilities';
 import { channelMention } from '@discordjs/builders';

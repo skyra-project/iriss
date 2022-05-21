@@ -87,6 +87,6 @@ async function makeCall(guildId: string, command: APIApplicationCommand) {
 		ErrorCodes.UnknownApplicationCommandPermissions
 	);
 
-	if (result.success) return result.value?.permissions ?? [];
+	if (result.success) return result.value?.value?.permissions ?? [];
 	throw result.error;
 }

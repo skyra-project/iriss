@@ -1,10 +1,11 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { apply } from '#lib/utilities/add-builder-localizations';
+import { getTextFormat, parse, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { channelMention, inlineCode } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
-import { fromAsync } from '@sapphire/result';
+import { err, fromAsync, ok } from '@sapphire/result';
 import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
-import { resolveUserKey } from '@skyra/http-framework-i18n';
+import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
@@ -156,9 +157,23 @@ export class UserCommand extends Command {
 		(builder) => apply(builder, LanguageKeys.Commands.Config.UseReactionsName, LanguageKeys.Commands.Config.ResetUseReactionsDescription),
 		'reset'
 	)
-	public handleUseReactions(_interaction: Command.Interaction, options: UseReactionsOptions): Command.AsyncResponse {
-		// TODO: Finish logic
-		return Promise.resolve(this.message({ content: JSON.stringify(options), flags: MessageFlags.Ephemeral }));
+	public async handleUseReactions(interaction: Command.Interaction, options: UseReactionsOptions): Command.AsyncResponse {
+		if (options.subCommandGroup === 'view') return this.viewUseReactions(interaction);
+		if (options.subCommandGroup === 'reset') return this.editConfiguration(interaction, { useReactions: [] });
+
+		const first = this.parseEmoji(interaction, options.value);
+		if (!first.success) return this.message({ content: first.error, flags: MessageFlags.Ephemeral });
+
+		const second = this.parseEmoji(interaction, options['second-value']);
+		if (!second.success) return this.message({ content: second.error, flags: MessageFlags.Ephemeral });
+
+		const third = this.parseEmoji(interaction, options['third-value']);
+		if (!third.success) return this.message({ content: third.error, flags: MessageFlags.Ephemeral });
+
+		const reactions = [first.value!];
+		if (second.value) reactions.push(second.value);
+		if (third.value) reactions.push(third.value);
+		return this.editConfiguration(interaction, { useReactions: reactions });
 	}
 
 	@RegisterSubCommand(
@@ -206,6 +221,44 @@ export class UserCommand extends Command {
 
 	private displayBooleanDefaultsDisabled(interaction: Command.Interaction, value: boolean | undefined = false) {
 		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Disabled));
+	}
+
+	private async viewUseReactions(interaction: Command.Interaction) {
+		const id = BigInt(interaction.guild_id!);
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
+
+		const content = this.displayEmojisGetContent(interaction, (settings?.useReactions ?? []) as SerializedEmoji[]);
+		return this.message({ content, flags: MessageFlags.Ephemeral });
+	}
+
+	private displayEmojisGetContent(interaction: Command.Interaction, reactions: SerializedEmoji[]) {
+		const t = getSupportedUserLanguageT(interaction);
+
+		if (reactions.length === 0) {
+			const key = LanguageKeys.Commands.Config.ViewContent;
+			return t(key, { value: inlineCode(t(LanguageKeys.Shared.Unset)) });
+		}
+
+		const mapped = reactions.map(getTextFormat);
+		if (reactions.length === 1) {
+			const key = LanguageKeys.Commands.Config.ViewContent;
+			return t(key, { value: mapped[0] });
+		}
+
+		if (reactions.length === 2) {
+			const key = LanguageKeys.Commands.Config.ViewUseReactionsTwo;
+			return t(key, { first: mapped[0], second: mapped[1] });
+		}
+
+		const key = LanguageKeys.Commands.Config.ViewUseReactionsThree;
+		return t(key, { first: mapped[0], second: mapped[1], third: mapped[2] });
+	}
+
+	private parseEmoji(interaction: Command.Interaction, value: string | undefined) {
+		if (value === undefined) return ok(null);
+
+		const first = parse(value);
+		return first === null ? err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditUseReactionsInvalidEmoji, { value })) : ok(first);
 	}
 }
 
