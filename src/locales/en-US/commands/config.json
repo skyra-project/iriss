@@ -16,6 +16,7 @@
 	"useEmbedName": "use-embed",
 	"useCompactName": "use-compact",
 	"useReactionsName": "use-reactions",
+	"removeReactionsName": "remove-reactions",
 
 	"editAddButtonsDescription": "Sets whether or not buttons should be added on new suggestion messages",
 	"resetAddButtonsDescription": "Enables buttons on new suggestion messages",
@@ -38,6 +39,9 @@
 	"editUseReactionsDescription": "Sets the reactions to be added on new suggestion messages",
 	"resetUseReactionsDescription": "Resets the reactions",
 	"viewUseReactionsDescription": "Check the reactions that will be added on new suggestion messages, if any",
+	"editRemoveReactionsDescription": "Sets whether or not I should automatically remove message reactions on archival",
+	"resetRemoveReactionsDescription": "Disables the automatic message reaction removal",
+	"viewRemoveReactionsDescription": "Check whether or not I'll remove message reactions on archival",
 
 	"sharedValueName": "value",
 	"sharedValueDescription": "The value for the configuration key",

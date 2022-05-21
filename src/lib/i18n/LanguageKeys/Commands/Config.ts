@@ -17,6 +17,7 @@ export const AddUpdateHistoryName = T('commands/config:addUpdateHistoryName');
 export const UseEmbedName = T('commands/config:useEmbedName');
 export const UseCompactName = T('commands/config:useCompactName');
 export const UseReactionsName = T('commands/config:useReactionsName');
+export const RemoveReactionsName = T('commands/config:removeReactionsName');
 
 // Subcommands
 export const EditChannelDescription = T('commands/config:editChannelDescription');
@@ -38,10 +39,11 @@ export const EditUseCompactDescription = T('commands/config:editUseCompactDescri
 export const ViewUseCompactDescription = T('commands/config:viewUseCompactDescription');
 export const ResetUseCompactDescription = T('commands/config:resetUseCompactDescription');
 export const EditUseReactionsDescription = T('commands/config:editUseReactionsDescription');
-export const EditUseReactionsSecondValueName = T('commands/config:editUseReactionsSecondValueName');
-export const EditUseReactionsThirdValueName = T('commands/config:editUseReactionsThirdValueName');
 export const ViewUseReactionsDescription = T('commands/config:viewUseReactionsDescription');
 export const ResetUseReactionsDescription = T('commands/config:resetUseReactionsDescription');
+export const EditRemoveReactionsDescription = T('commands/config:editRemoveReactionsDescription');
+export const ViewRemoveReactionsDescription = T('commands/config:viewRemoveReactionsDescription');
+export const ResetRemoveReactionsDescription = T('commands/config:resetRemoveReactionsDescription');
 
 // Shared
 export const SharedValue = 'commands/config:sharedValue';

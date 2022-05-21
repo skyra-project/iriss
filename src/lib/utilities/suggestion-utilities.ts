@@ -93,7 +93,7 @@ function removeMaskedHyperlinks(input: string) {
 
 export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
 	const message = options.message ?? ensure(interaction.message);
-	const settings = options.settings ?? (await container.prisma.guild.findUnique({ where: { id: BigInt(message.guild_id!) } }));
+	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(interaction.guild_id!) } }));
 
 	const channelId = message.channel_id;
 	const messageId = message.id;
@@ -104,7 +104,7 @@ export async function useArchive(interaction: AnyInteraction, options: useArchiv
 		if (!result.success) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
 	}
 
-	if (settings!.removeReactions) {
+	if (settings.removeReactions) {
 		const result = await fromAsync(ChannelId.MessageId.Reactions.remove(message.channel_id, message.id));
 		if (!result.success) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ReactionRemovalFailure);
 	}
@@ -176,7 +176,7 @@ export async function useEmbedContent(content: string, guildId: Snowflake, chann
 }
 
 export async function useMessageUpdate(interaction: AnyInteraction, message: APIMessage, action: Status, input: string, settings?: Guild) {
-	settings ??= (await container.prisma.guild.findUnique({ where: { id: BigInt(message.guild_id!) } }))!;
+	settings ??= (await container.prisma.guild.findUnique({ where: { id: BigInt(interaction.guild_id!) } }))!;
 
 	return message.embeds.length === 0
 		? useMessageUpdateContent(interaction, settings, action, input)
@@ -188,15 +188,15 @@ function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, a
 
 	const user = getUser(interaction);
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
-	const formattedHeader = `${contentSeparator}${bold(header)}:\n`;
+	const formattedHeader = `${bold(header)}:\n`;
 	const { content } = interaction.message!;
 	if (settings.addUpdateHistory) {
 		const [original, ...entries] = content.split(contentSeparator).concat(`${formattedHeader}${input}`);
-		return { content: `${original}${entries.slice(-3).join(contentSeparator)}` };
+		return { content: `${original}${contentSeparator}${entries.slice(-3).join(contentSeparator)}` };
 	}
 
 	const index = content.indexOf(contentSeparator);
-	return { content: `${index === -1 ? content : content.slice(0, index)}${formattedHeader}${input}` };
+	return { content: `${index === -1 ? content : content.slice(0, index)}${contentSeparator}${formattedHeader}${input}` };
 }
 
 async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guild, action: Status, input: string) {

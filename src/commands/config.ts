@@ -162,6 +162,26 @@ export class UserCommand extends Command {
 		return Promise.resolve(this.message({ content: JSON.stringify(options), flags: MessageFlags.Ephemeral }));
 	}
 
+	@RegisterSubCommand(
+		(builder) =>
+			apply(builder, LanguageKeys.Commands.Config.RemoveReactionsName, LanguageKeys.Commands.Config.EditRemoveReactionsDescription) //
+				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
+		'edit'
+	)
+	@RegisterSubCommand(
+		(builder) => apply(builder, LanguageKeys.Commands.Config.RemoveReactionsName, LanguageKeys.Commands.Config.ViewRemoveReactionsDescription),
+		'view'
+	)
+	@RegisterSubCommand(
+		(builder) => apply(builder, LanguageKeys.Commands.Config.RemoveReactionsName, LanguageKeys.Commands.Config.ResetRemoveReactionsDescription),
+		'reset'
+	)
+	public async handleRemoveReactions(interaction: Command.Interaction, options: Options<'remove-reactions', boolean>): Command.AsyncResponse {
+		return options.subCommandGroup === 'view'
+			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsDisabled(interaction, settings?.removeReactions))
+			: this.editConfiguration(interaction, { removeReactions: options.subCommandGroup === 'reset' ? false : options.value });
+	}
+
 	private async editConfiguration(interaction: Command.Interaction, data: Partial<Guild>) {
 		const id = BigInt(interaction.guild_id!);
 		const result = await fromAsync(this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null }));
@@ -172,7 +192,7 @@ export class UserCommand extends Command {
 
 	private async sharedView(interaction: Command.Interaction, cb: (settings: Guild | null) => string) {
 		const id = BigInt(interaction.guild_id!);
-		const value = cb(await this.container.prisma.guild.findUnique({ where: { id }, rejectOnNotFound: false }));
+		const value = cb(await this.container.prisma.guild.findUnique({ where: { id } }));
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Config.ViewContent, { value });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -182,11 +202,11 @@ export class UserCommand extends Command {
 	}
 
 	private displayBooleanDefaultsEnabled(interaction: Command.Interaction, value: boolean | undefined = true) {
-		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Enabled));
+		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Disabled));
 	}
 
 	private displayBooleanDefaultsDisabled(interaction: Command.Interaction, value: boolean | undefined = false) {
-		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Enabled));
+		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Disabled));
 	}
 }
 
