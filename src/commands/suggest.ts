@@ -13,12 +13,12 @@ import { Command, RegisterCommand } from '@skyra/http-framework';
 import { getSupportedLanguageName, getT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ButtonStyle, ComponentType, MessageFlags } from 'discord-api-types/v10';
 
-type MessageData = LanguageKeys.Commands.Suggestions.MessageData;
+type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
 @RegisterCommand((builder) =>
-	apply(builder, LanguageKeys.Commands.Suggestions.Suggest) //
-		.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggestions.SuggestOptionsSuggestion).setRequired(true))
-		.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggestions.SuggestOptionsId))
+	apply(builder, LanguageKeys.Commands.Suggest.RootName, LanguageKeys.Commands.Suggest.RootDescription) //
+		.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggest.OptionsSuggestion).setRequired(true))
+		.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggest.OptionsId))
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
@@ -36,7 +36,7 @@ export class UserCommand extends Command {
 			where: { id: guildId }
 		});
 		if (!settings?.channel) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewNotConfigured);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -59,7 +59,7 @@ export class UserCommand extends Command {
 		// TODO: Add reactions if defined
 		if (settings.addThread) await useThread(interaction, id, { message, input: rawInput });
 
-		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewSuccess, { id });
+		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewSuccess, { id });
 		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 
@@ -94,7 +94,7 @@ export class UserCommand extends Command {
 					type: ComponentType.Button,
 					custom_id: makeCustomId(Id.Suggestions, 'archive', id),
 					style: ButtonStyle.Danger,
-					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsArchive)
+					label: t(LanguageKeys.Commands.Suggest.ComponentsArchive)
 				}
 			]
 		};
@@ -103,7 +103,7 @@ export class UserCommand extends Command {
 				type: ComponentType.Button,
 				custom_id: makeCustomId(Id.Suggestions, 'thread', id),
 				style: ButtonStyle.Primary,
-				label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsCreateThread)
+				label: t(LanguageKeys.Commands.Suggest.ComponentsCreateThread)
 			});
 		}
 
@@ -115,19 +115,19 @@ export class UserCommand extends Command {
 					type: ComponentType.Button,
 					custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Accept),
 					style: ButtonStyle.Success,
-					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept)
+					label: t(LanguageKeys.Commands.Suggest.ComponentsAccept)
 				},
 				{
 					type: ComponentType.Button,
 					custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Consider),
 					style: ButtonStyle.Secondary,
-					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider)
+					label: t(LanguageKeys.Commands.Suggest.ComponentsConsider)
 				},
 				{
 					type: ComponentType.Button,
 					custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Deny),
 					style: ButtonStyle.Danger,
-					label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny)
+					label: t(LanguageKeys.Commands.Suggest.ComponentsDeny)
 				}
 			);
 		} else {
@@ -138,9 +138,9 @@ export class UserCommand extends Command {
 						type: ComponentType.SelectMenu,
 						custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
 						options: [
-							{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsAccept), value: Status.Accept },
-							{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsConsider), value: Status.Consider },
-							{ label: t(LanguageKeys.Commands.Suggestions.SuggestComponentsDeny), value: Status.Deny }
+							{ label: t(LanguageKeys.Commands.Suggest.ComponentsAccept), value: Status.Accept },
+							{ label: t(LanguageKeys.Commands.Suggest.ComponentsConsider), value: Status.Consider },
+							{ label: t(LanguageKeys.Commands.Suggest.ComponentsDeny), value: Status.Deny }
 						]
 					}
 				]
@@ -151,7 +151,7 @@ export class UserCommand extends Command {
 	}
 
 	private makeEmbedMessage(interaction: Command.Interaction, data: MessageData): ChannelId.Messages.post.Body {
-		const name = resolveKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewMessageEmbedTitle, data);
+		const name = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageEmbedTitle, data);
 		const embed = new EmbedBuilder()
 			.setColor(SuggestionStatusColors.Unresolved)
 			.setAuthor({ name, iconURL: displayAvatarURL(interaction.member!.user) })
@@ -160,7 +160,7 @@ export class UserCommand extends Command {
 	}
 
 	private makeContentMessage(interaction: Command.Interaction, data: MessageData): ChannelId.Messages.post.Body {
-		const content = resolveKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewMessageContent, data);
+		const content = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageContent, data);
 		return { content };
 	}
 
@@ -174,27 +174,27 @@ export class UserCommand extends Command {
 
 		// If the suggestion does not exist, return early:
 		if (suggestion === null) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifyDoesNotExist);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyDoesNotExist);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was made by a different author, return early:
 		const userId = BigInt(getUser(interaction).id);
 		if (suggestion.authorId !== userId) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifyMismatchingAuthor);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyMismatchingAuthor);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was archived, return early:
 		if (suggestion.archivedAt !== null) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifyArchived);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyArchived);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was already replied to, its contents become immutable to avoid changing the contents after
 		// a decision. As such, return early:
 		if (suggestion.repliedAt !== null) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifyReplied);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyReplied);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -206,7 +206,7 @@ export class UserCommand extends Command {
 
 		// If the settings were deleted or the channel not configured, everything becomes readonly. As such, return early:
 		if (!settings?.channel) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestNewNotConfigured);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -217,7 +217,7 @@ export class UserCommand extends Command {
 				data: { archivedAt: new Date() }
 			});
 
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifyMessageDeleted);
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyMessageDeleted);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -232,7 +232,7 @@ export class UserCommand extends Command {
 		}
 		await ChannelId.MessageId.patch(message.channel_id, message.id, data);
 
-		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggestions.SuggestModifySuccess, { id });
+		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifySuccess, { id });
 		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 

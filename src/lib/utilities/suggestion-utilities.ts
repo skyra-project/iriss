@@ -2,7 +2,7 @@ import type { AnyInteraction } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { ensure } from '#lib/utilities/assertions';
 import { getColor, Status } from '#lib/utilities/id-creator';
-import { getUser } from '#lib/utilities/interactions';
+import { getGuildId, getUser } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ChannelId, type Snowflake } from '#lib/utilities/rest';
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
@@ -93,7 +93,8 @@ function removeMaskedHyperlinks(input: string) {
 
 export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
 	const message = options.message ?? ensure(interaction.message);
-	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(interaction.guild_id!) } }));
+
+	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(getGuildId(interaction, message)) } }));
 
 	const channelId = message.channel_id;
 	const messageId = message.id;
@@ -200,7 +201,7 @@ function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, a
 }
 
 async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guild, action: Status, input: string) {
-	input = await useEmbedContent(input, settings.id, settings.channel!);
+	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel_id));
 
 	const user = getUser(interaction);
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });

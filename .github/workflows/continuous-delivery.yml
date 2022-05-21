@@ -31,4 +31,4 @@ jobs:
         with:
           push: true
           context: .
-          tags: ghcr.io/skyra-project/iris:latest
+          tags: ghcr.io/skyra-project/iriss:latest

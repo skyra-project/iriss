@@ -1,14 +1,12 @@
 {
 	"name": "config",
 	"description": "Views the configuration for this server",
-
 	"editName": "edit",
 	"editDescription": "Edits a configuration key",
 	"resetName": "reset",
 	"resetDescription": "Resets a configuration key to defaults",
 	"viewName": "view",
 	"viewDescription": "Views the current value for a configuration key",
-
 	"channelName": "channel",
 	"addThreadName": "add-thread",
 	"addButtonsName": "add-buttons",
@@ -17,7 +15,6 @@
 	"useCompactName": "use-compact",
 	"useReactionsName": "use-reactions",
 	"removeReactionsName": "remove-reactions",
-
 	"editAddButtonsDescription": "Sets whether or not buttons should be added on new suggestion messages",
 	"resetAddButtonsDescription": "Enables buttons on new suggestion messages",
 	"viewAddButtonsDescription": "Check whether or not buttons will be added on new suggestion messages",
@@ -42,14 +39,12 @@
 	"editRemoveReactionsDescription": "Sets whether or not I should automatically remove message reactions on archival",
 	"resetRemoveReactionsDescription": "Disables the automatic message reaction removal",
 	"viewRemoveReactionsDescription": "Check whether or not I'll remove message reactions on archival",
-
 	"sharedValueName": "value",
 	"sharedValueDescription": "The value for the configuration key",
 	"sharedSecondValueName": "second-value",
 	"sharedSecondValueDescription": "The second value for the configuration key",
 	"sharedThirdValueName": "third-value",
 	"sharedThirdValueDescription": "The third value for the configuration key",
-
 	"editSuccess": "Successfully edited the configuration for this server.",
 	"editFailure": "I wasn't able to save your changes, sorry :(",
 	"viewContent": "The current value for that configuration key is: {{value}}."

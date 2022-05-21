@@ -24,18 +24,13 @@ export class Handler extends InteractionHandler {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id: guildId } });
 
-		if (!settings?.channel) {
-			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.NotConfigured);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
-		}
-
 		const canRun = await has(interaction, 'resolve');
 		if (!canRun) {
 			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.MissingResolvePermissions);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		if (action === 'archive') return this.handleArchive(interaction, settings, Number(idString));
+		if (action === 'archive') return this.handleArchive(interaction, settings!, Number(idString));
 		if (action === 'thread') return this.handleThread(interaction, idString);
 		if (action === 'resolve') {
 			status ??= this.getResolveSelectMenuValue(interaction as APIMessageComponentSelectMenuInteraction);

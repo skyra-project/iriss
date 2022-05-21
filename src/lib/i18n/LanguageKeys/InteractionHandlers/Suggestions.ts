@@ -1,6 +1,5 @@
 import { FT, T } from '@skyra/http-framework-i18n';
 
-export const NotConfigured = T('interaction-handlers/suggestions:notConfigured');
 export const MissingResolvePermissions = T('interaction-handlers/suggestions:missingResolvePermissions');
 export const ModalTitle = FT<{ id: string }>('interaction-handlers/suggestions:modalTitle');
 export const ModalFieldLabelAccept = T('interaction-handlers/suggestions:modalFieldLabelAccept');

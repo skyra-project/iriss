@@ -1,6 +1,7 @@
 import { envParseString } from '@skyra/env-utilities';
 import { container } from '@skyra/http-framework';
 import {
+	RESTGetAPIGuildRolesResult,
 	Routes,
 	type RESTDeleteAPIChannelAllMessageReactionsResult,
 	type RESTGetAPIApplicationCommandPermissionsResult,
@@ -18,6 +19,45 @@ import {
 } from 'discord-api-types/v10';
 
 export type Snowflake = string | bigint;
+
+export namespace ApplicationId {
+	const applicationId = envParseString('DISCORD_CLIENT_ID');
+
+	export namespace Commands {
+		export function get(): Promise<get.Result> {
+			const route = Routes.applicationCommands(applicationId);
+			return container.rest.get(route) as Promise<get.Result>;
+		}
+
+		export namespace get {
+			export type Result = RESTGetAPIApplicationCommandsResult;
+		}
+	}
+
+	export namespace GuildId {
+		export namespace Commands {
+			export function get(guildId: Snowflake): Promise<get.Result> {
+				const route = Routes.applicationGuildCommands(applicationId, guildId.toString());
+				return container.rest.get(route) as Promise<get.Result>;
+			}
+
+			export namespace get {
+				export type Result = RESTGetAPIApplicationGuildCommandsResult;
+			}
+		}
+
+		export namespace CommandId.Permissions {
+			export function get(guildId: Snowflake, commandId: Snowflake): Promise<get.Result> {
+				const route = Routes.applicationCommandPermissions(applicationId, guildId.toString(), commandId.toString());
+				return container.rest.get(route) as Promise<get.Result>;
+			}
+
+			export namespace get {
+				export type Result = RESTGetAPIApplicationCommandPermissionsResult;
+			}
+		}
+	}
+}
 
 export namespace ChannelId {
 	export function patch(channelId: Snowflake, body: patch.Body) {
@@ -98,41 +138,15 @@ export namespace ChannelId {
 	}
 }
 
-export namespace ApplicationId {
-	const applicationId = envParseString('DISCORD_CLIENT_ID');
-
-	export namespace Commands {
-		export function get(): Promise<get.Result> {
-			const route = Routes.applicationCommands(applicationId);
+export namespace GuildId {
+	export namespace Roles {
+		export function get(guildId: Snowflake) {
+			const route = Routes.guildRoles(guildId.toString());
 			return container.rest.get(route) as Promise<get.Result>;
 		}
 
 		export namespace get {
-			export type Result = RESTGetAPIApplicationCommandsResult;
-		}
-	}
-
-	export namespace GuildId {
-		export namespace Commands {
-			export function get(guildId: Snowflake): Promise<get.Result> {
-				const route = Routes.applicationGuildCommands(applicationId, guildId.toString());
-				return container.rest.get(route) as Promise<get.Result>;
-			}
-
-			export namespace get {
-				export type Result = RESTGetAPIApplicationGuildCommandsResult;
-			}
-		}
-
-		export namespace CommandId.Permissions {
-			export function get(guildId: Snowflake, commandId: Snowflake): Promise<get.Result> {
-				const route = Routes.applicationCommandPermissions(applicationId, guildId.toString(), commandId.toString());
-				return container.rest.get(route) as Promise<get.Result>;
-			}
-
-			export namespace get {
-				export type Result = RESTGetAPIApplicationCommandPermissionsResult;
-			}
+			export type Result = RESTGetAPIGuildRolesResult;
 		}
 	}
 }

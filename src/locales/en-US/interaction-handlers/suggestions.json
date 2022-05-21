@@ -1,5 +1,4 @@
 {
-	"notConfigured": "The suggestions channel is not longer configured, please contact this server's administrators if this is an error.",
 	"missingResolvePermissions": "You must have permissions to run /resolve in order to use this button.",
 	"modalTitle": "Suggestion #{{id}}",
 	"modalFieldLabelAccept": "Message (Accept)",

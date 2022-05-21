@@ -10,8 +10,8 @@ import gradient from 'gradient-string';
 
 container.prisma = new PrismaClient();
 
-setRepository('iris');
-setInvite('948377113457745990', '34359822400');
+setRepository('iriss');
+setInvite('948377113457745990', '326417868864');
 
 setup(new URL('../src/.env', import.meta.url));
 
