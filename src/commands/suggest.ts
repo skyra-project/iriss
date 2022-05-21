@@ -7,11 +7,13 @@ import { ChannelId } from '#lib/utilities/rest';
 import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
 import { EmbedBuilder, time, userMention } from '@discordjs/builders';
+import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
+import { AsyncQueue } from '@sapphire/async-queue';
 import { fromAsync } from '@sapphire/result';
 import { Command, RegisterCommand } from '@skyra/http-framework';
-import { getSupportedLanguageName, getT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
-import { ButtonStyle, ComponentType, MessageFlags } from 'discord-api-types/v10';
+import { getSupportedLanguageName, getSupportedUserLanguageT, getT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
+import { ButtonStyle, ComponentType, MessageFlags, type APIMessage } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
@@ -22,6 +24,7 @@ type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
+	private readonly queues = new Collection<bigint, AsyncQueue>();
 	public override chatInputRun(interaction: Command.Interaction, options: Options): Command.GeneratorResponse {
 		return options.id === undefined
 			? this.handleNew(interaction, options.suggestion)
@@ -40,26 +43,49 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		// TODO: Add sync system
-		const count = await useCount(guildId);
+		const queue = this.queues.ensure(guildId, () => new AsyncQueue());
+		await queue.wait();
 
-		const input = settings.useEmbed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
+		let id: number;
+		let message: APIMessage;
+		try {
+			const count = await useCount(guildId);
+			id = count + 1;
 
-		const id = count + 1;
-		const user = this.makeUserData(interaction);
-		const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
-		const message = await ChannelId.Messages.post(settings.channel, body);
+			const input = settings.useEmbed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
+			const user = this.makeUserData(interaction);
+			const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
+			message = await ChannelId.Messages.post(settings.channel, body);
 
-		await this.container.prisma.suggestion.create({
-			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) },
-			select: null
-		});
-		addCount(guildId);
+			await this.container.prisma.suggestion.create({
+				data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) },
+				select: null
+			});
 
-		if (settings.useReactions.length) await useReactions(settings, message);
-		if (settings.addThread) await useThread(interaction, id, { message, input: rawInput });
+			addCount(guildId);
+		} finally {
+			queue.shift();
+		}
 
-		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewSuccess, { id });
+		const t = getSupportedUserLanguageT(interaction);
+		const errors: string[] = [];
+
+		if (settings.useReactions.length) {
+			const result = await useReactions(settings, message);
+			if (!result.success) errors.push(t(result.error.key, { failed: result.error.failed }));
+		}
+
+		if (settings.addThread) {
+			const result = await useThread(interaction, id, { message, input: rawInput });
+
+			if (!result.success) errors.push(t(result.error));
+			else if (!result.value.memberAddResult.success) errors.push(t(result.value.memberAddResult.error));
+		}
+
+		const header = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewSuccess, { id });
+		const details = errors.length === 0 ? '' : `\n\n- ${errors.join('\n- ')}`;
+
+		const content = header + details;
 		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 

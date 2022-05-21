@@ -17,6 +17,7 @@
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newNotConfigured": "This server has not configured the suggestions channel yet. Please contact the administrators to set it up!",
 	"newSuccess": "Successfully sent your suggestion (`#{{id}}`)!",
+	"reactionsFailed": "I failed to add the following reaction(s): {{failed}}",
 	"optionsIdName": "id",
 	"optionsIdDescription": "The suggestion's number to edit",
 	"optionsSuggestionName": "suggestion",

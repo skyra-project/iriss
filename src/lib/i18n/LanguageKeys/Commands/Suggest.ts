@@ -21,6 +21,7 @@ export const NewMessageContent = FT<MessageData>('commands/suggest:newMessageCon
 export const NewMessageEmbedTitle = FT<MessageData>('commands/suggest:newMessageEmbedTitle');
 export const NewNotConfigured = T('commands/suggest:newNotConfigured');
 export const NewSuccess = FT<{ id: number }>('commands/suggest:newSuccess');
+export const ReactionsFailed = FT<{ failed: string[] }>('commands/suggest:reactionsFailed');
 
 export interface MessageData {
 	id: number;

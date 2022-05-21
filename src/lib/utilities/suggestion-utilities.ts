@@ -6,7 +6,7 @@ import { getGuildId, getUser } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ChannelId, type Snowflake } from '#lib/utilities/rest';
 import { fromDiscord } from '#lib/utilities/result-utilities';
-import { getReactionFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
+import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
@@ -59,14 +59,19 @@ export async function useReactions(settings: Guild, message: APIMessage) {
 
 		// The reaction failed, likely because the emoji is invalid or has been deleted. Mark as failed for removal:
 		if (!result.success) failed.push(reaction);
-		// Reaction is valid, but cannot react any more, return early and stop all processing:
-		else if (!result.value.exists) return;
+		// Reaction is valid, but cannot react any more, break the loop:
+		else if (!result.value.exists) break;
 	}
 
-	if (!failed.length) return;
+	if (!failed.length) return ok();
 
 	const passing = settings.useReactions.filter((reaction) => !failed.includes(reaction));
 	await container.prisma.guild.update({ where: { id: settings.id }, data: { useReactions: passing }, select: null });
+
+	return err({
+		key: LanguageKeys.Commands.Suggest.ReactionsFailed,
+		failed: failed.map((reaction) => getTextFormat(reaction as SerializedEmoji)).join(' ')
+	});
 }
 
 const contentSeparator = '\u200B\n\n';
@@ -99,7 +104,8 @@ export async function useThread(interaction: AnyInteraction, id: string | number
 	if (!threadCreationResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
 
 	const thread = threadCreationResult.value;
-	const memberAddResult = await fromAsync(ChannelId.ThreadMemberId.put(thread.id, getUser(interaction).id));
+	const result = await fromAsync(ChannelId.ThreadMemberId.put(thread.id, getUser(interaction).id));
+	const memberAddResult = result.success ? result : err(LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
 
 	return ok({ thread, memberAddResult });
 }

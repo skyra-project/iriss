@@ -130,15 +130,15 @@ export class Handler extends InteractionHandler {
 
 		const patchResult = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components }));
 
+		const t = getSupportedUserLanguageT(interaction);
 		const key = patchResult.success
 			? LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess
 			: LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure;
-		const responseContent = resolveUserKey(interaction, key, { channel: channelMention(threadResult.value.thread.id) });
-		const warningContent = threadResult.value.memberAddResult.success
-			? ''
-			: `\n${resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure)}`;
 
-		const content = responseContent + warningContent;
+		const header = t(key, { channel: channelMention(threadResult.value.thread.id) });
+		const details = threadResult.value.memberAddResult.success ? '' : `\n${t(threadResult.value.memberAddResult.error)}`;
+
+		const content = header + details;
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 }
