@@ -49,7 +49,8 @@ export function getReactionFormat(emoji: SerializedEmoji) {
 	return `${name}:${id}`;
 }
 
-const twemoji = /\p{Emoji_Presentation}/gu;
+// Twemoji keycaps and Unicode emojis:
+const twemoji = /^(?:\d\ufe0f?\u20e3|\p{Emoji_Presentation})$/u;
 const customEmoji = /<(?<animated>a)?:(?<name>\w{2,32}):(?<id>\d{17,18})>/;
 export function parse(emoji: string): SerializedEmoji | null {
 	if (twemoji.test(emoji)) return `t${emoji}`;
