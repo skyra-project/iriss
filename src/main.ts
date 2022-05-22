@@ -44,7 +44,6 @@ console.log(
 				String.raw`      'I' `
 			],
 			name: [
-				'',
 				String.raw`d888888b d8888b. d888888b .d8888. .d8888.`,
 				String.raw`  '88'   88  '8D   '88'   88'  YP 88'  YP`,
 				String.raw`   88    88oobY'    88    '8bo.   '8bo.`,
@@ -52,7 +51,12 @@ console.log(
 				String.raw`  .88.   88 '88.   .88.   db   8D db   8D`,
 				String.raw`Y888888P 88   YD Y888888P '8888Y' '8888Y'`
 			],
-			extra: ['', `Listening on ${address}:${port}`]
+			extra: [
+				'',
+				`Loaded: ${container.stores.get('commands').size} commands`,
+				`      : ${container.stores.get('interaction-handlers').size} interaction handlers`,
+				`Listening: ${address}:${port}`
+			]
 		})
 	)
 );
