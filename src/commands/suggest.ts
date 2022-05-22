@@ -52,7 +52,7 @@ export class UserCommand extends Command {
 			const count = await useCount(guildId);
 			id = count + 1;
 
-			const input = settings.useEmbed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
+			const input = settings.embed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
 			const user = this.makeUserData(interaction);
 			const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
 			message = await ChannelId.Messages.post(settings.channel, body);
@@ -70,12 +70,12 @@ export class UserCommand extends Command {
 		const t = getSupportedUserLanguageT(interaction);
 		const errors: string[] = [];
 
-		if (settings.useReactions.length) {
+		if (settings.reactions.length) {
 			const result = await useReactions(settings, message);
 			if (!result.success) errors.push(t(result.error.key, { failed: result.error.failed }));
 		}
 
-		if (settings.addThread) {
+		if (settings.autoThread) {
 			const result = await useThread(interaction, id, { message, input: rawInput });
 
 			if (!result.success) errors.push(t(result.error));
@@ -101,7 +101,7 @@ export class UserCommand extends Command {
 	}
 
 	private makeMessage(interaction: Command.Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
-		const resolved = settings.useEmbed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
+		const resolved = settings.embed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
 		return { ...resolved, components: this.makeComponents(interaction, settings, data) };
 	}
 
@@ -109,7 +109,7 @@ export class UserCommand extends Command {
 		type MessageComponent = NonNullable<Command.MessageResponseOptions['components']>[number];
 
 		const components: MessageComponent[] = [];
-		if (!settings.addButtons) return components;
+		if (!settings.buttons) return components;
 
 		const id = makeIntegerString(data.id);
 		const t = getT(getSupportedLanguageName(interaction));
@@ -124,7 +124,7 @@ export class UserCommand extends Command {
 				}
 			]
 		};
-		if (!settings.addThread) {
+		if (!settings.autoThread) {
 			manageRow.components.unshift({
 				type: ComponentType.Button,
 				custom_id: makeCustomId(Id.Suggestions, 'thread', id),
@@ -135,7 +135,7 @@ export class UserCommand extends Command {
 
 		components.push(manageRow);
 
-		if (settings.useCompact) {
+		if (settings.compact) {
 			manageRow.components.push(
 				{
 					type: ComponentType.Button,

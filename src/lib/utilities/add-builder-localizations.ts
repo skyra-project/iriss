@@ -1,4 +1,5 @@
 import { lazy } from '#lib/common/lazy';
+import type { NonNullObject } from '#lib/common/types';
 import { Collection } from '@discordjs/collection';
 import { getT, loadedLocales, type TypedT } from '@skyra/http-framework-i18n';
 import type { LocalizationMap } from 'discord-api-types/v10';
@@ -11,7 +12,10 @@ function getDefaultT() {
 	throw new TypeError('Could not find en-US');
 }
 
-export function apply<T extends NamedBuilder>(builder: T, ...params: [root: LocalePrefixKey] | [name: TypedT, description: TypedT]): T {
+export function apply<T extends BuilderWithNameAndDescription>(
+	builder: T,
+	...params: [root: LocalePrefixKey] | [name: TypedT, description: TypedT]
+): T {
 	const locales = getLocales();
 	const defaultT = getDefaultT();
 
@@ -24,10 +28,28 @@ export function apply<T extends NamedBuilder>(builder: T, ...params: [root: Loca
 		.setDescriptionLocalizations(Object.fromEntries(locales.map((t, locale) => [locale, t(localeDescription)])));
 }
 
-export interface NamedBuilder {
+export function makeName<V extends NonNullObject>(nameKey: TypedT, value?: V): makeName.Result<V> {
+	const locales = getLocales();
+	const defaultT = getDefaultT();
+
+	return {
+		...value,
+		name: defaultT(nameKey),
+		name_localizations: Object.fromEntries(locales.map((t, locale) => [locale, t(nameKey)]))
+	} as makeName.Result<V>;
+}
+
+export namespace makeName {
+	export type Result<V> = V & {
+		name: string;
+		name_localizations: LocalizationMap;
+	};
+}
+
+export interface BuilderWithNameAndDescription {
 	setName(name: string): this;
-	setDescription(description: string): this;
 	setNameLocalizations(localizedNames: LocalizationMap | null): this;
+	setDescription(description: string): this;
 	setDescriptionLocalizations(localizedDescriptions: LocalizationMap | null): this;
 }
 

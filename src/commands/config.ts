@@ -1,6 +1,7 @@
+import { isDefined } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { apply } from '#lib/utilities/add-builder-localizations';
-import { getTextFormat, parse, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
+import { apply, makeName } from '#lib/utilities/add-builder-localizations';
+import { parse } from '#lib/utilities/serialized-emoji';
 import { channelMention, inlineCode } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { err, fromAsync, ok } from '@sapphire/result';
@@ -12,269 +13,175 @@ import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-type
 	apply(builder, LanguageKeys.Commands.Config.RootName, LanguageKeys.Commands.Config.RootDescription)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.setDMPermission(false)
-		.addSubcommandGroup((group) => apply(group, LanguageKeys.Commands.Config.Edit))
-		.addSubcommandGroup((group) => apply(group, LanguageKeys.Commands.Config.View))
-		.addSubcommandGroup((group) => apply(group, LanguageKeys.Commands.Config.Reset))
 )
 export class UserCommand extends Command {
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.ChannelName, LanguageKeys.Commands.Config.EditChannelDescription) //
-				.addChannelOption((input) =>
-					apply(input, LanguageKeys.Commands.Config.SharedValue) //
-						.addChannelTypes(ChannelType.GuildText)
-						.setRequired(true)
-				),
-		'edit'
+	@RegisterSubCommand((builder) =>
+		apply(builder, LanguageKeys.Commands.Config.Edit)
+			.addBooleanOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyAutoThread, LanguageKeys.Commands.Config.EditOptionsAutoThreadDescription)
+			)
+			.addBooleanOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyButtons, LanguageKeys.Commands.Config.EditOptionsButtonsDescription)
+			)
+			.addChannelOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyChannel, LanguageKeys.Commands.Config.EditOptionsChannelDescription) //
+					.addChannelTypes(ChannelType.GuildText)
+			)
+			.addBooleanOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyCompact, LanguageKeys.Commands.Config.EditOptionsCompactDescription)
+			)
+			.addBooleanOption((input) =>
+				apply(
+					input,
+					LanguageKeys.Commands.Config.KeyDisplayUpdateHistory,
+					LanguageKeys.Commands.Config.EditOptionsDisplayUpdateHistoryDescription
+				)
+			)
+			.addBooleanOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyEmbed, LanguageKeys.Commands.Config.EditOptionsEmbedDescription)
+			)
+			.addStringOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyReactions, LanguageKeys.Commands.Config.EditOptionsReactionsDescription)
+			)
+			.addBooleanOption((input) =>
+				apply(input, LanguageKeys.Commands.Config.KeyRemoveReactions, LanguageKeys.Commands.Config.EditOptionsRemoveReactionsDescription)
+			)
 	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.ChannelName, LanguageKeys.Commands.Config.ViewChannelDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.ChannelName, LanguageKeys.Commands.Config.ResetChannelDescription),
-		'reset'
-	)
-	public handleChannel(interaction: Command.Interaction, options: Options<'channel', TransformedArguments.Channel>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayChannel(interaction, settings?.channel?.toString()))
-			: this.editConfiguration(interaction, { channel: options.subCommandGroup === 'reset' ? null : BigInt(options.value.id) });
+	public async runEdit(interaction: Command.Interaction, options: EditOptions): Command.AsyncResponse {
+		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
+
+		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
+		if (isDefined(options.reactions)) {
+			const result = this.parseReactionsString(interaction, options.reactions);
+			if (!result.success) return this.message({ content: result.error, flags: MessageFlags.Ephemeral });
+
+			entries.push(['reactions', result.success]);
+		}
+
+		if (isDefined(options['auto-thread'])) entries.push(['autoThread', options['auto-thread']]);
+		if (isDefined(options.buttons)) entries.push(['buttons', options.buttons]);
+		if (isDefined(options.channel)) entries.push(['channel', BigInt(options.channel.id)]);
+		if (isDefined(options.compact)) entries.push(['compact', options.compact]);
+		if (isDefined(options['display-update-history'])) entries.push(['displayUpdateHistory', options['display-update-history']]);
+		if (isDefined(options.embed)) entries.push(['embed', options.embed]);
+		if (isDefined(options['remove-reactions'])) entries.push(['removeReactions', options['remove-reactions']]);
+
+		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.AddThreadName, LanguageKeys.Commands.Config.EditAddThreadDescription) //
-				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
-		'edit'
+	@RegisterSubCommand((builder) =>
+		apply(builder, LanguageKeys.Commands.Config.Reset).addStringOption((input) =>
+			apply(input, LanguageKeys.Commands.Config.ResetOptionsKey)
+				.addChoices(
+					makeName(LanguageKeys.Commands.Config.ResetOptionsKeyChoicesAll, { value: 'all' }),
+					makeName(LanguageKeys.Commands.Config.KeyAutoThread, { value: 'auto-thread' }),
+					makeName(LanguageKeys.Commands.Config.KeyButtons, { value: 'buttons' }),
+					makeName(LanguageKeys.Commands.Config.KeyChannel, { value: 'channel' }),
+					makeName(LanguageKeys.Commands.Config.KeyCompact, { value: 'compact' }),
+					makeName(LanguageKeys.Commands.Config.KeyDisplayUpdateHistory, { value: 'display-update-history' }),
+					makeName(LanguageKeys.Commands.Config.KeyEmbed, { value: 'embed' }),
+					makeName(LanguageKeys.Commands.Config.KeyReactions, { value: 'reactions' }),
+					makeName(LanguageKeys.Commands.Config.KeyRemoveReactions, { value: 'remove-reactions' })
+				)
+				.setRequired(true)
+		)
 	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.AddThreadName, LanguageKeys.Commands.Config.ViewAddThreadDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.AddThreadName, LanguageKeys.Commands.Config.ResetAddThreadDescription),
-		'reset'
-	)
-	public handleAddThread(interaction: Command.Interaction, options: Options<'add-thread', boolean>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsDisabled(interaction, settings?.addThread))
-			: this.editConfiguration(interaction, { addThread: options.subCommandGroup === 'reset' ? false : options.value });
+	public runReset(interaction: Command.Interaction, options: ResetOptions): Command.AsyncResponse {
+		switch (options.key) {
+			case 'all': {
+				const data: Omit<Required<Guild>, 'id'> = {
+					autoThread: false,
+					buttons: true,
+					channel: null,
+					compact: false,
+					displayUpdateHistory: false,
+					embed: true,
+					reactions: [],
+					removeReactions: false
+				};
+				return this.updateDatabase(interaction, data);
+			}
+			case 'auto-thread':
+				return this.updateDatabase(interaction, { autoThread: false });
+			case 'buttons':
+				return this.updateDatabase(interaction, { buttons: true });
+			case 'channel':
+				return this.updateDatabase(interaction, { channel: null });
+			case 'compact':
+				return this.updateDatabase(interaction, { compact: false });
+			case 'display-update-history':
+				return this.updateDatabase(interaction, { displayUpdateHistory: false });
+			case 'embed':
+				return this.updateDatabase(interaction, { embed: true });
+			case 'reactions':
+				return this.updateDatabase(interaction, { reactions: [] });
+			case 'remove-reactions':
+				return this.updateDatabase(interaction, { removeReactions: false });
+		}
 	}
 
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.AddButtonsName, LanguageKeys.Commands.Config.EditAddButtonsDescription) //
-				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
-		'edit'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.AddButtonsName, LanguageKeys.Commands.Config.ViewAddButtonsDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.AddButtonsName, LanguageKeys.Commands.Config.ResetAddButtonsDescription),
-		'reset'
-	)
-	public handleAddButtons(interaction: Command.Interaction, options: Options<'add-buttons', boolean>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsEnabled(interaction, settings?.addButtons))
-			: this.editConfiguration(interaction, { addButtons: options.subCommandGroup === 'reset' ? true : options.value });
+	@RegisterSubCommand((builder) => apply(builder, LanguageKeys.Commands.Config.View))
+	public async runView(interaction: Command.Interaction): Command.AsyncResponse {
+		const id = BigInt(interaction.guild_id!);
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
+
+		const content = this.viewGenerateContent(interaction, settings);
+		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.AddUpdateHistoryName, LanguageKeys.Commands.Config.EditAddUpdateHistoryDescription) //
-				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
-		'edit'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.AddUpdateHistoryName, LanguageKeys.Commands.Config.ViewAddUpdateHistoryDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.AddUpdateHistoryName, LanguageKeys.Commands.Config.ResetAddUpdateHistoryDescription),
-		'reset'
-	)
-	public handleAddUpdateHistory(interaction: Command.Interaction, options: Options<'add-update-history', boolean>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsDisabled(interaction, settings?.addUpdateHistory))
-			: this.editConfiguration(interaction, { addUpdateHistory: options.subCommandGroup === 'reset' ? false : options.value });
+	private viewGenerateContent(interaction: Command.Interaction, settings?: Partial<Guild> | null) {
+		settings ??= {};
+
+		const t = getSupportedUserLanguageT(interaction);
+		const bool = [inlineCode(t(LanguageKeys.Shared.Disabled)), inlineCode(t(LanguageKeys.Shared.Enabled))];
+
+		const channel = settings.channel ? channelMention(settings.channel.toString()) : inlineCode(t(LanguageKeys.Shared.Unset));
+		const autoThread = bool[Number(settings.autoThread ?? false)];
+		const buttons = bool[Number(settings.buttons ?? true)];
+		const compact = bool[Number(settings.compact ?? false)];
+		const displayUpdateHistory = bool[Number(settings.displayUpdateHistory ?? false)];
+		const embed = bool[Number(settings.embed ?? true)];
+		const reactions = settings.reactions?.length ? settings.reactions.join(' ') : inlineCode(t(LanguageKeys.Shared.None));
+
+		return t(LanguageKeys.Commands.Config.ViewContent, { channel, autoThread, buttons, compact, displayUpdateHistory, embed, reactions });
 	}
 
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.UseEmbedName, LanguageKeys.Commands.Config.EditUseEmbedDescription) //
-				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
-		'edit'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.UseEmbedName, LanguageKeys.Commands.Config.ViewUseEmbedDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.UseEmbedName, LanguageKeys.Commands.Config.ResetUseEmbedDescription),
-		'reset'
-	)
-	public handleUseEmbed(interaction: Command.Interaction, options: Options<'use-embed', boolean>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsEnabled(interaction, settings?.useEmbed))
-			: this.editConfiguration(interaction, { useEmbed: options.subCommandGroup === 'reset' ? true : options.value });
-	}
-
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.UseCompactName, LanguageKeys.Commands.Config.EditUseCompactDescription) //
-				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
-		'edit'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.UseCompactName, LanguageKeys.Commands.Config.ViewUseCompactDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.UseCompactName, LanguageKeys.Commands.Config.ResetUseCompactDescription),
-		'reset'
-	)
-	public async handleUseCompact(interaction: Command.Interaction, options: Options<'use-compact', boolean>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsDisabled(interaction, settings?.useCompact))
-			: this.editConfiguration(interaction, { useCompact: options.subCommandGroup === 'reset' ? false : options.value });
-	}
-
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.UseReactionsName, LanguageKeys.Commands.Config.EditUseReactionsDescription)
-				.addStringOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true))
-				.addStringOption((input) => apply(input, LanguageKeys.Commands.Config.SharedSecondValue))
-				.addStringOption((input) => apply(input, LanguageKeys.Commands.Config.SharedThirdValue)),
-		'edit'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.UseReactionsName, LanguageKeys.Commands.Config.ViewUseReactionsDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.UseReactionsName, LanguageKeys.Commands.Config.ResetUseReactionsDescription),
-		'reset'
-	)
-	public async handleUseReactions(interaction: Command.Interaction, options: UseReactionsOptions): Command.AsyncResponse {
-		if (options.subCommandGroup === 'view') return this.viewUseReactions(interaction);
-		if (options.subCommandGroup === 'reset') return this.editConfiguration(interaction, { useReactions: [] });
-
-		const first = this.parseEmoji(interaction, options.value);
-		if (!first.success) return this.message({ content: first.error, flags: MessageFlags.Ephemeral });
-
-		const second = this.parseEmoji(interaction, options['second-value']);
-		if (!second.success) return this.message({ content: second.error, flags: MessageFlags.Ephemeral });
-
-		const third = this.parseEmoji(interaction, options['third-value']);
-		if (!third.success) return this.message({ content: third.error, flags: MessageFlags.Ephemeral });
-
-		const reactions = [first.value!];
-		if (second.value) reactions.push(second.value);
-		if (third.value) reactions.push(third.value);
-		return this.editConfiguration(interaction, { useReactions: reactions });
-	}
-
-	@RegisterSubCommand(
-		(builder) =>
-			apply(builder, LanguageKeys.Commands.Config.RemoveReactionsName, LanguageKeys.Commands.Config.EditRemoveReactionsDescription) //
-				.addBooleanOption((input) => apply(input, LanguageKeys.Commands.Config.SharedValue).setRequired(true)),
-		'edit'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.RemoveReactionsName, LanguageKeys.Commands.Config.ViewRemoveReactionsDescription),
-		'view'
-	)
-	@RegisterSubCommand(
-		(builder) => apply(builder, LanguageKeys.Commands.Config.RemoveReactionsName, LanguageKeys.Commands.Config.ResetRemoveReactionsDescription),
-		'reset'
-	)
-	public async handleRemoveReactions(interaction: Command.Interaction, options: Options<'remove-reactions', boolean>): Command.AsyncResponse {
-		return options.subCommandGroup === 'view'
-			? this.sharedView(interaction, (settings) => this.displayBooleanDefaultsDisabled(interaction, settings?.removeReactions))
-			: this.editConfiguration(interaction, { removeReactions: options.subCommandGroup === 'reset' ? false : options.value });
-	}
-
-	private async editConfiguration(interaction: Command.Interaction, data: Partial<Guild>) {
+	private async updateDatabase(interaction: Command.Interaction, data: Partial<Guild>) {
 		const id = BigInt(interaction.guild_id!);
 		const result = await fromAsync(this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null }));
+
 		const key = result.success ? LanguageKeys.Commands.Config.EditSuccess : LanguageKeys.Commands.Config.EditFailure;
 		const content = resolveUserKey(interaction, key);
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private async sharedView(interaction: Command.Interaction, cb: (settings: Guild | null) => string) {
-		const id = BigInt(interaction.guild_id!);
-		const value = cb(await this.container.prisma.guild.findUnique({ where: { id } }));
-		const content = resolveUserKey(interaction, LanguageKeys.Commands.Config.ViewContent, { value });
-		return this.message({ content, flags: MessageFlags.Ephemeral });
-	}
+	private parseReactionsString(interaction: Command.Interaction, input: string) {
+		const reactions = input.split(' ');
+		if (reactions.length > 3) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidAmount));
 
-	private displayChannel(interaction: Command.Interaction, channelId: string | undefined) {
-		return channelId ? channelMention(channelId) : inlineCode(resolveUserKey(interaction, LanguageKeys.Shared.Unset));
-	}
+		const entries: string[] = [];
+		for (const reaction of reactions) {
+			const parsed = parse(reaction);
+			if (parsed === null) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidEmoji, { value: reaction }));
 
-	private displayBooleanDefaultsEnabled(interaction: Command.Interaction, value: boolean | undefined = true) {
-		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Disabled));
-	}
-
-	private displayBooleanDefaultsDisabled(interaction: Command.Interaction, value: boolean | undefined = false) {
-		return inlineCode(resolveUserKey(interaction, value ? LanguageKeys.Shared.Enabled : LanguageKeys.Shared.Disabled));
-	}
-
-	private async viewUseReactions(interaction: Command.Interaction) {
-		const id = BigInt(interaction.guild_id!);
-		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
-
-		const content = this.displayEmojisGetContent(interaction, (settings?.useReactions ?? []) as SerializedEmoji[]);
-		return this.message({ content, flags: MessageFlags.Ephemeral });
-	}
-
-	private displayEmojisGetContent(interaction: Command.Interaction, reactions: SerializedEmoji[]) {
-		const t = getSupportedUserLanguageT(interaction);
-
-		if (reactions.length === 0) {
-			const key = LanguageKeys.Commands.Config.ViewContent;
-			return t(key, { value: inlineCode(t(LanguageKeys.Shared.Unset)) });
+			entries.push(parsed);
 		}
 
-		const mapped = reactions.map(getTextFormat);
-		if (reactions.length === 1) {
-			const key = LanguageKeys.Commands.Config.ViewContent;
-			return t(key, { value: mapped[0] });
-		}
-
-		if (reactions.length === 2) {
-			const key = LanguageKeys.Commands.Config.ViewUseReactionsTwo;
-			return t(key, { first: mapped[0], second: mapped[1] });
-		}
-
-		const key = LanguageKeys.Commands.Config.ViewUseReactionsThree;
-		return t(key, { first: mapped[0], second: mapped[1], third: mapped[2] });
-	}
-
-	private parseEmoji(interaction: Command.Interaction, value: string | undefined) {
-		if (value === undefined) return ok(null);
-
-		const first = parse(value);
-		return first === null ? err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditUseReactionsInvalidEmoji, { value })) : ok(first);
+		return ok(entries);
 	}
 }
 
-type Options<T extends string, V, E extends string = ''> = (EditOptions<T> & { value: V } & Record<E, V>) | ViewOptions<T> | ResetOptions<T>;
-
-interface EditOptions<T extends string> {
-	subCommand: T;
-	subCommandGroup: 'edit';
-}
-interface ViewOptions<T extends string> {
-	subCommand: T;
-	subCommandGroup: 'view';
-}
-interface ResetOptions<T extends string> {
-	subCommand: T;
-	subCommandGroup: 'reset';
+interface EditOptions {
+	channel?: TransformedArguments.Channel;
+	'auto-thread'?: boolean;
+	buttons?: boolean;
+	compact?: boolean;
+	'display-update-history'?: boolean;
+	embed?: boolean;
+	reactions?: string;
+	'remove-reactions'?: boolean;
 }
 
-type UseReactionsOptions = Options<'use-reactions', string, 'second-value' | 'third-value'>;
+interface ResetOptions {
+	key: 'all' | keyof EditOptions;
+}

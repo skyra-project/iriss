@@ -48,7 +48,7 @@ export function addCount(guildId: Snowflake) {
 
 export async function useReactions(settings: Guild, message: APIMessage) {
 	const failed: string[] = [];
-	for (const reaction of settings.useReactions) {
+	for (const reaction of settings.reactions) {
 		const result = await fromDiscord(
 			ChannelId.MessageId.ReactionId.put(message.channel_id, message.id, getReactionFormat(reaction as SerializedEmoji)),
 			RESTJSONErrorCodes.UnknownMessage,
@@ -65,8 +65,8 @@ export async function useReactions(settings: Guild, message: APIMessage) {
 
 	if (!failed.length) return ok();
 
-	const passing = settings.useReactions.filter((reaction) => !failed.includes(reaction));
-	await container.prisma.guild.update({ where: { id: settings.id }, data: { useReactions: passing }, select: null });
+	const passing = settings.reactions.filter((reaction) => !failed.includes(reaction));
+	await container.prisma.guild.update({ where: { id: settings.id }, data: { reactions: passing }, select: null });
 
 	return err({
 		key: LanguageKeys.Commands.Suggest.ReactionsFailed,
@@ -222,7 +222,7 @@ function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, a
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const formattedHeader = `${bold(header)}:\n`;
 	const { content } = interaction.message!;
-	if (settings.addUpdateHistory) {
+	if (settings.displayUpdateHistory) {
 		const [original, ...entries] = content.split(contentSeparator).concat(`${formattedHeader}${input}`);
 		return { content: `${original}${contentSeparator}${entries.slice(-3).join(contentSeparator)}` };
 	}
@@ -238,7 +238,7 @@ async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guil
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const [embed] = interaction.message!.embeds;
 
-	const fields = settings.addUpdateHistory //
+	const fields = settings.displayUpdateHistory //
 		? [...(embed.fields ?? []), { name: header, value: input }].slice(-3)
 		: [{ name: header, value: input }];
 	const color = getColor(action);

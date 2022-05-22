@@ -12,29 +12,29 @@ datasource db {
 }
 
 model Guild {
-  id               BigInt       @id
+  id                   BigInt       @id
   /// The channel for suggestions
-  channel          BigInt?
+  channel              BigInt?
   /// Whether or not to automatically create a thread.
   /// If set to true, the create thread button will not be added.
-  addThread        Boolean      @default(false)
+  autoThread           Boolean      @default(false)
   /// Whether or not to show management buttons.
-  addButtons       Boolean      @default(true)
-  /// Whether or not updates should be appended.
-  addUpdateHistory Boolean      @default(false)
-  /// Whether or not the suggestions should be shown as an embed.
-  useEmbed         Boolean      @default(true)
+  buttons              Boolean      @default(true)
   /// Whether or not to use compact mode.
   ///
   /// Compact suggestions have the following differences:
   /// - Swap the suggestion select menu to three buttons (one row versus two).
-  useCompact       Boolean      @default(false)
+  compact              Boolean      @default(false)
+  /// Whether or not updates should be appended.
+  displayUpdateHistory Boolean      @default(false)
+  /// Whether or not the suggestions should be shown as an embed.
+  embed                Boolean      @default(true)
   /// The reactions to use, if any.
-  useReactions     String[]
+  reactions            String[]
   /// Whether or not reactions should be removed automatically on archive.
-  removeReactions  Boolean      @default(false)
+  removeReactions      Boolean      @default(false)
   /// The suggestions available
-  suggestions      Suggestion[]
+  suggestions          Suggestion[]
 }
 
 model Suggestion {
