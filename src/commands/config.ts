@@ -55,7 +55,7 @@ export class UserCommand extends Command {
 			const result = this.parseReactionsString(interaction, options.reactions);
 			if (!result.success) return this.message({ content: result.error, flags: MessageFlags.Ephemeral });
 
-			entries.push(['reactions', result.success]);
+			entries.push(['reactions', result.value]);
 		}
 
 		if (isDefined(options['auto-thread'])) entries.push(['autoThread', options['auto-thread']]);
@@ -150,8 +150,13 @@ export class UserCommand extends Command {
 		const id = BigInt(interaction.guild_id!);
 		const result = await fromAsync(this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null }));
 
-		const key = result.success ? LanguageKeys.Commands.Config.EditSuccess : LanguageKeys.Commands.Config.EditFailure;
-		const content = resolveUserKey(interaction, key);
+		if (result.success) {
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Config.EditSuccess);
+			return this.message({ content, flags: MessageFlags.Ephemeral });
+		}
+
+		this.container.logger.error(result.error);
+		const content = resolveUserKey(interaction, LanguageKeys.Commands.Config.EditFailure);
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 

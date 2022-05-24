@@ -6,7 +6,7 @@ import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
 import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
-import { EmbedBuilder, time, userMention } from '@discordjs/builders';
+import { channelMention, EmbedBuilder, time, userMention } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
@@ -32,8 +32,6 @@ export class UserCommand extends Command {
 	}
 
 	private async *handleNew(interaction: Command.Interaction, rawInput: string): Command.GeneratorResponse {
-		yield this.defer({ flags: MessageFlags.Ephemeral });
-
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({
 			where: { id: guildId }
@@ -42,6 +40,8 @@ export class UserCommand extends Command {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
+
+		yield this.defer({ flags: MessageFlags.Ephemeral });
 
 		const queue = this.queues.ensure(guildId, () => new AsyncQueue());
 		await queue.wait();
@@ -55,8 +55,16 @@ export class UserCommand extends Command {
 			const input = settings.embed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
 			const user = this.makeUserData(interaction);
 			const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
-			message = await ChannelId.Messages.post(settings.channel, body);
 
+			const postResult = await fromAsync(ChannelId.Messages.post(settings.channel, body));
+			if (!postResult.success) {
+				const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewFailedToSend, {
+					channel: channelMention(settings.channel.toString())
+				});
+				return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
+			}
+
+			message = postResult.value;
 			await this.container.prisma.suggestion.create({
 				data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) },
 				select: null
@@ -71,8 +79,8 @@ export class UserCommand extends Command {
 		const errors: string[] = [];
 
 		if (settings.reactions.length) {
-			const result = await useReactions(settings, message);
-			if (!result.success) errors.push(t(result.error.key, { failed: result.error.failed }));
+			const result = await useReactions(t, settings, message);
+			if (!result.success) errors.push(result.error);
 		}
 
 		if (settings.autoThread) {

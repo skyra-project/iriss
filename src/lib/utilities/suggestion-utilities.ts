@@ -5,15 +5,15 @@ import { getColor, Status } from '#lib/utilities/id-creator';
 import { getGuildId, getUser } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ChannelId, type Snowflake } from '#lib/utilities/rest';
-import { fromDiscord } from '#lib/utilities/result-utilities';
+import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { err, fromAsync, ok } from '@sapphire/result';
 import { container } from '@skyra/http-framework';
-import { resolveKey, type TypedT } from '@skyra/http-framework-i18n';
-import { ChannelType, RESTJSONErrorCodes, type APIMessage } from 'discord-api-types/v10';
+import { resolveKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
+import { ChannelType, type APIMessage } from 'discord-api-types/v10';
 import slug from 'limax';
 
 const countCache = new Collection<bigint, number>();
@@ -46,32 +46,57 @@ export function addCount(guildId: Snowflake) {
 	if (entry !== undefined) countCache.set(guildId, entry + 1);
 }
 
-export async function useReactions(settings: Guild, message: APIMessage) {
+const useReactionsOk = [
+	ErrorCodes.UnknownMessage,
+	ErrorCodes.UnknownChannel,
+	ErrorCodes.UnknownGuild,
+	ErrorCodes.MaximumNumberOfReactionsReached
+] as const;
+
+const useReactionsErr = [ErrorCodes.UnknownEmoji] as const;
+
+export async function useReactions(t: TFunction, settings: Guild, message: APIMessage) {
 	const failed: string[] = [];
+	const removed: string[] = [];
 	for (const reaction of settings.reactions) {
 		const result = await fromDiscord(
 			ChannelId.MessageId.ReactionId.put(message.channel_id, message.id, getReactionFormat(reaction as SerializedEmoji)),
-			RESTJSONErrorCodes.UnknownMessage,
-			RESTJSONErrorCodes.UnknownChannel,
-			RESTJSONErrorCodes.UnknownGuild,
-			RESTJSONErrorCodes.MaximumNumberOfReactionsReached
+			{ ok: useReactionsOk, err: useReactionsErr }
 		);
 
-		// The reaction failed, likely because the emoji is invalid or has been deleted. Mark as failed for removal:
-		if (!result.success) failed.push(reaction);
+		// The reaction failed because...
+		if (!result.success) {
+			const formatted = getTextFormat(reaction as SerializedEmoji);
+
+			failed.push(formatted);
+
+			// ... the emoji does not exist - mark as failed for removal:
+			if (result.error.tag.exists) {
+				removed.push(formatted);
+			}
+			// ... any other reason - log the error:
+			else {
+				container.logger.error(result.error.value);
+			}
+		}
 		// Reaction is valid, but cannot react any more, break the loop:
-		else if (!result.value.exists) break;
+		else if (!result.value.exists) {
+			break;
+		}
 	}
 
 	if (!failed.length) return ok();
+	if (!removed.length) return err(t(LanguageKeys.Commands.Suggest.ReactionsFailed, { failed }));
 
-	const passing = settings.reactions.filter((reaction) => !failed.includes(reaction));
+	const passing = settings.reactions.filter((reaction) => !removed.includes(reaction));
 	await container.prisma.guild.update({ where: { id: settings.id }, data: { reactions: passing }, select: null });
 
-	return err({
-		key: LanguageKeys.Commands.Suggest.ReactionsFailed,
-		failed: failed.map((reaction) => getTextFormat(reaction as SerializedEmoji)).join(' ')
-	});
+	return err(
+		t(LanguageKeys.Commands.Suggest.ReactionsFailedAndRemoved, {
+			failed,
+			removed
+		})
+	);
 }
 
 const contentSeparator = '\u200B\n\n';

@@ -1,5 +1,5 @@
+import '#lib/setup/all';
 import { registerCommands } from '#lib/utilities/register-commands';
-import { PrismaClient } from '@prisma/client';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client, container } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
@@ -7,9 +7,6 @@ import { setInvite, setRepository } from '@skyra/shared-http-pieces';
 import '@skyra/shared-http-pieces/register';
 import { createBanner } from '@skyra/start-banner';
 import gradient from 'gradient-string';
-
-container.prisma = new PrismaClient();
-
 setRepository('iriss');
 setInvite('948377113457745990', '326417868864');
 
@@ -20,7 +17,7 @@ await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false }
 
 const client = new Client();
 await client.load();
-client.on('error', (error) => console.error(error));
+client.on('error', (error) => container.logger.error(error));
 
 void registerCommands();
 
@@ -41,7 +38,8 @@ console.log(
 				String.raw` //////I\\\\\\ `,
 				String.raw`  '////I\\\\' `,
 				String.raw`    '//I\\' `,
-				String.raw`      'I' `
+				String.raw`      'I' `,
+				''
 			],
 			name: [
 				String.raw`d888888b d8888b. d888888b .d8888. .d8888.`,
@@ -60,3 +58,4 @@ console.log(
 		})
 	)
 );
+container.logger.info('Ready');

@@ -19,9 +19,11 @@ export const ModifyReplied = T('commands/suggest:modifyReplied');
 export const ModifySuccess = FT<{ id: number }>('commands/suggest:modifySuccess');
 export const NewMessageContent = FT<MessageData>('commands/suggest:newMessageContent');
 export const NewMessageEmbedTitle = FT<MessageData>('commands/suggest:newMessageEmbedTitle');
+export const NewFailedToSend = FT<{ channel: string }>('commands/suggest:newFailedToSend');
 export const NewNotConfigured = T('commands/suggest:newNotConfigured');
 export const NewSuccess = FT<{ id: number }>('commands/suggest:newSuccess');
 export const ReactionsFailed = FT<{ failed: string[] }>('commands/suggest:reactionsFailed');
+export const ReactionsFailedAndRemoved = FT<{ failed: string[]; removed: string[] }>('commands/suggest:reactionsFailedAndRemoved');
 
 export interface MessageData {
 	id: number;

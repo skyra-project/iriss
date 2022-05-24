@@ -82,11 +82,11 @@ export async function get(guildId: string, commandName: string) {
 }
 
 async function makeCall(guildId: string, command: APIApplicationCommand) {
-	const result = await fromDiscord(
-		ApplicationId.GuildId.CommandId.Permissions.get(guildId, command.id),
-		ErrorCodes.UnknownApplicationCommandPermissions
-	);
+	const result = await fromDiscord(ApplicationId.GuildId.CommandId.Permissions.get(guildId, command.id), {
+		ok: [ErrorCodes.UnknownApplicationCommandPermissions]
+	});
 
 	if (result.success) return result.value?.value?.permissions ?? [];
+
 	throw result.error;
 }

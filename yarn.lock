@@ -707,6 +707,7 @@ __metadata:
     "@types/node": ^17.0.35
     "@typescript-eslint/eslint-plugin": ^5.25.0
     "@typescript-eslint/parser": ^5.25.0
+    colorette: ^2.0.16
     cz-conventional-changelog: ^3.3.0
     discord-api-types: ^0.33.0
     eslint: ^8.15.0
