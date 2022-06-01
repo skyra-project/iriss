@@ -1,2 +1,2 @@
-# iris
-Your favourite Discord bot for suggestions, part of ArchId Network.
+# iriss
+Your favourite Discord bot for feedback management, part of ArchId Network.

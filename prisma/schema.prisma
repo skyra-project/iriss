@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id                   BigInt       @id
+  /// The channel for suggestions
+  channel              BigInt?
+  /// Whether or not to automatically create a thread.
+  /// If set to true, the create thread button will not be added.
+  autoThread           Boolean      @default(false)
+  /// Whether or not to show management buttons.
+  buttons              Boolean      @default(true)
+  /// Whether or not to use compact mode.
+  ///
+  /// Compact suggestions have the following differences:
+  /// - Swap the suggestion select menu to three buttons (one row versus two).
+  compact              Boolean      @default(false)
+  /// Whether or not updates should be appended.
+  displayUpdateHistory Boolean      @default(false)
+  /// Whether or not the suggestions should be shown as an embed.
+  embed                Boolean      @default(true)
+  /// The reactions to use, if any.
+  reactions            String[]
+  /// Whether or not reactions should be removed automatically on archive.
+  removeReactions      Boolean      @default(false)
+  /// The suggestions available
+  suggestions          Suggestion[]
+}
+
+model Suggestion {
+  id         Int
+  guild      Guild     @relation(fields: [guildId], references: [id])
+  guildId    BigInt
+  authorId   BigInt
+  messageId  BigInt
+  createdAt  DateTime  @default(now())
+  repliedAt  DateTime?
+  archivedAt DateTime?
+
+  @@id([id, guildId])
+}
