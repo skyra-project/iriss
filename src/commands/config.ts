@@ -1,4 +1,4 @@
-import { isDefined } from '#lib/common/types';
+import { isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { apply, makeName } from '#lib/utilities/add-builder-localizations';
 import { parse } from '#lib/utilities/serialized-emoji';
@@ -51,20 +51,20 @@ export class UserCommand extends Command {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
 		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
-		if (isDefined(options.reactions)) {
+		if (!isNullish(options.reactions)) {
 			const result = this.parseReactionsString(interaction, options.reactions);
 			if (!result.success) return this.message({ content: result.error, flags: MessageFlags.Ephemeral });
 
 			entries.push(['reactions', result.value]);
 		}
 
-		if (isDefined(options['auto-thread'])) entries.push(['autoThread', options['auto-thread']]);
-		if (isDefined(options.buttons)) entries.push(['buttons', options.buttons]);
-		if (isDefined(options.channel)) entries.push(['channel', BigInt(options.channel.id)]);
-		if (isDefined(options.compact)) entries.push(['compact', options.compact]);
-		if (isDefined(options['display-update-history'])) entries.push(['displayUpdateHistory', options['display-update-history']]);
-		if (isDefined(options.embed)) entries.push(['embed', options.embed]);
-		if (isDefined(options['remove-reactions'])) entries.push(['removeReactions', options['remove-reactions']]);
+		if (!isNullish(options['auto-thread'])) entries.push(['autoThread', options['auto-thread']]);
+		if (!isNullish(options.buttons)) entries.push(['buttons', options.buttons]);
+		if (!isNullish(options.channel)) entries.push(['channel', BigInt(options.channel.id)]);
+		if (!isNullish(options.compact)) entries.push(['compact', options.compact]);
+		if (!isNullish(options['display-update-history'])) entries.push(['displayUpdateHistory', options['display-update-history']]);
+		if (!isNullish(options.embed)) entries.push(['embed', options.embed]);
+		if (!isNullish(options['remove-reactions'])) entries.push(['removeReactions', options['remove-reactions']]);
 
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
