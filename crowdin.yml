@@ -1,4 +1,4 @@
-project_id: ''
+project_id: '519738'
 api_token_env: 'CROWDIN_PERSONAL_TOKEN'
 commit_message: 'chore(i18n-crowdin): new translations for %original_file_name% (%language%)'
 append_commit_message: false
