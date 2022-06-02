@@ -11,7 +11,9 @@
 		"#lib/*": "./dist/lib/*.js"
 	},
 	"scripts": {
-		"build": "tsc -b src",
+		"build": "yarn build:prisma && yarn build:ts",
+		"build:prisma": "yarn prisma generate",
+		"build:ts": "tsc -b src",
 		"dev": "yarn build && yarn start",
 		"watch": "tsc -b src -w",
 		"watch:start": "tsc-watch -b src --onSuccess \"yarn start\"",
