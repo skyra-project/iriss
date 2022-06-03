@@ -50,9 +50,11 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app/dist dist
 COPY --chown=node:node --from=builder /usr/src/app/src/locales src/locales
-COPY --chown=node:node --from=builder /usr/src/app/node_modules/.prisma node_modules/.prisma
 
 RUN yarn workspaces focus --all --production
+
+# Patch .prisma with the built files
+COPY --chown=node:node --from=builder /usr/src/app/node_modules/.prisma node_modules/.prisma
 
 USER node
 
