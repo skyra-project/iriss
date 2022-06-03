@@ -19,5 +19,15 @@
 	"resetDescription": "कॉन्फ़िगरेशन विकल्प को उसकी डिफ़ॉल्ट सेटिंग पर रीसेट",
 	"resetOptionsKeyName": "मूल",
 	"resetOptionsKeyDescription": "रीसेट करने का विकल्प",
-	"resetOptionsKeyChoicesAll": "सब"
+	"resetOptionsKeyChoicesAll": "सब",
+	"keyChannel": "चैनल",
+	"keyAutoThread": "ऑटो-थ्रेड",
+	"keyButtons": "बटन्स",
+	"keyCompact": "काम्पैक्ट",
+	"keyDisplayUpdateHistory": "प्रदर्शन-अपडेट-इतिहास",
+	"keyEmbed": "एम्बेड",
+	"keyReactions": "प्रतिक्रियाएं",
+	"keyRemoveReactions": "प्रतिक्रियाएं-हटाना",
+	"editSuccess": "इस सर्वर के कॉन्फ़िगरेशन को सफलतापूर्वक संपादित किया गया।",
+	"editFailure": "मैं आपके परिवर्तनों को सहेजने में सक्षम नहीं थी, क्षमा करें :("
 }
