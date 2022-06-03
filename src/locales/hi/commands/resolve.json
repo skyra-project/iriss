@@ -1,1 +1,14 @@
-{}
+{
+	"name": "समाधान",
+	"description": "इस सर्वर से सुझावों का समाधान करता है",
+	"archiveName": "आर्काइव",
+	"archiveDescription": "इस सर्वर से एक सुझाव संग्रहित करें",
+	"acceptName": "स्वीकारें",
+	"acceptDescription": "इस सर्वर के किसी सुझाव को स्वीकृत के रूप में चिह्नित करें",
+	"considerName": "विचारें",
+	"considerDescription": "इस सर्वर से किसी सुझाव को माना गया के रूप में चिह्नित करें",
+	"denyName": "अस्वीकारें",
+	"denyDescription": "इस सर्वर से किसी सुझाव को अस्वीकृत के रूप में चिह्नित करें",
+	"optionsResponseName": "प्रतिक्रिया",
+	"optionsResponseDescription": "सुझाव संदेश में जोड़ी जाने वाली प्रतिक्रिया"
+}
