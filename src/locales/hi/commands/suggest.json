@@ -1,1 +1,27 @@
-{}
+{
+	"name": "सुझाएं",
+	"description": "इस सर्वर के लिए एक नया सुझाव बनाएं",
+	"componentsAccept": "स्वीकारें",
+	"componentsArchive": "आर्काइव",
+	"componentsConsider": "विचारें",
+	"componentsCreateThread": "थ्रेड बनाएं",
+	"componentsDeny": "अस्वीकारें",
+	"modifyArchived": "आप संग्रहीत सुझाव को संशोधित नहीं कर सकते हैं। आप इसे एक नए सुझाव के साथ संदर्भित कर सकते हैं।",
+	"modifyDoesNotExist": "आपके द्वारा निर्दिष्ट सुझाव मौजूद नहीं है।",
+	"modifyMessageDeleted": "ऐसा लगता है कि आप जिस सुझाव को संपादित करने का प्रयास कर रहे हैं उसे हटा दिया गया था, और इस तरह, स्वचालित रूप से संग्रहीत किया गया था। क्षमा करे!",
+	"modifyMismatchingAuthor": "आप किसी और के सुझाव को संशोधित नहीं कर सकते।",
+	"modifyNotConfigured": "इस सर्वर ने सुझाव चैनल को कॉन्फ़िगरेशन से हटा दिया है, और इसलिए, सभी सुझाव अब केवल-पढ़ने के लिए हैं। कृपया इस घटना के बारे में सर्वर के ऐड्मिनिस्ट्रेटर से संपर्क करें यदि यह काम करने वाला था।",
+	"modifyReplied": "आप उस सुझाव को संशोधित नहीं कर सकते जिसका उत्तर दिया गया था। आप चर्चा चैनल में इसका अनुसरण कर सकते हैं।",
+	"modifySuccess": "आपका सुझाव सफलतापूर्वक अपडेट किया गया (`#{{id}}`)!",
+	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ने {{timestamp}} को सुझाव दिया**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "मुझे खेद है, लेकिन मैं {{channel}} में संदेश पोस्ट करने में सक्षम नहीं थी। कृपया इस समस्या की रिपोर्ट किसी ऐड्मिनिस्ट्रेटर को करें. :(",
+	"newNotConfigured": "इस सर्वर ने अभी तक सुझाव चैनल को कॉन्फ़िगर नहीं किया है। इसे स्थापित करने के लिए कृपया ऐड्मिनिस्ट्रेटरो से संपर्क करें!",
+	"newSuccess": "आपका सुझाव सफलतापूर्वक भेज दिया गया (`#{{id}}`)!",
+	"reactionsFailed": "मैं {{failed, list(conjunction)}} जोड़ने में सक्षम नहीं थी।",
+	"reactionsFailedAndRemoved": "मैं {{failed, list(conjunction)}} जोड़ने में सक्षम नहीं थी, जिसमें से मैंने {{removed, list(conjunction)}} हटा दिया, क्योंकि मैंने उनसे प्रतिक्रिया करने की पहुँच खो दी थी।",
+	"optionsIdName": "क्रमांक",
+	"optionsIdDescription": "सम्पादित करने के लिये सुझाव का क्रमांक",
+	"optionsSuggestionName": "सुझाव",
+	"optionsSuggestionDescription": "पोस्ट करने का सुझाव"
+}
