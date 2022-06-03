@@ -11,12 +11,11 @@
 		"#lib/*": "./dist/lib/*.js"
 	},
 	"scripts": {
-		"build": "yarn build:prisma && yarn build:ts",
-		"build:prisma": "yarn prisma generate",
-		"build:ts": "tsc -b src",
+		"build": "tsc -b src",
 		"dev": "yarn build && yarn start",
 		"watch": "tsc -b src -w",
 		"watch:start": "tsc-watch -b src --onSuccess \"yarn start\"",
+		"prisma:generate": "yarn prisma generate",
 		"clean": "node scripts/build/clean.mjs",
 		"start": "node --enable-source-maps dist/main.js",
 		"test": "eslint --ext ts src",

@@ -17,6 +17,8 @@ COPY --chown=node:node package.json .
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node .yarn/ .yarn/
 
+RUN sed -i 's/"postinstall": "husky install .github\/husky"/"postinstall": ""/' ./package.json
+
 ENTRYPOINT ["dumb-init", "--"]
 
 # ================ #
@@ -28,9 +30,11 @@ FROM base as builder
 ENV NODE_ENV="development"
 
 COPY --chown=node:node tsconfig.base.json .
+COPY --chown=node:node prisma/ prisma/
 COPY --chown=node:node src/ src/
 
 RUN yarn install --immutable
+RUN yarn run prisma:generate
 RUN yarn run build
 
 # ================ #
@@ -46,6 +50,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app/dist dist
 COPY --chown=node:node --from=builder /usr/src/app/src/locales src/locales
+COPY --chown=node:node --from=builder /usr/src/app/node_modules/.prisma node_modules/.prisma
 
 RUN yarn workspaces focus --all --production
 
