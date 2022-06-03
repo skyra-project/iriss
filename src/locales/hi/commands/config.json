@@ -3,6 +3,7 @@
 	"description": "इस सर्वर के लिए कॉन्फ़िगरेशन प्रबंधित करें",
 	"viewName": "देखें",
 	"viewDescription": "वर्तमान कॉन्फ़िगरेशन देखें",
+	"viewContent": "**वर्तमान सेटिंग्स**:\n\nचैनल: {{channel}}\nऑटो-थ्रेड: {{autoThread}}\nबटन: {{buttons}}\nकॉम्पैक्ट: {{compact}}\nप्रदर्शन अपडेट इतिहास: {{displayUpdateHistory}}\nएम्बेड करें: {{embed}}\nप्रतिक्रियाएं: {{reactions}}\n\n> **नोट**: उन्हें अपडेट करने के लिए, आप `/कॉन्फिग एडिट` का उपयोग कर सकते हैं।",
 	"editName": "संपादन",
 	"editDescription": "कॉन्फ़िगरेशन फ़ाइल संपादित करें",
 	"editOptionsChannelDescription": "यदि सेट है, वह चैनल जहां नए सुझव पोस्ट करने हैं",
