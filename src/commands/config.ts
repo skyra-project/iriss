@@ -1,10 +1,10 @@
-import { isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { apply, makeName } from '#lib/utilities/add-builder-localizations';
-import { parse } from '#lib/utilities/serialized-emoji';
+import { getTextFormat, parse, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { channelMention, inlineCode } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { err, fromAsync, ok } from '@sapphire/result';
+import { isNullish } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
 import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
@@ -141,7 +141,9 @@ export class UserCommand extends Command {
 		const compact = bool[Number(settings.compact ?? false)];
 		const displayUpdateHistory = bool[Number(settings.displayUpdateHistory ?? false)];
 		const embed = bool[Number(settings.embed ?? true)];
-		const reactions = settings.reactions?.length ? settings.reactions.join(' ') : inlineCode(t(LanguageKeys.Shared.None));
+		const reactions = settings.reactions?.length
+			? settings.reactions.map((reaction) => getTextFormat(reaction as SerializedEmoji)).join(' ')
+			: inlineCode(t(LanguageKeys.Shared.None));
 
 		return t(LanguageKeys.Commands.Config.ViewContent, { channel, autoThread, buttons, compact, displayUpdateHistory, embed, reactions });
 	}
