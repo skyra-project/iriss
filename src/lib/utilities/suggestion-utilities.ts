@@ -236,17 +236,17 @@ export async function useMessageUpdate(interaction: AnyInteraction, message: API
 	settings ??= (await container.prisma.guild.findUnique({ where: { id: BigInt(interaction.guild_id!) } }))!;
 
 	return message.embeds.length === 0
-		? useMessageUpdateContent(interaction, settings, action, input)
-		: useMessageUpdateEmbed(interaction, settings, action, input);
+		? useMessageUpdateContent(interaction, message, settings, action, input)
+		: useMessageUpdateEmbed(interaction, message, settings, action, input);
 }
 
-function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, action: Status, input: string) {
+function useMessageUpdateContent(interaction: AnyInteraction, message: APIMessage, settings: Guild, action: Status, input: string) {
 	input = usePlainContent(input);
 
 	const user = getUser(interaction);
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const formattedHeader = `${bold(header)}:\n`;
-	const { content } = interaction.message!;
+	const { content } = message;
 	if (settings.displayUpdateHistory) {
 		const [original, ...entries] = content.split(contentSeparator).concat(`${formattedHeader}${input}`);
 		return { content: `${original}${contentSeparator}${entries.slice(-3).join(contentSeparator)}` };
@@ -256,12 +256,12 @@ function useMessageUpdateContent(interaction: AnyInteraction, settings: Guild, a
 	return { content: `${index === -1 ? content : content.slice(0, index)}${contentSeparator}${formattedHeader}${input}` };
 }
 
-async function useMessageUpdateEmbed(interaction: AnyInteraction, settings: Guild, action: Status, input: string) {
+async function useMessageUpdateEmbed(interaction: AnyInteraction, message: APIMessage, settings: Guild, action: Status, input: string) {
 	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel_id));
 
 	const user = getUser(interaction);
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
-	const [embed] = interaction.message!.embeds;
+	const [embed] = message.embeds;
 
 	const fields = settings.displayUpdateHistory //
 		? [...(embed.fields ?? []), { name: header, value: input }].slice(-3)
