@@ -1,1 +1,6 @@
-{}
+{
+	"enabled": "Geactiveerd",
+	"disabled": "Gedeactiveerd",
+	"unset": "Uitzetten",
+	"none": "Geen"
+}
