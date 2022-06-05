@@ -1,1 +1,27 @@
-{}
+{
+	"name": "suggereren",
+	"description": "Een nieuwe suggestie voor deze server maken",
+	"componentsAccept": "Accepteren",
+	"componentsArchive": "Archiveren",
+	"componentsConsider": "Overwegen",
+	"componentsCreateThread": "Maak thread",
+	"componentsDeny": "Afwijzen",
+	"modifyArchived": "Je kunt een suggestie die gearchiveerd is niet wijzigen. Je kunt deze met een nieuwe suggestie refereren.",
+	"modifyDoesNotExist": "De door u opgegeven suggestie bestaat niet.",
+	"modifyMessageDeleted": "Het lijkt erop dat de suggestie die je probeert te bewerken is verwijderd en is daarom automatisch gearchiveerd. Sorry!",
+	"modifyMismatchingAuthor": "Je kunt de suggestie van iemand anders niet wijzigen.",
+	"modifyNotConfigured": "Deze server heeft het suggestie kanaal uit de configuratie verwijderd en daarom zijn alle suggesties nu alleen-lezen. Neem contact op met de beheerders over dit incident als dit had moeten werken.",
+	"modifyReplied": "Je kunt een geantwoorde suggestie niet wijzigen. Je kunt het in het discussiekanaal opvolgen.",
+	"modifySuccess": "Je suggestie is succesvol gewijzigd (`#{{id}}`)!",
+	"newMessageContent": "[`#{{id}}`] **{{user.mention}} suggereert op {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "Het spijt me, maar ik kon geen bericht plaatsen in {{channel}}. Rapporteer dit probleem alstublieft aan een beheerder. 😦",
+	"newNotConfigured": "Deze server heeft het suggestiekanaal nog niet geconfigureerd. Neem contact op met de beheerders om deze in te stellen!",
+	"newSuccess": "Je suggestie is succesvol verstuurd (`#{{id}}`)!",
+	"reactionsFailed": "Ik kon {{failed, list(conjunction)}} niet toevoegen.",
+	"reactionsFailedAndRemoved": "Ik kon geen {{failed, list(conjunction)}} toevoegen, waaruit ik {{removed, list(conjunction)}} heb verwijderd, omdat ik de toegang heb verloren om te reageren.",
+	"optionsIdName": "id",
+	"optionsIdDescription": "Het nummer van de suggestie om te bewerken",
+	"optionsSuggestionName": "suggestie",
+	"optionsSuggestionDescription": "De suggestie om te verzenden"
+}

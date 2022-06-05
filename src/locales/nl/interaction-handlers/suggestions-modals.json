@@ -1,1 +1,7 @@
-{}
+{
+	"contentAccepted": "Geaccepteerd door {{tag}} op {{time}}",
+	"contentConsidered": "Overwogen door {{tag}} op {{time}}",
+	"contentDenied": "Afgewezen door {{tag}} op {{time}}",
+	"updateFailure": "Het is niet gelukt om de inhoud van het bericht bij te werken, sorry! 😢",
+	"updateSuccess": "Het bericht is succesvol bijgewerkt!"
+}
