@@ -1,1 +1,24 @@
-{}
+{
+	"name": "해결",
+	"description": "서버의 제안 해결",
+	"archiveName": "보관",
+	"archiveDescription": "서버의 제안 보관",
+	"acceptName": " 수락",
+	"acceptDescription": "서버의 제안을 '수락'으로 표시",
+	"considerName": "심리",
+	"considerDescription": "서버의 제안을 '심리'로 표시",
+	"denyName": "거절",
+	"denyDescription": "서버의 제안을 '거절'로 표시",
+	"optionsIdName": "번호",
+	"optionsIdDescription": "수정할 제안 번호",
+	"optionsResponseName": "응답",
+	"optionsResponseDescription": "제안 메세지에 추가될 응답",
+	"notConfigured": "서버의 제안 채널이 설정되지 않았어요. `/설정 편집 채널 #채널`로 설정하거나 관리자에게 요청하세요.",
+	"suggestionArchived": "제안이 보관돼서 수정할 수 없어요.",
+	"suggestionIdDoesNotExist": "그 번호의 제안이 존재하지 않아요.",
+	"suggestionMessageDeleted": "제안 메세지가 삭제되어서 자동으로 보관되었어요.",
+	"archiveSuccess": "{{id}}번 제안을 성공적으로 보관했어요.",
+	"noReason": "*이유 제시되지 않음*",
+	"success": "{{id}}번 제안을 성공적으로 수정했어요.",
+	"failure": "{{id}}번 제안을 수정하지 못했어요."
+}
