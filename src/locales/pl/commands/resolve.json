@@ -1,1 +1,24 @@
-{}
+{
+	"name": "rozwiąż",
+	"description": "Rozwiąż sugestię z tego serwera",
+	"archiveName": "zarchiwizuj",
+	"archiveDescription": "Zarchiwizuj sugestię z tego serwera",
+	"acceptName": "zaakceptuj",
+	"acceptDescription": "Oznacz sugestię z tego serwera jako zaakceptowaną",
+	"considerName": "rozważ",
+	"considerDescription": "Oznacz sugestię z tego serwera jako rozważaną",
+	"denyName": "odrzuć",
+	"denyDescription": "Oznacz sugestię z tego serwera jako odrzuconą",
+	"optionsIdName": "nr",
+	"optionsIdDescription": "Nr sugestii do zaktualizowania",
+	"optionsResponseName": "odpowiedź",
+	"optionsResponseDescription": "Odpowiedź, która ma zostać dodana do sugestii",
+	"notConfigured": "Ten serwer nie ma ustawionego kanału dla sugestii — skonfiguruj to przy pomocy `/ustawienia edytuj kanał #kanał` lub poproś administratora, aby to zrobił.",
+	"suggestionArchived": "Sugestia jest zarchiwizowana i nie może być edytowana.",
+	"suggestionIdDoesNotExist": "Nr sugestii, który został podany, nie istnieje.",
+	"suggestionMessageDeleted": "Wiadomość z sugestią została usunięta. Z tego powodu sugestia została automatycznie zarchiwizowana.",
+	"archiveSuccess": "Pomyślnie zarchiwizowano sugestię nr {{id}}.",
+	"noReason": "*Nie podano powodu*",
+	"success": "Pomyślnie zaktualizowano sugestię nr {{id}}.",
+	"failure": "Przepraszam, nie udało mi się zaktualizować sugestii nr {{id}}!"
+}
