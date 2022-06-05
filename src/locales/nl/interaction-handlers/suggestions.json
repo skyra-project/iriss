@@ -1,1 +1,18 @@
-{}
+{
+	"missingResolvePermissions": "U moet machtigingen hebben voor het uitvoeren van /oplossen om deze knop te gebruiken.",
+	"modalTitle": "Suggestie #{{id}}",
+	"modalFieldLabelAccept": "Bericht (Accepteren)",
+	"modalFieldLabelConsider": "Bericht (Overwegen)",
+	"modalFieldLabelDeny": "Bericht (Afwijzen)",
+	"modalFieldPlaceholderAccept": "Het lijkt me goed omdat...",
+	"modalFieldPlaceholderConsider": "We overwegen dit omdat...",
+	"modalFieldPlaceholderDeny": "Ik vrees dat we dit afwijzen omdat...",
+	"archiveSuccess": "De suggestie is succesvol gearchiveerd.",
+	"archiveThreadFailure": "Ik kon het gekoppelde thread niet archiveren, sorry!",
+	"reactionRemovalFailure": "Het verwijderen van alle reacties is mislukt, je moet ze misschien handmatig verwijderen.",
+	"archiveMessageFailure": "Ik kon het bericht niet archiveren, misschien is het al verwijderd.",
+	"threadChannelCreationFailure": "Ik kon geen thread aanmaken, je kan contact opnemen met een beheerder om mij machtigingen te geven of aan een moderator vragen om een thread aan te maken, sorry!  😢",
+	"threadMessageUpdateSuccess": "Met succes de thread {{channel}} aangemaakt en de thread aanmaken knop verwijderd van het suggestie bericht.",
+	"threadMessageUpdateFailure": "Ik kon met succes de thread {{channel}} aanmaken, maar ik heb een fout gekregen met het bijwerken van het suggestie bericht, dus ik kon de knop om een nieuw thread aan te maken niet verwijderen. 😦",
+	"threadMemberAddFailure": "Ook kon ik jou niet automatisch toevoegen aan de thread, wellicht wil je nog handmatig joinen. Sorry voor het ongemak. 😦"
+}
