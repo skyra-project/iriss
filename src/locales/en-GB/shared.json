@@ -1,1 +1,6 @@
-{}
+{
+	"enabled": "Enabled",
+	"disabled": "Disabled",
+	"unset": "Unset",
+	"none": "None"
+}
