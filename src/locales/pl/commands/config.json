@@ -15,7 +15,6 @@
 	"editOptionsReactionsDescription": "Jeśli ustawione, reakcje do dodania do nowej sugestii. Maksymalnie 3, rozdzielone spacją",
 	"editOptionsRemoveReactionsDescription": "Czy automatycznie usuwać reakcje z sugestii w momencie archiwizacji (domyślnie: Fałsz)",
 	"editReactionsInvalidAmount": "Doceniam entuzjazm, ale niestety nie jestem w stanie dodać więcej niż 3 reakcje, przez co muszę prosić o nieprzekraczanie tego limitu!",
-	"editReactionsInvalidEmoji": "Nie udało mi się użyć {{value}}, aby znaleźć emoji, spróbuj ponownie z czymś innym. Przepraszam za utrudnienia :(",
 	"resetName": "zresetuj",
 	"resetDescription": "Zresetuj opcję do wartości domyślnej",
 	"resetOptionsKeyName": "opcja",
@@ -29,6 +28,5 @@
 	"keyEmbed": "embed",
 	"keyReactions": "reakcje",
 	"keyRemoveReactions": "usuń-reakcje",
-	"editSuccess": "Pomyślnie edytowano konfigurację serwera.",
-	"editFailure": "Nie udało mi się zapisać Twoich zmian, przykro mi :("
+	"editSuccess": "Pomyślnie edytowano konfigurację serwera."
 }
