@@ -25,18 +25,18 @@
 		"postinstall": "husky install .github/husky"
 	},
 	"dependencies": {
-		"@discordjs/builders": "0.14.0-dev.1652702621-5e9b757",
-		"@discordjs/collection": "0.7.0-dev.1652702622-5e9b757",
+		"@discordjs/builders": "0.14.0",
+		"@discordjs/collection": "0.7.0",
 		"@prisma/client": "^3.14.0",
 		"@sapphire/async-queue": "^1.3.1",
 		"@sapphire/result": "^1.1.1",
 		"@sapphire/utilities": "^3.6.2",
 		"@skyra/env-utilities": "^1.0.0",
-		"@skyra/http-framework": "^0.5.1",
-		"@skyra/http-framework-i18n": "^0.1.6",
-		"@skyra/shared-http-pieces": "^0.0.28",
+		"@skyra/http-framework": "^0.5.2",
+		"@skyra/http-framework-i18n": "^0.1.7",
+		"@skyra/shared-http-pieces": "^0.0.29",
 		"@skyra/start-banner": "^1.0.0",
-		"colorette": "^2.0.16",
+		"colorette": "^2.0.17",
 		"discord-api-types": "^0.33.0",
 		"gradient-string": "^2.0.1",
 		"limax": "^3.0.0",
@@ -53,7 +53,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.16.0",
+		"eslint": "^8.17.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"husky": "^8.0.1",
@@ -61,7 +61,7 @@
 		"prettier": "^2.6.2",
 		"pretty-quick": "^3.1.3",
 		"prisma": "^3.14.0",
-		"typescript": "^4.7.2"
+		"typescript": "^4.7.3"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
