@@ -15,7 +15,7 @@
 	"modifySuccess": "¡Actualizada correctamente su sugerencia (`#{{id}}`)!",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ha sugerido el {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
-	"newFailedToSend": "Lo siento, pero no pude publicar un mensaje en {{channel}}. Por favor, reporta este problema a un administrador. :(",
+	"newFailedToSend": "Lo siento, pero no pude publicar un mensaje en {{channel}}. Por favor, reporta este problema a un administrador. 😦",
 	"newNotConfigured": "Este servidor no ha configurado el canal de sugerencias todavía. ¡Por favor, contacte con los administradores para configurarlo!",
 	"newSuccess": "¡Enviada con éxito su sugerencia (`#{{id}}`)!",
 	"reactionsFailed": "No pude añadir {{failed, list(conjunction)}}.",

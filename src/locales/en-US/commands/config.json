@@ -15,7 +15,7 @@
 	"editOptionsReactionsDescription": "If set, the reactions to use on new suggestion messages, up to 3, separated by a space",
 	"editOptionsRemoveReactionsDescription": "Whether to automatically remove all reactions from suggestion messages on archival (default: False)",
 	"editReactionsInvalidAmount": "I appreciate your enthusiasm, but I cannot afford adding more than 3 reactions, so please keep it to a maximum of 3 emojis, sorry!",
-	"editReactionsInvalidEmoji": "I could not parse {{value}} to a valid emoji, please try again with another one. Sorry for the inconvenience :(",
+	"editReactionsInvalidEmoji": "I could not parse {{value}} to a valid emoji, please try again with another one. Sorry for the inconvenience 😦",
 	"resetName": "reset",
 	"resetDescription": "Reset a configuration option to its default setting",
 	"resetOptionsKeyName": "key",
@@ -30,5 +30,5 @@
 	"keyReactions": "reactions",
 	"keyRemoveReactions": "remove-reactions",
 	"editSuccess": "Successfully edited the configuration for this server.",
-	"editFailure": "I wasn't able to save your changes, sorry :("
+	"editFailure": "I wasn't able to save your changes, sorry 😦"
 }

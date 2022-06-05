@@ -2,6 +2,6 @@
 	"contentAccepted": "{{time}}에 {{tag}}가 수락",
 	"contentConsidered": "{{time}}에 {{tag}}가 심리",
 	"contentDenied": "{{time}}에 {{tag}}가 거절",
-	"updateFailure": "메세지를 수정하지 못했어요. 죄송해요! :'c",
+	"updateFailure": "메세지를 수정하지 못했어요. 죄송해요! 😢",
 	"updateSuccess": "메세지를 수정했어요."
 }

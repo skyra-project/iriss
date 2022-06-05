@@ -15,7 +15,7 @@
 	"editOptionsReactionsDescription": "Las reacciones a usar en las próximas sugerencias, hasta 3, separados por un espacio",
 	"editOptionsRemoveReactionsDescription": "Si eliminar automáticamente todas las reacciones al archivar (por defecto: False)",
 	"editReactionsInvalidAmount": "Aprecio su entusiasmo, pero no puedo permitirme añadir más de 3 reacciones, así que por favor manténgalo hasta un máximo de 3 emojis, ¡lo siento!",
-	"editReactionsInvalidEmoji": "No pude interpretar {{value}} como un emoji válido, por favor inténtalo de nuevo con otro. Disculpe las molestias :(",
+	"editReactionsInvalidEmoji": "No pude interpretar {{value}} como un emoji válido, por favor inténtalo de nuevo con otro. Disculpe las molestias 😦",
 	"resetName": "restablecer",
 	"resetDescription": "Restablece una opción de configuración a su valor predeterminado",
 	"resetOptionsKeyName": "opción",
@@ -30,5 +30,5 @@
 	"keyReactions": "reacciones",
 	"keyRemoveReactions": "eliminar-reacciones",
 	"editSuccess": "Se ha editado correctamente la configuración de este servidor.",
-	"editFailure": "No pude guardar tus cambios, lo siento :("
+	"editFailure": "No pude guardar tus cambios, lo siento 😦"
 }

@@ -15,7 +15,7 @@
 	"modifySuccess": "Successfully updated your suggestion (`#{{id}}`)!",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} suggested on {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
-	"newFailedToSend": "I'm sorry, but I wasn't able to post a message in {{channel}}. Please report this issue to an administrator. :(",
+	"newFailedToSend": "I'm sorry, but I wasn't able to post a message in {{channel}}. Please report this issue to an administrator. 😦",
 	"newNotConfigured": "This server has not configured the suggestions channel yet. Please contact the administrators to set it up!",
 	"newSuccess": "Successfully sent your suggestion (`#{{id}}`)!",
 	"reactionsFailed": "I was not able to add {{failed, list(conjunction)}}.",

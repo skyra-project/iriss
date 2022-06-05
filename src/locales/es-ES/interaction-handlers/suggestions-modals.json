@@ -2,6 +2,6 @@
 	"contentAccepted": "Aceptado por {{tag}} el {{time}}",
 	"contentConsidered": "Considerado por {{tag}} el {{time}}",
 	"contentDenied": "Rechazado por {{tag}} el {{time}}",
-	"updateFailure": "No pude actualizar el contenido del mensaje, ¡perdón! :'c",
+	"updateFailure": "No pude actualizar el contenido del mensaje, ¡perdón! 😢",
 	"updateSuccess": "¡He actualizado el mensaje con éxito!"
 }

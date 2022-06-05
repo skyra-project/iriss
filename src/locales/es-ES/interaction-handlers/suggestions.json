@@ -11,8 +11,8 @@
 	"archiveThreadFailure": "No he podido archivar el hilo enlazado, ¡lo siento!",
 	"reactionRemovalFailure": "La eliminación de todas las reacciones falló, es posible que usted necesite eliminarlas manualmente.",
 	"archiveMessageFailure": "No pude archivar el mensaje, puede que haya sido eliminado.",
-	"threadChannelCreationFailure": "No pude crear el hilo, puede que necesite ponerse en contacto con un administrador para darme permisos, o un moderador para crear un hilo, ¡lo siento! :'(",
+	"threadChannelCreationFailure": "No pude crear el hilo, puede que necesite ponerse en contacto con un administrador para darme permisos, o un moderador para crear un hilo, ¡lo siento! 😢",
 	"threadMessageUpdateSuccess": "Se ha creado correctamente el hilo {{channel}} y se ha eliminado el botón del hilo del mensaje de la sugerencia.",
-	"threadMessageUpdateFailure": "He podido crear el hilo {{channel}}, sin embargo, tuve un pequeño problema actualizando el mensaje de sugerencia, así que no pude eliminar el botón. :(",
-	"threadMemberAddFailure": "Además, no pude añadirte al hilo, así que puede que tengas que unirte manualmente. Disculpe las molestias. :("
+	"threadMessageUpdateFailure": "He podido crear el hilo {{channel}}, sin embargo, tuve un pequeño problema actualizando el mensaje de sugerencia, así que no pude eliminar el botón. 😦",
+	"threadMemberAddFailure": "Además, no pude añadirte al hilo, así que puede que tengas que unirte manualmente. Disculpe las molestias. 😦"
 }
