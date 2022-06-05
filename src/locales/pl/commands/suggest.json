@@ -1,1 +1,27 @@
-{}
+{
+	"name": "zasugeruj",
+	"description": "Utwórz nową sugestię dla tego serwera",
+	"componentsAccept": "Zaakceptuj",
+	"componentsArchive": "Zarchiwizuj",
+	"componentsConsider": "Rozważ",
+	"componentsCreateThread": "Utwórz Wątek",
+	"componentsDeny": "Odrzuć",
+	"modifyArchived": "Nie można modyfikować sugestii, która została zarchiwizowana. Możesz natomiast odnieść się do niej w nowej sugestii.",
+	"modifyDoesNotExist": "Podana sugestia nie istnieje.",
+	"modifyMessageDeleted": "Wygląda na to, że sugestia którą próbujesz edytować, została usunięta, i z tego powodu została też automatycznie zarchiwizowana. Przykro mi!",
+	"modifyMismatchingAuthor": "Nie możesz edytować nieswoich sugestii.",
+	"modifyNotConfigured": "Kanał sugestii został usunięty z konfiguracji, przez co wszystkie sugestie są teraz tylko do odczytu. Jeśli to nie jest zamierzony efekt, skontaktuj się z administracją serwera w celu rozwiązania problemu.",
+	"modifyReplied": "Sugestie z odpowiedziami nie podlegają edycji. Dyskusję możesz kontynuować w przeznaczonym do tego kanale.",
+	"modifySuccess": "Pomyślnie zaktualizowano Twoją sugestię (`nr {{id}}`)!",
+	"newMessageContent": "[`nr {{id}}`] **Zasugerowane przez {{user.mention}} o {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "Nr {{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "Przykro mi, ale nie udało mi się wysłać wiadomości na kanale {{channel}}. Proszę zgłosić ten problem do administratora. :(",
+	"newNotConfigured": "Ten serwer nie ma jeszcze skonfigurowanego kanału dla sugestii. Skontaktuj się z administratorami, aby go skonfigurować!",
+	"newSuccess": "Pomyślnie wysłano Twoją sugestię (`nr {{id}}`)!",
+	"reactionsFailed": "Nie udało się dodać reakcji {{failed, list(conjunction)}}.",
+	"reactionsFailedAndRemoved": "Nie udało się dodać reakcji {{failed, list(conjunction)}}, z czego usunięto {{removed, list(conjunction)}}, gdyż nie jestem już w stanie ich użyć.",
+	"optionsIdName": "nr",
+	"optionsIdDescription": "Nr sugestii do zmodyfikowania",
+	"optionsSuggestionName": "sugestia",
+	"optionsSuggestionDescription": "Sugestia do wysłania"
+}
