@@ -1,1 +1,24 @@
-{}
+{
+	"name": "sluiten",
+	"description": "Sluit de suggestie in deze server",
+	"archiveName": "archiveren",
+	"archiveDescription": "Archiveer een suggestie in deze server",
+	"acceptName": "accepteren",
+	"acceptDescription": "Markeer een suggestie van deze server als geaccepteerd",
+	"considerName": "overwegen",
+	"considerDescription": "Markeer een suggestie van deze server als overwogen",
+	"denyName": "afwijzen",
+	"denyDescription": "Markeer een suggestie van deze server als afgewezen",
+	"optionsIdName": "id",
+	"optionsIdDescription": "Het ID van de te bijwerken suggestie",
+	"optionsResponseName": "antwoord",
+	"optionsResponseDescription": "Het antwoord dat moet worden toegevoegd aan de suggestie",
+	"notConfigured": "Deze server heeft geen suggesties-kanaal geconfigureerd, configureer deze met `/configuratie aanpassen kanaal #kanaal` of vraag een beheerder om dit te doen.",
+	"suggestionArchived": "De suggestie is gearchiveerd en kan niet worden gewijzigd.",
+	"suggestionIdDoesNotExist": "De opgegeven suggestie-ID bestaat niet.",
+	"suggestionMessageDeleted": "Het bericht van de suggestie is verwijderd en daarom is het automatisch gearchiveerd.",
+	"archiveSuccess": "De suggestie {{id}} is succesvol gearchiveerd.",
+	"noReason": "*Geen reden opgegeven*",
+	"success": "De suggestie {{id}} is succesvol bijgewerkt.",
+	"failure": "Het is me niet gelukt om de suggestie {{id}} bij te werken, sorry!"
+}
