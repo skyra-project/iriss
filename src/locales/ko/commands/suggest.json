@@ -15,7 +15,6 @@
 	"modifySuccess": "(`#{{id}}`)번 제안을 성공적으로 수정했어요!",
 	"newMessageContent": "[`#{{id}}`] **{{timestamp}}에 {{user.mention}}이(가) 제안**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
-	"newFailedToSend": "{{channel}}에 메세지를 보내지 못했어요. 관리자에게 이 문제를 보고해주세요 :(",
 	"newNotConfigured": "서버의 제안 채널이 설정되지 않았어요. 관리자들에게 설정을 부탁해주세요!",
 	"newSuccess": "(`#{{id}}`)번 제안을 성공적으로 보냈어요!",
 	"reactionsFailed": "{{failed, list(conjunction)}}을 추가하지 못했어요.",
