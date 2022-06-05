@@ -2,6 +2,5 @@
 	"contentAccepted": "{{tag}} द्वारा {{time}} को स्वीकार किया गया",
 	"contentConsidered": "{{tag}} द्वारा {{time}} को माना गया",
 	"contentDenied": "{{tag}} द्वारा {{time}} को अस्वीकार किया गया",
-	"updateFailure": "मैं संदेश की सामग्री को अपडेट करने में विफल रही, क्षमा करें! :'c",
 	"updateSuccess": "संदेश को सफलतापूर्वक अपडेट किया गया!"
 }
