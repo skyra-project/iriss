@@ -15,7 +15,6 @@
 	"editOptionsReactionsDescription": "설정되었다면, 새 제안 메세지에 사용할 반응 (3개까지, 공백으로 분리)",
 	"editOptionsRemoveReactionsDescription": "제안 메세지 보관 시 모든 반응 제거 (기본값: 참)",
 	"editReactionsInvalidAmount": "죄송해요! 반응은 최대 3개까지만 추가할 수 있어요.",
-	"editReactionsInvalidEmoji": "{{value}}를 이모티콘으로 변환하지 못했어요. 다른 이모티콘으로 다시 시도해주세요.",
 	"resetName": "초기화",
 	"resetDescription": "설정값 초기화",
 	"resetOptionsKeyName": "값",
@@ -29,6 +28,5 @@
 	"keyEmbed": "임베드",
 	"keyReactions": "반응",
 	"keyRemoveReactions": "반응-제거",
-	"editSuccess": "서버의 설정값을 성공적으로 변경했어요.",
-	"editFailure": "변경값을 저장하지 못했어요. 죄송해요 :("
+	"editSuccess": "서버의 설정값을 성공적으로 변경했어요."
 }
