@@ -1,1 +1,27 @@
-{}
+{
+	"name": "suggest",
+	"description": "Create a new suggestion for this server",
+	"componentsAccept": "Accept",
+	"componentsArchive": "Archive",
+	"componentsConsider": "Consider",
+	"componentsCreateThread": "Create Thread",
+	"componentsDeny": "Deny",
+	"modifyArchived": "You cannot modify a suggestion that is archived. You may reference it with a new suggestion.",
+	"modifyDoesNotExist": "The suggestion you specified does not exist.",
+	"modifyMessageDeleted": "It seems the suggestion you are trying to edit was deleted, and as such, automatically archived. Sorry!",
+	"modifyMismatchingAuthor": "You cannot modify somebody else's suggestion.",
+	"modifyNotConfigured": "This server has removed the suggestions channel from the configuration, and as such, all suggestions are now read-only. Please contact the server's administrators about this incident if this was supposed to work.",
+	"modifyReplied": "You cannot modify a suggestion that was replied. You may follow it up in the discussion channel.",
+	"modifySuccess": "Successfully updated your suggestion (`#{{id}}`)!",
+	"newMessageContent": "[`#{{id}}`] **{{user.mention}} suggested on {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "I'm sorry, but I wasn't able to post a message in {{channel}}. Please report this issue to an administrator. 😦",
+	"newNotConfigured": "This server has not configured the suggestions channel yet. Please contact the administrators to set it up!",
+	"newSuccess": "Successfully sent your suggestion (`#{{id}}`)!",
+	"reactionsFailed": "I was not able to add {{failed, list(conjunction)}}.",
+	"reactionsFailedAndRemoved": "I was not able to add {{failed, list(conjunction)}}, from which I removed {{removed, list(conjunction)}}, as I lost access to react with them.",
+	"optionsIdName": "id",
+	"optionsIdDescription": "The suggestion's number to edit",
+	"optionsSuggestionName": "suggestion",
+	"optionsSuggestionDescription": "The suggestion to be posted"
+}
