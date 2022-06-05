@@ -11,8 +11,5 @@
 	"archiveThreadFailure": "Przykro mi, nie udało mi się zarchiwizować wątku sugestii!",
 	"reactionRemovalFailure": "Usuwanie reakcji nie powiodło się; możliwe, że trzeba je usunąć ręcznie.",
 	"archiveMessageFailure": "Nie udało mi się zarchiwizować wiadomości; możliwe, że została usunięta.",
-	"threadChannelCreationFailure": "Nie udało mi się utworzyć wątku. Poproś administratora o przyznanie mi pozwoleń albo moderatora o manualne utworzenie wątku. Przykro mi! :'(",
-	"threadMessageUpdateSuccess": "Pomyślnie utworzono wątek {{channel}} oraz usunięto przycisk wątku z sugestii.",
-	"threadMessageUpdateFailure": "Pomyślnie utworzono wątek {{channel}}, jednak nie udało mi się usunąć przycisku wątku z sugestii. :(",
-	"threadMemberAddFailure": "Niestety, nie udało mi się dodać Cię do wątku; spróbuj dołączyć do niego ręcznie. Przepraszam za utrudnienia. :("
+	"threadMessageUpdateSuccess": "Pomyślnie utworzono wątek {{channel}} oraz usunięto przycisk wątku z sugestii."
 }
