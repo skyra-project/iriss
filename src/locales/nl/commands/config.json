@@ -15,7 +15,6 @@
 	"editOptionsReactionsDescription": "Indien ingesteld, de reacties om te gebruiken op nieuwe suggesties, t/m 3, gescheiden met een spatie",
 	"editOptionsRemoveReactionsDescription": "Of alle reacties van suggesties verwijderd moeten worden bij archivering (standaard: Nee)",
 	"editReactionsInvalidAmount": "Ik waardeer je enthousiasme, maar ik kan niet meer dan 3 reacties toe voegen, dus bewaar het maximum tot maximaal 3, sorry!",
-	"editReactionsInvalidEmoji": "Ik kon {{value}} niet parsen naar een geldige emoji, probeer het opnieuw met een andere. Sorry voor het ongemak :(",
 	"resetName": "reset",
 	"resetDescription": "Een configuratie optie terugzetten naar de standaardinstelling",
 	"resetOptionsKeyName": "sleutel",
@@ -29,6 +28,5 @@
 	"keyEmbed": "embed",
 	"keyReactions": "reacties",
 	"keyRemoveReactions": "verwijderen-reacties",
-	"editSuccess": "De configuratie voor deze server is succesvol gewijzigd.",
-	"editFailure": "Ik kon uw wijzigingen niet opslaan, sorry :("
+	"editSuccess": "De configuratie voor deze server is succesvol gewijzigd."
 }
