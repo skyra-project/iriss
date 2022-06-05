@@ -1,1 +1,27 @@
-{}
+{
+	"name": "제안",
+	"description": "서버에 새 제안 생성",
+	"componentsAccept": "수락",
+	"componentsArchive": "보관",
+	"componentsConsider": "심리",
+	"componentsCreateThread": "스레드 생성",
+	"componentsDeny": "거절",
+	"modifyArchived": "보관된 제안은 수정할 수 없어요. 하지만, 새 제안으로 참조할 수 있어요.",
+	"modifyDoesNotExist": "그 제안이 존재하지 않아요.",
+	"modifyMessageDeleted": "수정하려던 제안이 삭제돼서 자동으로 보관된 것 같아요. 죄송해요!",
+	"modifyMismatchingAuthor": "다른 사람의 제안을 수정 할 수 없어요.",
+	"modifyNotConfigured": "서버 설정에서 제안 채널이 제거되어서, 모든 제안이 읽기 전용이에요. 정상 작동이 아니라면 서버 관리자에게 연락해주세요.",
+	"modifyReplied": "답변된 제안은 수정 할 수 없어요. 의논 채널에서 참조 할 수 있어요.",
+	"modifySuccess": "(`#{{id}}`)번 제안을 성공적으로 수정했어요!",
+	"newMessageContent": "[`#{{id}}`] **{{timestamp}}에 {{user.mention}}이(가) 제안**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "{{channel}}에 메세지를 보내지 못했어요. 관리자에게 이 문제를 보고해주세요 :(",
+	"newNotConfigured": "서버의 제안 채널이 설정되지 않았어요. 관리자들에게 설정을 부탁해주세요!",
+	"newSuccess": "(`#{{id}}`)번 제안을 성공적으로 보냈어요!",
+	"reactionsFailed": "{{failed, list(conjunction)}}을 추가하지 못했어요.",
+	"reactionsFailedAndRemoved": "반응 할 권한을 잃어서 {{removed, list(conjunction)}}을 제거한 {{failed, list(conjunction)}}을 추가하지 못했어요.",
+	"optionsIdName": "번호",
+	"optionsIdDescription": "수정할 제안의 번호",
+	"optionsSuggestionName": "제안",
+	"optionsSuggestionDescription": "보낼 제안"
+}

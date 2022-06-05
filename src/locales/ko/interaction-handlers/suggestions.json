@@ -1,1 +1,18 @@
-{}
+{
+	"missingResolvePermissions": "/해결을 사용할 권한이 있어야 이 버튼을 사용할 수 있어요.",
+	"modalTitle": "#{{id}}번 제안",
+	"modalFieldLabelAccept": "메세지 (수락)",
+	"modalFieldLabelConsider": "메세지 (심리)",
+	"modalFieldLabelDeny": "메세지 (거절)",
+	"modalFieldPlaceholderAccept": "...때문에 수락해야 할 것 같아요.",
+	"modalFieldPlaceholderConsider": "...때문에 심리해야 할 것 같아요.",
+	"modalFieldPlaceholderDeny": "...때문에 거절해야 할 것 같아요.",
+	"archiveSuccess": "제안이 성공적으로 보관됐어요.",
+	"archiveThreadFailure": "스레드를 보관하지 못했어요. 죄송해요!",
+	"reactionRemovalFailure": "반응 제거에 실패했어요. 직접 제거하셔야 할 수도 있어요.",
+	"archiveMessageFailure": "메세지를 보관하지 못했어요. 메세지가 삭제됐을 수도 있어요.",
+	"threadChannelCreationFailure": "스레드를 생성하지 못했어요. 권한을 주시거나, 관리자에게 연락해주세요. 죄송해요! :'(",
+	"threadMessageUpdateSuccess": "{{channel}} 스레드를 생성하고 제안 메세지에서 스레드 버튼을 제거했어요.",
+	"threadMessageUpdateFailure": "{{channel}} 스레드를 성공적으로 생성했지만, 제안 메세지를 수정하지 못해 스레드 버튼을 제거하지 못했어요. :(",
+	"threadMemberAddFailure": "스레드에 당신을 추가할 수 없어서, 직접 들어오셔야 할 수도 있어요. 죄송해요 :("
+}
