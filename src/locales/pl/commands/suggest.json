@@ -15,7 +15,6 @@
 	"modifySuccess": "Pomyślnie zaktualizowano Twoją sugestię (`nr {{id}}`)!",
 	"newMessageContent": "[`nr {{id}}`] **Zasugerowane przez {{user.mention}} o {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "Nr {{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
-	"newFailedToSend": "Przykro mi, ale nie udało mi się wysłać wiadomości na kanale {{channel}}. Proszę zgłosić ten problem do administratora. :(",
 	"newNotConfigured": "Ten serwer nie ma jeszcze skonfigurowanego kanału dla sugestii. Skontaktuj się z administratorami, aby go skonfigurować!",
 	"newSuccess": "Pomyślnie wysłano Twoją sugestię (`nr {{id}}`)!",
 	"reactionsFailed": "Nie udało się dodać reakcji {{failed, list(conjunction)}}.",
