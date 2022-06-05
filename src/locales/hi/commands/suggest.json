@@ -15,7 +15,6 @@
 	"modifySuccess": "आपका सुझाव सफलतापूर्वक अपडेट किया गया (`#{{id}}`)!",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ने {{timestamp}} को सुझाव दिया**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
-	"newFailedToSend": "मुझे खेद है, लेकिन मैं {{channel}} में संदेश पोस्ट करने में सक्षम नहीं थी। कृपया इस समस्या की रिपोर्ट किसी ऐड्मिनिस्ट्रेटर को करें. :(",
 	"newNotConfigured": "इस सर्वर ने अभी तक सुझाव चैनल को कॉन्फ़िगर नहीं किया है। इसे स्थापित करने के लिए कृपया ऐड्मिनिस्ट्रेटरो से संपर्क करें!",
 	"newSuccess": "आपका सुझाव सफलतापूर्वक भेज दिया गया (`#{{id}}`)!",
 	"reactionsFailed": "मैं {{failed, list(conjunction)}} जोड़ने में सक्षम नहीं थी।",
