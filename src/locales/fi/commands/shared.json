@@ -1,1 +1,3 @@
-{}
+{
+	"infoEmbedDescription": "Iriss on botti joka on keskittynyt ehdotusten hallintaan. Tämä on vain HTTP-botti joka perustuu [Skyra HTTP Frameworkkiin](https://www.npmjs.com/package/@skyra/http-framework)."
+}
