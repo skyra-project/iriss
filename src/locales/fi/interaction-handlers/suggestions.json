@@ -1,1 +1,18 @@
-{}
+{
+	"missingResolvePermissions": "Sinulla on oltava oikeus käyttää komentoa /etsi käyttääksesi painiketta.",
+	"modalTitle": "Ehdotus #{{id}}",
+	"modalFieldLabelAccept": "Viesti (Hyväksy)",
+	"modalFieldLabelConsider": "Viesti (Harkitse)",
+	"modalFieldLabelDeny": "Viesti (Hylkää)",
+	"modalFieldPlaceholderAccept": "Vaikuttaa hyvältä mielestäni, koska...",
+	"modalFieldPlaceholderConsider": "Harkitsemme tätä, koska...",
+	"modalFieldPlaceholderDeny": "Valitettavasti hylkäämme tämän, koska...",
+	"archiveSuccess": "Ehdotus on arkistoitu onnistuneesti.",
+	"archiveThreadFailure": "En voinut arkistoida linkattua viestiketjua, pahoitteluni!",
+	"reactionRemovalFailure": "Reaktioiden poisto epäonnistui, ne saattaa joutua poistamaan käsin.",
+	"archiveMessageFailure": "En voinut arkistoida viestiä, se on mahdollisesti poistettu.",
+	"threadChannelCreationFailure": "En voinut luoda viestiketjua, saatat joutua ottamaan yhteyttä ylläpitäjään muokataksesi oikeuksiani, tai pyytämään moderaattoria luomaan viestiketju, pahoitteluni! 😢",
+	"threadMessageUpdateSuccess": "Viestiketju {{channel}} luotu onnistuneesti, ja viestiketju painike on poistettu ehdotusviestistä.",
+	"threadMessageUpdateFailure": "Loin viestiketjun {{channel}} onnistuneesti, mutta minulla oli ongelmia ehdotusviestin päivittämisessä, joten en voinut poistaa painiketta. 😦",
+	"threadMemberAddFailure": "Ainiin, en myöskään voinut lisätä sinua viestiketjuun, joten saatat joutua liittymään siihen itse. Pahoitteluni aiheutuneesta vaivasta. 😦"
+}
