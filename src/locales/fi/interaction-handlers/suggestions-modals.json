@@ -1,1 +1,7 @@
-{}
+{
+	"contentAccepted": "Hyväksyjä {{tag}} aikana {{time}}",
+	"contentConsidered": "Harkitsija {{tag}} aikana {{time}}",
+	"contentDenied": "Hylkääjä {{tag}} aikana {{time}}",
+	"updateFailure": "En voinut päivittää viestin sisältöä, anteeksi! 😢",
+	"updateSuccess": "Viesti päivitetty onnistuneesti!"
+}
