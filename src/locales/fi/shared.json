@@ -1,1 +1,6 @@
-{}
+{
+	"enabled": "Käytössä",
+	"disabled": "Pois käytöstä",
+	"unset": "Poista",
+	"none": "Ei mitään"
+}
