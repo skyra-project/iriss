@@ -13,7 +13,7 @@
 	"optionsIdDescription": "Ehdotuksen ID joka päivitetään",
 	"optionsResponseName": "vastaus",
 	"optionsResponseDescription": "Ehdotusviestiin liitettävä vastaus",
-	"notConfigured": "Tälle palvelimelle ei ole määritetty ehdotuskanavaa, määritä se käyttämällä `/asetukset muokkaa kanava #kanava` tai pyydä adminia määrittämään.",
+	"notConfigured": "Tälle palvelimelle ei ole määritetty ehdotuskanavaa, määritä se käyttämällä `/asetukset muokkaa kanava #kanava` tai pyydä ylläpitoa määrittämään se.",
 	"suggestionArchived": "Ehdotus on arkistoitu ja sitä ei voi muokata.",
 	"suggestionIdDoesNotExist": "Ehdotusta annetulla ID'llä ei ole olemassa.",
 	"suggestionMessageDeleted": "Ehdotuksen viesti on poistettu, joten ehdotus on automaattisesti arkistoitu.",
