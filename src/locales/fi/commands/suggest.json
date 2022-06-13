@@ -1,1 +1,10 @@
-{}
+{
+	"name": "ehdota",
+	"description": "Luo uusi ehdotus palvelimelle",
+	"componentsAccept": "Hyväksy",
+	"componentsArchive": "Arkistoi",
+	"componentsConsider": "Harkitse",
+	"componentsCreateThread": "Luo Thread",
+	"componentsDeny": "Hylkää",
+	"modifyArchived": "Et voi muokata ehdotusta joka on arkistoitu. Voit viitata siihen uudessa ehdotuksessa."
+}
