@@ -1,1 +1,26 @@
-{}
+{
+	"name": "asetukset",
+	"description": "Hallitse palvelimen asetuksia",
+	"viewName": "näytä",
+	"viewDescription": "Näytä tämänhetkiset asetukset",
+	"viewContent": "**Nykyiset asetukset**:\n\nKanava: {{channel}}\nAutomaattinen thread: {{autoThread}}\nPainikkeet: {{buttons}}\nTiivis: {{compact}}\nNäytä Päivitys Historia: {{displayUpdateHistory}}\nUpotus: {{embed}}\nReaktiot: {{reactions}}\n\n> **Huom**: Päivittääksesi asetuksia, voit käyttää komentoa `/asetukset muokkaa`.",
+	"editName": "muokkaa",
+	"editDescription": "Muokkaa asetusta",
+	"editReactionsInvalidAmount": "Arvostan intoasi, mutta en voi lisätä yli 3 reaktiota, joten pidäthän sen maksimissaan 3 emojissa, anteeksi!",
+	"editReactionsInvalidEmoji": "En voinut muuntaa arvoa {{value}} emojiksi, yritä toisella uudelleen. Pahoitteluni vaivasta 😦",
+	"resetName": "nollaa",
+	"resetDescription": "Nollaa asetus oletusarvoon",
+	"resetOptionsKeyName": "asetus",
+	"resetOptionsKeyDescription": "Asetus joka nollataan",
+	"resetOptionsKeyChoicesAll": "kaikki",
+	"keyChannel": "kanava",
+	"keyAutoThread": "auto-thread",
+	"keyButtons": "painikkeet",
+	"keyCompact": "tiivis",
+	"keyDisplayUpdateHistory": "näytä-päivitys-historia",
+	"keyEmbed": "upotus",
+	"keyReactions": "reaktiot",
+	"keyRemoveReactions": "poista-reaktiot",
+	"editSuccess": "Palvelimen asetuksien muokkaaminen onnistui.",
+	"editFailure": "En voinut tallentaa muutoksiasi, pahoitteluni 😦"
+}
