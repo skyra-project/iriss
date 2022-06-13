@@ -1,1 +1,24 @@
-{}
+{
+	"name": "etsi",
+	"description": "Etsi ehdotus palvelimelta",
+	"archiveName": "arkistoi",
+	"archiveDescription": "Arkistoi ehdotus palvelimelta",
+	"acceptName": "hyväksy",
+	"acceptDescription": "Merkitse ehdotus hyväksytyksi palvelimelta",
+	"considerName": "harkitse",
+	"considerDescription": "Merkitse ehdotus harkituksi palvelimelta",
+	"denyName": "hylkää",
+	"denyDescription": "Merkitse ehdotus hylätyksi palvelimelta",
+	"optionsIdName": "id",
+	"optionsIdDescription": "Ehdotuksen ID joka päivitetään",
+	"optionsResponseName": "vastaus",
+	"optionsResponseDescription": "Ehdotusviestiin liitettävä vastaus",
+	"notConfigured": "Tälle palvelimelle ei ole määritetty ehdotuskanavaa, määritä se käyttämällä `/asetukset muokkaa kanava #kanava` tai pyydä adminia määrittämään.",
+	"suggestionArchived": "Ehdotus on arkistoitu ja sitä ei voi muokata.",
+	"suggestionIdDoesNotExist": "Ehdotusta annetulla ID'llä ei ole olemassa.",
+	"suggestionMessageDeleted": "Ehdotuksen viesti on poistettu, joten ehdotus on automaattisesti arkistoitu.",
+	"archiveSuccess": "Ehdotus {{id}} arkistoitiin onnistuneesti.",
+	"noReason": "*Ei määritettyä syytä*",
+	"success": "Ehdotus {{id}} päivitetty onnistuneesti.",
+	"failure": "En pystynyt päivittämään ehdotusta {{id}}, pahoitteluni!"
+}
