@@ -7,7 +7,7 @@
 	"editName": "muokkaa",
 	"editDescription": "Muokkaa asetusta",
 	"editOptionsChannelDescription": "Jos asetettu, kanava johon uudet ehdotukset lähetetään",
-	"editOptionsAutoThreadDescription": "Luodaanko uusi thread-kanava uusia ehdotusviestejä varten (oletus: False)",
+	"editOptionsAutoThreadDescription": "Luodaanko uusi viestiketju-kanava uusia ehdotusviestejä varten (oletus: False)",
 	"editOptionsButtonsDescription": "Lisätäänkö hallintapainikkeet uusiin ehdotusviesteihin (oletus: True)",
 	"editOptionsCompactDescription": "Käytetäänkö tiivistä tilaa uusissa ehdotusviesteissä (oletus: False)",
 	"editOptionsDisplayUpdateHistoryDescription": "Näytetäänkö kolme viimeisintä vastausta ehdotuksissa (oletus: False)",
