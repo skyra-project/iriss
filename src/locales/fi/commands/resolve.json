@@ -1,6 +1,4 @@
 {
-	"name": "etsi",
-	"description": "Etsi ehdotus palvelimelta",
 	"archiveName": "arkistoi",
 	"archiveDescription": "Arkistoi ehdotus palvelimelta",
 	"acceptName": "hyväksy",
