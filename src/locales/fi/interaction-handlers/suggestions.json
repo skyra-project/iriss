@@ -1,4 +1,5 @@
 {
+	"missingResolvePermissions": "Sinulla on oltava oikeus käyttää komentoa /ratkaise käyttääksesi painiketta.",
 	"modalTitle": "Ehdotus #{{id}}",
 	"modalFieldLabelAccept": "Viesti (Hyväksy)",
 	"modalFieldLabelConsider": "Viesti (Harkitse)",
