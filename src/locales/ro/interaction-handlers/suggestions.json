@@ -1,1 +1,18 @@
-{}
+{
+	"missingResolvePermissions": "Trebuie să aveți permisiunea de a rula /rezolvă pentru a utiliza acest buton.",
+	"modalTitle": "Sugestia #{{id}}",
+	"modalFieldLabelAccept": "Mesaj (Acceptare)",
+	"modalFieldLabelConsider": "Mesaj (Considerare)",
+	"modalFieldLabelDeny": "Mesaj (Refuzare)",
+	"modalFieldPlaceholderAccept": "Mi se pare bine deoarece...",
+	"modalFieldPlaceholderConsider": "Considerăm acest lucru pentru că...",
+	"modalFieldPlaceholderDeny": "Mi-e teamă că refuzăm acest lucru pentru că...",
+	"archiveSuccess": "Sugestia a fost arhivată cu succes.",
+	"archiveThreadFailure": "Nu am reușit să arhivez firul legat, îmi pare rău!",
+	"reactionRemovalFailure": "Eliminarea tuturor reacțiilor a eșuat, poate fi necesar să le eliminați manual.",
+	"archiveMessageFailure": "Nu am putut arhiva mesajul, este posibil să fi fost șters.",
+	"threadChannelCreationFailure": "Nu am putut să creez firul, s-ar putea să trebuiască să contactați un administrator pentru a-mi da permisiuni, sau un moderator pentru a-l crea, îmi pare rău! 😢",
+	"threadMessageUpdateSuccess": "A fost creată cu succes firul {{channel}} și a fost șters butonul de discuție din mesajul de sugestie.",
+	"threadMessageUpdateFailure": "Am reușit să creez firul {{channel}}, dar am avut o mică problemă cu actualizarea mesajului de sugestie, așa că nu am putut să elimin butonul. 😦",
+	"threadMemberAddFailure": "De asemenea, nu am putut să vă adaug la fir, deci este posibil să trebuiască să vă alăturați manual. Îmi cer scuze pentru inconveniență. 😦"
+}
