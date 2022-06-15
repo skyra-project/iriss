@@ -1,1 +1,27 @@
-{}
+{
+	"name": "sugerează",
+	"description": "Creează o nouă sugestie pentru acest server",
+	"componentsAccept": "Acceptă",
+	"componentsArchive": "Arhivare",
+	"componentsConsider": "Considerați",
+	"componentsCreateThread": "Crează fir",
+	"componentsDeny": "Refuză",
+	"modifyArchived": "Nu puteți modifica o sugestie care este arhivată. Puteți să faceți referire la aceasta cu o nouă sugestie.",
+	"modifyDoesNotExist": "Sugestia pe care ați specificat-o nu există.",
+	"modifyMessageDeleted": "Se pare că sugestia pe care încercați să o editați a fost ștearsă și, ca atare, arhivată automat. Îmi pare rău!",
+	"modifyMismatchingAuthor": "Nu poți modifica sugestia altcuiva.",
+	"modifyNotConfigured": "Acest server a eliminat canalul de sugestii din configurație, și, ca atare, toate sugestiile sunt acum doar pentru citire. Vă rugăm să contactați administratorii serverului cu privire la acest incident dacă asta ar fi trebuit să funcționeze.",
+	"modifyReplied": "Nu puteți modifica o sugestie care a fost răspunsă. O puteți urmări în canalul de discuții.",
+	"modifySuccess": "Sugestie actualizată cu succes (`#{{id}}`)!",
+	"newMessageContent": "[`#{{id}}`] **{{user.mention}} a sugerat la {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "Îmi pare rău, dar nu am putut posta un mesaj în {{channel}}. Te rog să raportezi această problemă unui administrator. 😦",
+	"newNotConfigured": "Acest server nu a configurat încă un canal de sugestii. Te rog să contactezi administratorii serverului pentru a-l configura!",
+	"newSuccess": "Sugestie ta a fost trimisă cu succes (`#{{id}}`)!",
+	"reactionsFailed": "Nu am reușit să adaug {{failed, list(conjunction)}}.",
+	"reactionsFailedAndRemoved": "Nu am reușit să adaug {{failed, list(conjunction)}}, din care am eliminat {{removed, list(conjunction)}}, deoarece am pierdut accesul pentru a reacționa cu ei.",
+	"optionsIdName": "id",
+	"optionsIdDescription": "Numărul sugestiei de editat",
+	"optionsSuggestionName": "sugestie",
+	"optionsSuggestionDescription": "Sugestia de postat"
+}
