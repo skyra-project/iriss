@@ -4,7 +4,7 @@
 	"viewName": "смотреть",
 	"viewDescription": "Просмотреть текущую конфигурацию",
 	"viewContent": "**Текущие настройки**:\n\nКанал: {{channel}}\nАвто-ветка: {{autoThread}}\nКнопки: {{buttons}}\nКомпактность: {{compact}}\nПоказывать историю обновлений: {{displayUpdateHistory}}\nEmbed-сообщения: {{embed}}\nРеакции: {{reactions}}\n\n> **Примечание**: Для их изменения, вы можете использовать `/config edit`.",
-	"editName": "сменить",
+	"editName": "изменить",
 	"editDescription": "Редактировать значение конфигурации",
 	"editOptionsChannelDescription": "Если установлено - канал для отправки новых предложений",
 	"editOptionsAutoThreadDescription": "Автоматически создавать ветку из новых предложений (по умолчанию: False)",
@@ -24,5 +24,10 @@
 	"keyChannel": "канал",
 	"keyAutoThread": "авто-ветка",
 	"keyButtons": "кнопки",
-	"keyCompact": "компактность"
+	"keyCompact": "компактный-режим",
+	"keyDisplayUpdateHistory": "показывать-историю-обновлений",
+	"keyEmbed": "вложения",
+	"keyReactions": "реакции",
+	"keyRemoveReactions": "удалять-реакции",
+	"editSuccess": "Конфигурация этого сервера успешно изменена."
 }
