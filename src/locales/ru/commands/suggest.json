@@ -18,6 +18,7 @@
 	"newNotConfigured": "На этом сервере ещё не настроен канал для предложений. Пожалуйста, свяжитесь с администраторами, чтобы настроить его!",
 	"newSuccess": "Ваше предложение (`#{{id}}`) успешно отправлено!",
 	"reactionsFailed": "Мне не удалось добавить {{failed, list(conjunction)}}.",
+	"reactionsFailedAndRemoved": "Мне не удалось добавить {{failed, list(conjunction)}}, и я удалила {{removed, list(conjunction)}} из моей конфигурации, так как я больше не могу использовать их в качестве реакций из-за потери доступа к ним.",
 	"optionsIdName": "id",
 	"optionsIdDescription": "Номер предложения для редактирования",
 	"optionsSuggestionName": "предложение",
