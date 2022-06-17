@@ -12,7 +12,7 @@ import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { fromAsync } from '@sapphire/result';
 import { Command, RegisterCommand } from '@skyra/http-framework';
-import { getSupportedLanguageName, getSupportedUserLanguageT, getT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
+import { getSupportedLanguageT, getSupportedUserLanguageT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ButtonStyle, ComponentType, MessageFlags, type APIMessage } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
@@ -120,7 +120,7 @@ export class UserCommand extends Command {
 		if (!settings.buttons) return components;
 
 		const id = makeIntegerString(data.id);
-		const t = getT(getSupportedLanguageName(interaction));
+		const t = getSupportedLanguageT(interaction);
 		const manageRow: MessageComponent = {
 			type: ComponentType.ActionRow,
 			components: [
