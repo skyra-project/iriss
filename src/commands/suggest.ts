@@ -235,7 +235,7 @@ export class UserCommand extends Command {
 		// Get the guild settings to get the channel:
 		const settings = await this.container.prisma.guild.findUnique({
 			where: { id: guildId },
-			select: { channel: true, embed: true }
+			select: { channel: true }
 		});
 
 		// If the settings were deleted or the channel not configured, everything becomes readonly. As such, return early:
