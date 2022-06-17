@@ -1,1 +1,7 @@
-{}
+{
+	"contentAccepted": "Acceptat de {{tag}} la {{time}}",
+	"contentConsidered": "Considerat de {{tag}} la {{time}}",
+	"contentDenied": "Refuzat de {{tag}} la {{time}}",
+	"updateFailure": "Nu am reușit să actualizez conținutul mesajului, îmi pare rău! 😢",
+	"updateSuccess": "Mesajul a fost actualizat cu succes!"
+}

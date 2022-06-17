@@ -1,1 +1,6 @@
-{}
+{
+	"enabled": "Activat",
+	"disabled": "Dezactivat",
+	"unset": "Nesetat",
+	"none": "Niciunul"
+}

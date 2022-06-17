@@ -1,1 +1,24 @@
-{}
+{
+	"name": "rezolvă",
+	"description": "Rezolvă sugestiile de la acest server",
+	"archiveName": "arhivare",
+	"archiveDescription": "Arhivează o sugestie de la acest server",
+	"acceptName": "acceptă",
+	"acceptDescription": "Marchează o sugestie de la acest server ca fiind acceptată",
+	"considerName": "considerați",
+	"considerDescription": "Marchează o sugestie de la acest server ca fiind considerată",
+	"denyName": "refuză",
+	"denyDescription": "Marchează o sugestie de la acest server ca refuzat",
+	"optionsIdName": "id",
+	"optionsIdDescription": "ID-ul sugestiei de actualizat",
+	"optionsResponseName": "răspuns",
+	"optionsResponseDescription": "Răspunsul care urmează să fie adăugat la mesajul sugerat",
+	"notConfigured": "Acest server nu are un canal de sugestii configurat, vă rugăm să-l configurați cu `/configurație modifică canal #canal` sau cereți unui administrator să facă acest lucru.",
+	"suggestionArchived": "Sugestia este arhivată și nu poate fi editată.",
+	"suggestionIdDoesNotExist": "ID-ul sugestiei pe care l-ați specificat nu există.",
+	"suggestionMessageDeleted": "Mesajul sugestiei a fost șters și, prin urmare, a fost arhivat automat.",
+	"archiveSuccess": "Sugestia {{id}} a fost arhivată cu succes.",
+	"noReason": "*Niciun motiv specificat*",
+	"success": "Sugestia {{id}} a fost actualizată cu succes.",
+	"failure": "Nu am putut actualiza sugestia {{id}}, îmi pare rău!"
+}
