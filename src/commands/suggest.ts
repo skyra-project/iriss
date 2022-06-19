@@ -1,4 +1,4 @@
-import { SuggestionStatusColors } from '#lib/common/constants';
+import { EmptyMentions, SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { apply } from '#lib/utilities/add-builder-localizations';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
@@ -12,7 +12,7 @@ import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { fromAsync } from '@sapphire/result';
 import { Command, RegisterCommand } from '@skyra/http-framework';
-import { getSupportedLanguageName, getSupportedUserLanguageT, getT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
+import { getSupportedLanguageT, getSupportedUserLanguageT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ButtonStyle, ComponentType, MessageFlags, type APIMessage } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
@@ -110,7 +110,7 @@ export class UserCommand extends Command {
 
 	private makeMessage(interaction: Command.Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
 		const resolved = settings.embed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
-		return { ...resolved, components: this.makeComponents(interaction, settings, data) };
+		return { ...resolved, components: this.makeComponents(interaction, settings, data), allowed_mentions: EmptyMentions };
 	}
 
 	private makeComponents(interaction: Command.Interaction, settings: Guild, data: MessageData) {
@@ -120,7 +120,7 @@ export class UserCommand extends Command {
 		if (!settings.buttons) return components;
 
 		const id = makeIntegerString(data.id);
-		const t = getT(getSupportedLanguageName(interaction));
+		const t = getSupportedLanguageT(interaction);
 		const manageRow: MessageComponent = {
 			type: ComponentType.ActionRow,
 			components: [
@@ -198,7 +198,7 @@ export class UserCommand extends Command {
 		return { content };
 	}
 
-	private async *handleEdit(interaction: Command.Interaction, id: number, input: string): Command.GeneratorResponse {
+	private async *handleEdit(interaction: Command.Interaction, id: number, rawInput: string): Command.GeneratorResponse {
 		yield this.defer({ flags: MessageFlags.Ephemeral });
 
 		const guildId = BigInt(interaction.guild_id!);
@@ -255,14 +255,14 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		input = await useEmbedContent(input, guildId, settings.channel);
-
 		const message = result.value;
 		let data: ChannelId.MessageId.patch.Body;
 		if (message.embeds.length) {
-			data = { embeds: [{ ...message.embeds[0], description: input }] };
+			const description = await useEmbedContent(rawInput, guildId, settings.channel);
+			data = { embeds: [{ ...message.embeds[0], description }] };
 		} else {
-			data = { content: message.content.slice(0, message.content.indexOf('\n')) + input };
+			const content = message.content.slice(0, message.content.indexOf('\n')) + usePlainContent(rawInput);
+			data = { content, allowed_mentions: EmptyMentions };
 		}
 		await ChannelId.MessageId.patch(message.channel_id, message.id, data);
 
