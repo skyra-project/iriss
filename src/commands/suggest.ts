@@ -199,8 +199,6 @@ export class UserCommand extends Command {
 	}
 
 	private async *handleEdit(interaction: Command.Interaction, id: number, rawInput: string): Command.GeneratorResponse {
-		yield this.defer({ flags: MessageFlags.Ephemeral });
-
 		const guildId = BigInt(interaction.guild_id!);
 		const suggestion = await this.container.prisma.suggestion.findUnique({
 			where: { id_guildId: { id, guildId } }
@@ -244,6 +242,8 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
+		yield this.defer({ flags: MessageFlags.Ephemeral });
+
 		const result = await fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
 		if (!result.success) {
 			await this.container.prisma.suggestion.update({
@@ -252,7 +252,7 @@ export class UserCommand extends Command {
 			});
 
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyMessageDeleted);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const message = result.value;
