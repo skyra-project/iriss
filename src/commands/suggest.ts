@@ -10,7 +10,7 @@ import { channelMention, EmbedBuilder, time, userMention } from '@discordjs/buil
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
-import { fromAsync } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { Command, RegisterCommand } from '@skyra/http-framework';
 import { getSupportedLanguageT, getSupportedUserLanguageT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ButtonStyle, ComponentType, MessageFlags, type APIMessage } from 'discord-api-types/v10';
@@ -56,15 +56,15 @@ export class UserCommand extends Command {
 			const user = this.makeUserData(interaction);
 			const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
 
-			const postResult = await fromAsync(ChannelId.Messages.post(settings.channel, body));
-			if (!postResult.success) {
+			const postResult = await Result.fromAsync(ChannelId.Messages.post(settings.channel, body));
+			if (postResult.isErr()) {
 				const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewFailedToSend, {
 					channel: channelMention(settings.channel.toString())
 				});
 				return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 			}
 
-			message = postResult.value;
+			message = postResult.unwrap();
 			await this.container.prisma.suggestion.create({
 				data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) },
 				select: null
@@ -80,14 +80,14 @@ export class UserCommand extends Command {
 
 		if (settings.reactions.length) {
 			const result = await useReactions(t, settings, message);
-			if (!result.success) errors.push(result.error);
+			result.inspectErr((error) => errors.push(error));
 		}
 
 		if (settings.autoThread) {
 			const result = await useThread(interaction, id, { message, input: rawInput });
-
-			if (!result.success) errors.push(t(result.error));
-			else if (!result.value.memberAddResult.success) errors.push(t(result.value.memberAddResult.error));
+			result
+				.inspect((value) => value.memberAddResult.inspectErr((error) => errors.push(t(error))))
+				.inspectErr((error) => errors.push(t(error)));
 		}
 
 		const header = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewSuccess, { id });
@@ -244,8 +244,8 @@ export class UserCommand extends Command {
 
 		yield this.defer({ flags: MessageFlags.Ephemeral });
 
-		const result = await fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
-		if (!result.success) {
+		const result = await Result.fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
+		if (result.isErr()) {
 			await this.container.prisma.suggestion.update({
 				where: { id_guildId: suggestion },
 				data: { archivedAt: new Date() }
@@ -255,7 +255,7 @@ export class UserCommand extends Command {
 			return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		const message = result.value;
+		const message = result.unwrap();
 		let data: ChannelId.MessageId.patch.Body;
 		if (message.embeds.length) {
 			const description = await useEmbedContent(rawInput, guildId, settings.channel);

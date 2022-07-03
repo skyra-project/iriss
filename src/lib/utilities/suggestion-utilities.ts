@@ -10,7 +10,7 @@ import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/uti
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
-import { err, fromAsync, ok } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { container } from '@skyra/http-framework';
 import { resolveKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
 import { ChannelType, type APIMessage } from 'discord-api-types/v10';
@@ -65,33 +65,33 @@ export async function useReactions(t: TFunction, settings: Guild, message: APIMe
 		);
 
 		// The reaction failed because...
-		if (!result.success) {
+		if (result.isErr()) {
 			const formatted = getTextFormat(reaction as SerializedEmoji);
-
 			failed.push(formatted);
 
-			// ... the emoji does not exist - mark as failed for removal:
-			if (result.error.tag.exists) {
-				removed.push(formatted);
-			}
-			// ... any other reason - log the error:
-			else {
-				container.logger.error(result.error.value);
-			}
+			const error = result.unwrapErr();
+			error.tag.match({
+				// ... the emoji does not exist - mark as failed for removal:
+				some: () => {
+					removed.push(formatted);
+				},
+				// ... any other reason - log the error:
+				none: () => container.logger.error(error.value)
+			});
 		}
 		// Reaction is valid, but cannot react any more, break the loop:
-		else if (!result.value.exists) {
+		else if (result.unwrap().isNone()) {
 			break;
 		}
 	}
 
-	if (!failed.length) return ok();
-	if (!removed.length) return err(t(LanguageKeys.Commands.Suggest.ReactionsFailed, { failed }));
+	if (!failed.length) return Result.ok();
+	if (!removed.length) return Result.err(t(LanguageKeys.Commands.Suggest.ReactionsFailed, { failed }));
 
 	const passing = settings.reactions.filter((reaction) => !removed.includes(reaction));
 	await container.prisma.guild.update({ where: { id: settings.id }, data: { reactions: passing }, select: null });
 
-	return err(
+	return Result.err(
 		t(LanguageKeys.Commands.Suggest.ReactionsFailedAndRemoved, {
 			failed,
 			removed
@@ -118,7 +118,7 @@ export async function useThread(interaction: AnyInteraction, id: string | number
 	const input = options.input ?? getOriginalContent(message);
 
 	const name = `${id}-${slug(removeMaskedHyperlinks(input))}`.slice(0, 100);
-	const threadCreationResult = await fromAsync(
+	const threadCreationResult = await Result.fromAsync(
 		ChannelId.MessageId.Threads.post(message.channel_id, message.id, {
 			type: ChannelType.GuildPrivateThread,
 			name,
@@ -126,13 +126,13 @@ export async function useThread(interaction: AnyInteraction, id: string | number
 		})
 	);
 
-	if (!threadCreationResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
+	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
 
-	const thread = threadCreationResult.value;
-	const result = await fromAsync(ChannelId.ThreadMemberId.put(thread.id, getUser(interaction).id));
-	const memberAddResult = result.success ? result : err(LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
+	const thread = threadCreationResult.unwrap();
+	const result = await Result.fromAsync(ChannelId.ThreadMemberId.put(thread.id, getUser(interaction).id));
+	const memberAddResult = result.mapErr(() => LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
 
-	return ok({ thread, memberAddResult });
+	return Result.ok({ thread, memberAddResult });
 }
 
 export namespace useThread {
@@ -157,19 +157,20 @@ export async function useArchive(interaction: AnyInteraction, options: useArchiv
 
 	const errors: TypedT[] = [];
 	if (message.thread) {
-		const result = await fromAsync(ChannelId.patch(message.thread.id, { archived: true }));
-		if (!result.success) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
+		const result = await Result.fromAsync(ChannelId.patch(message.thread.id, { archived: true }));
+		if (result.isErr()) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
 	}
 
 	if (settings.removeReactions) {
-		const result = await fromAsync(ChannelId.MessageId.Reactions.remove(message.channel_id, message.id));
-		if (!result.success) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ReactionRemovalFailure);
+		const result = await Result.fromAsync(ChannelId.MessageId.Reactions.remove(message.channel_id, message.id));
+		if (result.isErr()) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ReactionRemovalFailure);
 	}
 
-	const messageUpdateResult = await fromAsync(ChannelId.MessageId.patch(channelId, messageId, { components: [] }));
-	if (!messageUpdateResult.success) return err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure);
-
-	return ok({ errors });
+	const messageUpdateResult = await Result.fromAsync(ChannelId.MessageId.patch(channelId, messageId, { components: [] }));
+	return messageUpdateResult.match({
+		ok: () => Result.ok({ errors }),
+		err: () => Result.err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure)
+	});
 }
 
 export namespace useArchive {

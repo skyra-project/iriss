@@ -5,7 +5,7 @@ import { url } from '#lib/utilities/message';
 import { ChannelId } from '#lib/utilities/rest';
 import { useArchive, useMessageUpdate } from '#lib/utilities/suggestion-utilities';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
-import { err, fromAsync, ok } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { Command, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
 import { resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
@@ -23,18 +23,19 @@ export class UserCommand extends Command {
 	)
 	public async handleArchive(interaction: Command.Interaction, options: ArchiveOptions): Command.AsyncResponse {
 		const result = await this.getInformation(interaction, options.id);
-		if (!result.success) {
-			const content = resolveUserKey(interaction, result.error);
+		if (result.isErr()) {
+			const content = resolveUserKey(interaction, result.unwrapErr());
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		await useArchive(interaction, result.value);
+		const data = result.unwrap();
+		await useArchive(interaction, data);
 
-		const { id, guildId } = result.value.suggestion;
+		const { id, guildId } = data.suggestion;
 		await this.container.prisma.suggestion.update({ where: { id_guildId: { id, guildId } }, data: { archivedAt: new Date() } });
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Resolve.ArchiveSuccess, {
-			id: hyperlink(`#${options.id}`, hideLinkEmbed(url(result.value.message)))
+			id: hyperlink(`#${options.id}`, hideLinkEmbed(url(data.message)))
 		});
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -68,17 +69,20 @@ export class UserCommand extends Command {
 
 	private async sharedHandler(interaction: Command.Interaction, options: ReplyOptions, action: Status): Command.AsyncResponse {
 		const result = await this.getInformation(interaction, options.id);
-		if (!result.success) {
-			const content = resolveUserKey(interaction, result.error);
+		if (result.isErr()) {
+			const content = resolveUserKey(interaction, result.unwrapErr());
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		const { message, settings } = result.value;
+		const { message, settings } = result.unwrap();
 		const input = options.suggestion ?? resolveKey(interaction, LanguageKeys.Commands.Resolve.NoReason);
 		const body = await useMessageUpdate(interaction, message, action, input, settings);
-		const updateResult = await fromAsync(ChannelId.MessageId.patch(message.channel_id, message.id, body));
+		const updateResult = await Result.fromAsync(ChannelId.MessageId.patch(message.channel_id, message.id, body));
 
-		const key = updateResult.success ? LanguageKeys.Commands.Resolve.Success : LanguageKeys.Commands.Resolve.Failure;
+		const key = updateResult.match({
+			ok: () => LanguageKeys.Commands.Resolve.Success,
+			err: () => LanguageKeys.Commands.Resolve.Failure
+		});
 		const content = resolveUserKey(interaction, key, { id: hyperlink(`#${options.id}`, url(message)) });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -87,19 +91,19 @@ export class UserCommand extends Command {
 		const guildId = BigInt(interaction.guild_id!);
 
 		const suggestion = await this.container.prisma.suggestion.findUnique({ where: { id_guildId: { id, guildId } } });
-		if (!suggestion) return err(LanguageKeys.Commands.Resolve.SuggestionIdDoesNotExist);
-		if (suggestion.archivedAt) return err(LanguageKeys.Commands.Resolve.SuggestionArchived);
+		if (!suggestion) return Result.err(LanguageKeys.Commands.Resolve.SuggestionIdDoesNotExist);
+		if (suggestion.archivedAt) return Result.err(LanguageKeys.Commands.Resolve.SuggestionArchived);
 
 		const settings = (await this.container.prisma.guild.findUnique({ where: { id: guildId } }))!;
-		if (!settings?.channel) return err(LanguageKeys.Commands.Resolve.NotConfigured);
+		if (!settings?.channel) return Result.err(LanguageKeys.Commands.Resolve.NotConfigured);
 
-		const messageResult = await fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
-		if (!messageResult.success) {
+		const messageResult = await Result.fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
+		if (messageResult.isErr()) {
 			await this.container.prisma.suggestion.update({ where: { id_guildId: { id, guildId } }, data: { archivedAt: new Date() } });
-			return err(LanguageKeys.Commands.Resolve.SuggestionMessageDeleted);
+			return Result.err(LanguageKeys.Commands.Resolve.SuggestionMessageDeleted);
 		}
 
-		return ok({ suggestion, settings, message: messageResult.value });
+		return Result.ok({ suggestion, settings, message: messageResult.unwrap() });
 	}
 }
 

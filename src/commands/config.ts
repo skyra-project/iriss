@@ -3,7 +3,7 @@ import { apply, makeName } from '#lib/utilities/add-builder-localizations';
 import { getTextFormat, parse, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { channelMention, inlineCode } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
-import { err, fromAsync, ok } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { isNullish } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
 import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
@@ -53,9 +53,9 @@ export class UserCommand extends Command {
 		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
 		if (!isNullish(options.reactions)) {
 			const result = this.parseReactionsString(interaction, options.reactions);
-			if (!result.success) return this.message({ content: result.error, flags: MessageFlags.Ephemeral });
+			if (result.isErr()) return this.message({ content: result.unwrapErr(), flags: MessageFlags.Ephemeral });
 
-			entries.push(['reactions', result.value]);
+			entries.push(['reactions', result.unwrap()]);
 		}
 
 		if (!isNullish(options['auto-thread'])) entries.push(['autoThread', options['auto-thread']]);
@@ -150,31 +150,38 @@ export class UserCommand extends Command {
 
 	private async updateDatabase(interaction: Command.Interaction, data: Partial<Guild>) {
 		const id = BigInt(interaction.guild_id!);
-		const result = await fromAsync(this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null }));
+		const result = await Result.fromAsync(
+			this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null })
+		);
 
-		if (result.success) {
-			const content = resolveUserKey(interaction, LanguageKeys.Commands.Config.EditSuccess);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
-		}
+		const content = result.match({
+			ok: () => resolveUserKey(interaction, LanguageKeys.Commands.Config.EditSuccess),
+			err: (error) => {
+				this.container.logger.error(error);
+				return resolveUserKey(interaction, LanguageKeys.Commands.Config.EditFailure);
+			}
+		});
 
-		this.container.logger.error(result.error);
-		const content = resolveUserKey(interaction, LanguageKeys.Commands.Config.EditFailure);
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private parseReactionsString(interaction: Command.Interaction, input: string) {
 		const reactions = input.split(' ');
-		if (reactions.length > 3) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidAmount));
+		if (reactions.length > 3) {
+			return Result.err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidAmount));
+		}
 
 		const entries: string[] = [];
 		for (const reaction of reactions) {
 			const parsed = parse(reaction);
-			if (parsed === null) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidEmoji, { value: reaction }));
+			if (parsed === null) {
+				return Result.err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidEmoji, { value: reaction }));
+			}
 
 			entries.push(parsed);
 		}
 
-		return ok(entries);
+		return Result.ok(entries);
 	}
 }
 
