@@ -6,7 +6,7 @@ import { ChannelId } from '#lib/utilities/rest';
 import { useArchive, useThread } from '#lib/utilities/suggestion-utilities';
 import { channelMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
-import { fromAsync } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
 import {
@@ -44,8 +44,8 @@ export class Handler extends InteractionHandler {
 		const t = getSupportedUserLanguageT(interaction);
 
 		const result = await useArchive(interaction, { settings });
-		if (!result.success) {
-			const content = t(result.error);
+		if (result.isErr()) {
+			const content = t(result.unwrapErr());
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -56,7 +56,8 @@ export class Handler extends InteractionHandler {
 		});
 
 		const header = t(LanguageKeys.InteractionHandlers.Suggestions.ArchiveSuccess);
-		const warnings = result.value.errors.length === 0 ? '' : `\n\n- ${result.value.errors.map((error) => t(error)).join('\n- ')}`;
+		const value = result.unwrap();
+		const warnings = value.errors.length === 0 ? '' : `\n\n- ${value.errors.map((error) => t(error)).join('\n- ')}`;
 		const content = header + warnings;
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -116,8 +117,8 @@ export class Handler extends InteractionHandler {
 
 	private async handleThread(interaction: APIMessageComponentInteraction, idString: string): InteractionHandler.AsyncResponse {
 		const threadResult = await useThread(interaction, idString);
-		if (!threadResult.success) {
-			const content = resolveUserKey(interaction, threadResult.error);
+		if (threadResult.isErr()) {
+			const content = resolveUserKey(interaction, threadResult.unwrapErr());
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
@@ -128,15 +129,20 @@ export class Handler extends InteractionHandler {
 			...interaction.message.components!.slice(1)
 		];
 
-		const patchResult = await fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components }));
+		const patchResult = await Result.fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components }));
 
 		const t = getSupportedUserLanguageT(interaction);
-		const key = patchResult.success
-			? LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess
-			: LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure;
+		const key = patchResult.match({
+			ok: () => LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateSuccess,
+			err: () => LanguageKeys.InteractionHandlers.Suggestions.ThreadMessageUpdateFailure
+		});
 
-		const header = t(key, { channel: channelMention(threadResult.value.thread.id) });
-		const details = threadResult.value.memberAddResult.success ? '' : `\n${t(threadResult.value.memberAddResult.error)}`;
+		const thread = threadResult.unwrap();
+		const header = t(key, { channel: channelMention(thread.thread.id) });
+		const details = thread.memberAddResult.match({
+			ok: () => '',
+			err: (error) => `\n${t(error)}`
+		});
 
 		const content = header + details;
 		return this.message({ content, flags: MessageFlags.Ephemeral });

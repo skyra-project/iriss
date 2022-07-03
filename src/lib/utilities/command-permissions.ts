@@ -81,12 +81,13 @@ export async function get(guildId: string, commandName: string) {
 	return { command, permissions };
 }
 
-async function makeCall(guildId: string, command: APIApplicationCommand) {
+async function makeCall(guildId: string, command: APIApplicationCommand): Promise<APIApplicationCommandPermission[]> {
 	const result = await fromDiscord(ApplicationId.GuildId.CommandId.Permissions.get(guildId, command.id), {
 		ok: [ErrorCodes.UnknownApplicationCommandPermissions]
 	});
 
-	if (result.success) return result.value?.value?.permissions ?? [];
-
-	throw result.error;
+	return result.unwrap().match({
+		some: (value) => value.permissions,
+		none: () => []
+	});
 }
