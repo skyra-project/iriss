@@ -150,7 +150,7 @@ function removeMaskedHyperlinks(input: string) {
 export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
 	const message = options.message ?? ensure(interaction.message);
 
-	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(getGuildId(interaction, message)) } }));
+	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(getGuildId(interaction)) } }));
 
 	const channelId = message.channel_id;
 	const messageId = message.id;

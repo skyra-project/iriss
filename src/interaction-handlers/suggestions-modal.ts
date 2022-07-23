@@ -24,7 +24,7 @@ export class Handler extends InteractionHandler {
 			})
 		);
 
-		const id = hyperlink(inlineCode(`#${idString}`), url(interaction.message!));
+		const id = hyperlink(inlineCode(`#${idString}`), url(guildId, interaction.message!.channel_id, interaction.message!.id));
 		const content = resolveUserKey(
 			interaction,
 			result.match({
