@@ -35,7 +35,7 @@ export class UserCommand extends Command {
 		await this.container.prisma.suggestion.update({ where: { id_guildId: { id, guildId } }, data: { archivedAt: new Date() } });
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Resolve.ArchiveSuccess, {
-			id: hyperlink(`#${options.id}`, hideLinkEmbed(url(data.message)))
+			id: hyperlink(`#${options.id}`, hideLinkEmbed(url(data.guildId, data.message.channel_id, data.message.id)))
 		});
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
@@ -74,7 +74,7 @@ export class UserCommand extends Command {
 			return this.message({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		const { message, settings } = result.unwrap();
+		const { message, settings, guildId } = result.unwrap();
 		const input = options.suggestion ?? resolveKey(interaction, LanguageKeys.Commands.Resolve.NoReason);
 		const body = await useMessageUpdate(interaction, message, action, input, settings);
 		const updateResult = await Result.fromAsync(ChannelId.MessageId.patch(message.channel_id, message.id, body));
@@ -83,7 +83,7 @@ export class UserCommand extends Command {
 			ok: () => LanguageKeys.Commands.Resolve.Success,
 			err: () => LanguageKeys.Commands.Resolve.Failure
 		});
-		const content = resolveUserKey(interaction, key, { id: hyperlink(`#${options.id}`, url(message)) });
+		const content = resolveUserKey(interaction, key, { id: hyperlink(`#${options.id}`, url(guildId, message.channel_id, message.id)) });
 		return this.message({ content, flags: MessageFlags.Ephemeral });
 	}
 
@@ -103,7 +103,7 @@ export class UserCommand extends Command {
 			return Result.err(LanguageKeys.Commands.Resolve.SuggestionMessageDeleted);
 		}
 
-		return Result.ok({ suggestion, settings, message: messageResult.unwrap() });
+		return Result.ok({ suggestion, settings, guildId: suggestion.guildId, message: messageResult.unwrap() });
 	}
 }
 
