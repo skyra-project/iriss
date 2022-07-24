@@ -75,7 +75,7 @@ export class UserCommand extends Command {
 		}
 
 		const { message, settings, guildId } = result.unwrap();
-		const input = options.suggestion ?? resolveKey(interaction, LanguageKeys.Commands.Resolve.NoReason);
+		const input = options.response ?? resolveKey(interaction, LanguageKeys.Commands.Resolve.NoReason);
 		const body = await useMessageUpdate(interaction, message, action, input, settings);
 		const updateResult = await Result.fromAsync(ChannelId.MessageId.patch(message.channel_id, message.id, body));
 
@@ -112,6 +112,6 @@ interface ArchiveOptions {
 }
 
 interface ReplyOptions {
-	suggestion?: string;
+	response?: string;
 	id: number;
 }
