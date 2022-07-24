@@ -3,7 +3,7 @@
 	"description": "서버의 제안 해결",
 	"archiveName": "보관",
 	"archiveDescription": "서버의 제안 보관",
-	"acceptName": " 수락",
+	"acceptName": "수락",
 	"acceptDescription": "서버의 제안을 '수락'으로 표시",
 	"considerName": "심리",
 	"considerDescription": "서버의 제안을 '심리'로 표시",
