@@ -91,7 +91,7 @@
 			"@typescript-eslint/no-base-to-string": "off"
 		}
 	},
-	"packageManager": "yarn@3.2.1",
+	"packageManager": "yarn@3.2.2",
 	"volta": {
 		"node": "18.4.0"
 	}
