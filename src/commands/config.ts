@@ -1,50 +1,57 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { apply, makeName } from '#lib/utilities/add-builder-localizations';
 import { getTextFormat, parse, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { channelMention, inlineCode } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { Result } from '@sapphire/result';
 import { isNullish } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
-import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
+import { applyLocalizedBuilder, createSelectMenuChoiceName, getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
-	apply(builder, LanguageKeys.Commands.Config.RootName, LanguageKeys.Commands.Config.RootDescription)
+	applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.RootName, LanguageKeys.Commands.Config.RootDescription)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
 	@RegisterSubCommand((builder) =>
-		apply(builder, LanguageKeys.Commands.Config.Edit)
+		applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.Edit)
 			.addBooleanOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyAutoThread, LanguageKeys.Commands.Config.EditOptionsAutoThreadDescription)
+				applyLocalizedBuilder(
+					input,
+					LanguageKeys.Commands.Config.KeyAutoThread,
+					LanguageKeys.Commands.Config.EditOptionsAutoThreadDescription
+				)
 			)
 			.addBooleanOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyButtons, LanguageKeys.Commands.Config.EditOptionsButtonsDescription)
+				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyButtons, LanguageKeys.Commands.Config.EditOptionsButtonsDescription)
 			)
 			.addChannelOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyChannel, LanguageKeys.Commands.Config.EditOptionsChannelDescription) //
+				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyChannel, LanguageKeys.Commands.Config.EditOptionsChannelDescription) //
 					.addChannelTypes(ChannelType.GuildText)
 			)
 			.addBooleanOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyCompact, LanguageKeys.Commands.Config.EditOptionsCompactDescription)
+				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyCompact, LanguageKeys.Commands.Config.EditOptionsCompactDescription)
 			)
 			.addBooleanOption((input) =>
-				apply(
+				applyLocalizedBuilder(
 					input,
 					LanguageKeys.Commands.Config.KeyDisplayUpdateHistory,
 					LanguageKeys.Commands.Config.EditOptionsDisplayUpdateHistoryDescription
 				)
 			)
 			.addBooleanOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyEmbed, LanguageKeys.Commands.Config.EditOptionsEmbedDescription)
+				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyEmbed, LanguageKeys.Commands.Config.EditOptionsEmbedDescription)
 			)
 			.addStringOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyReactions, LanguageKeys.Commands.Config.EditOptionsReactionsDescription)
+				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyReactions, LanguageKeys.Commands.Config.EditOptionsReactionsDescription)
 			)
 			.addBooleanOption((input) =>
-				apply(input, LanguageKeys.Commands.Config.KeyRemoveReactions, LanguageKeys.Commands.Config.EditOptionsRemoveReactionsDescription)
+				applyLocalizedBuilder(
+					input,
+					LanguageKeys.Commands.Config.KeyRemoveReactions,
+					LanguageKeys.Commands.Config.EditOptionsRemoveReactionsDescription
+				)
 			)
 	)
 	public async runEdit(interaction: Command.Interaction, options: EditOptions): Command.AsyncResponse {
@@ -70,18 +77,18 @@ export class UserCommand extends Command {
 	}
 
 	@RegisterSubCommand((builder) =>
-		apply(builder, LanguageKeys.Commands.Config.Reset).addStringOption((input) =>
-			apply(input, LanguageKeys.Commands.Config.ResetOptionsKey)
+		applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.Reset).addStringOption((input) =>
+			applyLocalizedBuilder(input, LanguageKeys.Commands.Config.ResetOptionsKey)
 				.addChoices(
-					makeName(LanguageKeys.Commands.Config.ResetOptionsKeyChoicesAll, { value: 'all' }),
-					makeName(LanguageKeys.Commands.Config.KeyAutoThread, { value: 'auto-thread' }),
-					makeName(LanguageKeys.Commands.Config.KeyButtons, { value: 'buttons' }),
-					makeName(LanguageKeys.Commands.Config.KeyChannel, { value: 'channel' }),
-					makeName(LanguageKeys.Commands.Config.KeyCompact, { value: 'compact' }),
-					makeName(LanguageKeys.Commands.Config.KeyDisplayUpdateHistory, { value: 'display-update-history' }),
-					makeName(LanguageKeys.Commands.Config.KeyEmbed, { value: 'embed' }),
-					makeName(LanguageKeys.Commands.Config.KeyReactions, { value: 'reactions' }),
-					makeName(LanguageKeys.Commands.Config.KeyRemoveReactions, { value: 'remove-reactions' })
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.ResetOptionsKeyChoicesAll, { value: 'all' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyAutoThread, { value: 'auto-thread' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyButtons, { value: 'buttons' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyChannel, { value: 'channel' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyCompact, { value: 'compact' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyDisplayUpdateHistory, { value: 'display-update-history' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyEmbed, { value: 'embed' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyReactions, { value: 'reactions' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyRemoveReactions, { value: 'remove-reactions' })
 				)
 				.setRequired(true)
 		)
@@ -120,7 +127,7 @@ export class UserCommand extends Command {
 		}
 	}
 
-	@RegisterSubCommand((builder) => apply(builder, LanguageKeys.Commands.Config.View))
+	@RegisterSubCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.View))
 	public async runView(interaction: Command.Interaction): Command.AsyncResponse {
 		const id = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id } });

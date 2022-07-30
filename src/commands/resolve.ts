@@ -1,5 +1,4 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { apply } from '#lib/utilities/add-builder-localizations';
 import { Status } from '#lib/utilities/id-creator';
 import { url } from '#lib/utilities/message';
 import { ChannelId } from '#lib/utilities/rest';
@@ -7,18 +6,18 @@ import { useArchive, useMessageUpdate } from '#lib/utilities/suggestion-utilitie
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { Command, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
-import { resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
+import { applyLocalizedBuilder, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
-	apply(builder, LanguageKeys.Commands.Resolve.RootName, LanguageKeys.Commands.Resolve.RootDescription) //
+	applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.RootName, LanguageKeys.Commands.Resolve.RootDescription) //
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
 	@RegisterSubCommand((builder) =>
-		apply(builder, LanguageKeys.Commands.Resolve.Archive).addIntegerOption((option) =>
-			apply(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true)
+		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Archive).addIntegerOption((option) =>
+			applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true)
 		)
 	)
 	public async handleArchive(interaction: Command.Interaction, options: ArchiveOptions): Command.AsyncResponse {
@@ -41,27 +40,27 @@ export class UserCommand extends Command {
 	}
 
 	@RegisterSubCommand((builder) =>
-		apply(builder, LanguageKeys.Commands.Resolve.Accept)
-			.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
-			.addStringOption((option) => apply(option, LanguageKeys.Commands.Resolve.OptionsResponse))
+		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Accept)
+			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
+			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
 	)
 	public handleAccept(interaction: Command.Interaction, options: ReplyOptions): Command.AsyncResponse {
 		return this.sharedHandler(interaction, options, Status.Accept);
 	}
 
 	@RegisterSubCommand((builder) =>
-		apply(builder, LanguageKeys.Commands.Resolve.Consider)
-			.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
-			.addStringOption((option) => apply(option, LanguageKeys.Commands.Resolve.OptionsResponse))
+		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Consider)
+			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
+			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
 	)
 	public handleConsider(interaction: Command.Interaction, options: ReplyOptions): Command.AsyncResponse {
 		return this.sharedHandler(interaction, options, Status.Consider);
 	}
 
 	@RegisterSubCommand((builder) =>
-		apply(builder, LanguageKeys.Commands.Resolve.Deny)
-			.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
-			.addStringOption((option) => apply(option, LanguageKeys.Commands.Resolve.OptionsResponse))
+		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Deny)
+			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
+			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
 	)
 	public handleDeny(interaction: Command.Interaction, options: ReplyOptions): Command.AsyncResponse {
 		return this.sharedHandler(interaction, options, Status.Deny);

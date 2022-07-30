@@ -1,6 +1,5 @@
 import { EmptyMentions, SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { apply } from '#lib/utilities/add-builder-localizations';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
 import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
@@ -12,15 +11,15 @@ import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { Result } from '@sapphire/result';
 import { Command, RegisterCommand } from '@skyra/http-framework';
-import { getSupportedLanguageT, getSupportedUserLanguageT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
+import { applyLocalizedBuilder, getSupportedLanguageT, getSupportedUserLanguageT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { ButtonStyle, ComponentType, MessageFlags, type APIMessage } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
 @RegisterCommand((builder) =>
-	apply(builder, LanguageKeys.Commands.Suggest.RootName, LanguageKeys.Commands.Suggest.RootDescription) //
-		.addStringOption((option) => apply(option, LanguageKeys.Commands.Suggest.OptionsSuggestion).setRequired(true))
-		.addIntegerOption((option) => apply(option, LanguageKeys.Commands.Suggest.OptionsId))
+	applyLocalizedBuilder(builder, LanguageKeys.Commands.Suggest.RootName, LanguageKeys.Commands.Suggest.RootDescription) //
+		.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsSuggestion).setRequired(true))
+		.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsId))
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
