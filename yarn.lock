@@ -719,13 +719,13 @@ __metadata:
     "@skyra/env-utilities": ^1.0.2
     "@skyra/http-framework": ^0.7.0
     "@skyra/http-framework-i18n": ^0.2.0
+    "@skyra/logger": ^1.0.0
     "@skyra/shared-http-pieces": ^0.0.40
     "@skyra/start-banner": ^1.0.2
     "@types/gradient-string": ^1.1.2
     "@types/node": ^18.6.3
     "@typescript-eslint/eslint-plugin": ^5.31.0
     "@typescript-eslint/parser": ^5.31.0
-    colorette: ^2.0.19
     cz-conventional-changelog: ^3.3.0
     discord-api-types: ^0.36.3
     eslint: ^8.20.0
@@ -742,6 +742,15 @@ __metadata:
     typescript: ^4.7.4
   languageName: unknown
   linkType: soft
+
+"@skyra/logger@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@skyra/logger@npm:1.0.0"
+  dependencies:
+    colorette: 2.0.19
+  checksum: 6777754a9e729155c303327d073039f504e30823956896dc6e5898272072d7216e22b4435e9f4743ac8aef8f7dd7504ae5b24f665c3b331461dc4b9ed6bb9a3c
+  languageName: node
+  linkType: hard
 
 "@skyra/shared-http-pieces@npm:^0.0.40":
   version: 0.0.40
@@ -1442,7 +1451,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^2.0.16, colorette@npm:^2.0.17, colorette@npm:^2.0.19":
+"colorette@npm:2.0.19, colorette@npm:^2.0.16, colorette@npm:^2.0.17":
   version: 2.0.19
   resolution: "colorette@npm:2.0.19"
   checksum: 888cf5493f781e5fcf54ce4d49e9d7d698f96ea2b2ef67906834bb319a392c667f9ec69f4a10e268d2946d13a9503d2d19b3abaaaf174e3451bfe91fb9d82427
