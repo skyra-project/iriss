@@ -598,17 +598,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/pieces@npm:^3.4.1":
-  version: 3.4.1
-  resolution: "@sapphire/pieces@npm:3.4.1"
-  dependencies:
-    "@discordjs/collection": ^1.0.1
-    "@sapphire/utilities": ^3.9.0
-    tslib: ^2.4.0
-  checksum: 0e93d597779bc7bbec29d25d5dc043c2ed9725147cde1919784304212afa8deff0eb19631c6bde5f04bc41b2182ccda2274bc48941bb1d6f3d249be74684990c
-  languageName: node
-  linkType: hard
-
 "@sapphire/pieces@npm:^3.5.0":
   version: 3.5.0
   resolution: "@sapphire/pieces@npm:3.5.0"
@@ -679,9 +668,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/http-framework-i18n@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@skyra/http-framework-i18n@npm:0.2.1"
+"@skyra/http-framework-i18n@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@skyra/http-framework-i18n@npm:0.3.0"
   dependencies:
     "@discordjs/collection": ^1.0.1
     "@sapphire/utilities": ^3.9.0
@@ -689,30 +678,13 @@ __metadata:
     discord-api-types: ^0.36.3
     i18next: ^21.8.16
     tslib: ^2.4.0
-  checksum: 32e186edc6328e57f487340096e35beac97cb07019a6bfa0896484aed67a5bcb3b8d41d298738063929c6d0967519d564f2b397d96585541ac1062bb8eaefcfa
+  checksum: db2958cc3f56b6472f353481327c4dc9758b2db646430d1cf5ca5c421e5cbd48f22c294b341e8a018c2277520d050b99d593baa5473895214545749ee88e6605
   languageName: node
   linkType: hard
 
-"@skyra/http-framework@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@skyra/http-framework@npm:0.7.1"
-  dependencies:
-    "@discordjs/builders": ^1.1.0
-    "@discordjs/collection": ^1.0.1
-    "@discordjs/rest": ^1.0.1
-    "@sapphire/pieces": ^3.4.1
-    "@sapphire/utilities": ^3.9.0
-    discord-api-types: ^0.36.3
-    fastify: ^4.3.0
-    form-data: ^4.0.0
-    tweetnacl: ^1.0.3
-  checksum: 432b432fa03fa96011e256c53435268e53b280fad3af0dee736580f6ff378a2a75604745a66726d47d8339741ec22ad0c6a0c53772423fb78aebda08a9e4ee0b
-  languageName: node
-  linkType: hard
-
-"@skyra/http-framework@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "@skyra/http-framework@npm:0.7.2"
+"@skyra/http-framework@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@skyra/http-framework@npm:0.8.0"
   dependencies:
     "@discordjs/builders": ^1.1.0
     "@discordjs/collection": ^1.0.1
@@ -723,7 +695,7 @@ __metadata:
     fastify: ^4.3.0
     form-data: ^4.0.0
     tweetnacl: ^1.0.3
-  checksum: 0181985f0458e4c4b4df8b33e8c2a5563f2379f4ffc9cab4b2c28d1fb287129663b58c86dcd95e296cd0b248a3a318e9df1230b26e1241b037f4449affcba172
+  checksum: c4ca29ac85b53ec181c366a96bbdac002ff40917b4e5f3742049c41520201509c132bc5f3192e5aaf6d8844d3af80f923be41f8c3600f5d77c0db324e88fdf5d
   languageName: node
   linkType: hard
 
@@ -752,10 +724,10 @@ __metadata:
     "@sapphire/ts-config": ^3.3.4
     "@sapphire/utilities": ^3.9.0
     "@skyra/env-utilities": ^1.0.2
-    "@skyra/http-framework": ^0.7.2
-    "@skyra/http-framework-i18n": ^0.2.1
+    "@skyra/http-framework": ^0.8.0
+    "@skyra/http-framework-i18n": ^0.3.0
     "@skyra/logger": ^1.0.0
-    "@skyra/shared-http-pieces": ^0.0.41
+    "@skyra/shared-http-pieces": ^0.0.42
     "@skyra/start-banner": ^1.0.2
     "@types/gradient-string": ^1.1.2
     "@types/node": ^18.6.4
@@ -787,17 +759,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/shared-http-pieces@npm:^0.0.41":
-  version: 0.0.41
-  resolution: "@skyra/shared-http-pieces@npm:0.0.41"
+"@skyra/shared-http-pieces@npm:^0.0.42":
+  version: 0.0.42
+  resolution: "@skyra/shared-http-pieces@npm:0.0.42"
   dependencies:
     "@discordjs/builders": ^1.1.0
     "@discordjs/collection": ^1.0.1
-    "@skyra/http-framework": ^0.7.1
-    "@skyra/http-framework-i18n": ^0.2.1
+    "@skyra/http-framework": ^0.8.0
+    "@skyra/http-framework-i18n": ^0.3.0
     discord-api-types: ^0.36.3
     tslib: ^2.4.0
-  checksum: a11aa4df5fa868ec85148b77a487c88432da39596a547cb6d9a0882a0b6c6287bfb77fa22ecb3947bd2e0d0409289bb30f4a73aadaee0679c3ca110dd758dde2
+  checksum: 14bf2994ffb3ae8dd904473a73d675f630cc9e9306e0fd635bcfb1a2581b8f1014dfe1884bdf91b029747411d6127fe8ea8d9ca5a16c063555634907905900fc
   languageName: node
   linkType: hard
 
