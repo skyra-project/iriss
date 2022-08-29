@@ -6,12 +6,13 @@ import { hyperlink, inlineCode } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { resolveUserKey } from '@skyra/http-framework-i18n';
-import { MessageFlags, type APIModalSubmitGuildInteraction } from 'discord-api-types/v10';
+import { MessageFlags } from 'discord-api-types/v10';
 
 type IdParserResult = Values<Get<Id.SuggestionsModal>>;
 
 export class Handler extends InteractionHandler {
-	public async *run(interaction: APIModalSubmitGuildInteraction, [action, idString]: IdParserResult): InteractionHandler.GeneratorResponse {
+	public async *run(interaction: InteractionHandler.ModalInteraction, [action, idString]: IdParserResult) {
+		// TODO: Uhhh, modals *do* have messages after all?
 		const body = await useMessageUpdate(interaction, interaction.message!, action, interaction.data.components![0].components[0].value);
 		yield this.updateMessage(body);
 
@@ -33,6 +34,6 @@ export class Handler extends InteractionHandler {
 			}),
 			{ id }
 		);
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 }

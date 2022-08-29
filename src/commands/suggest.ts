@@ -1,7 +1,6 @@
 import { EmptyMentions, SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
-import { getUser } from '#lib/utilities/interactions';
 import { ChannelId } from '#lib/utilities/rest';
 import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
 import { displayAvatarURL } from '#lib/utilities/user';
@@ -24,23 +23,23 @@ type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 )
 export class UserCommand extends Command {
 	private readonly queues = new Collection<bigint, AsyncQueue>();
-	public override chatInputRun(interaction: Command.Interaction, options: Options): Command.GeneratorResponse {
+	public override chatInputRun(interaction: Command.ChatInputInteraction, options: Options) {
 		return options.id === undefined
 			? this.handleNew(interaction, options.suggestion)
 			: this.handleEdit(interaction, options.id, options.suggestion);
 	}
 
-	private async *handleNew(interaction: Command.Interaction, rawInput: string): Command.GeneratorResponse {
+	private async handleNew(interaction: Command.ChatInputInteraction, rawInput: string) {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({
 			where: { id: guildId }
 		});
 		if (!settings?.channel) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		yield this.defer({ flags: MessageFlags.Ephemeral });
+		const response = await interaction.defer({ flags: MessageFlags.Ephemeral });
 
 		const queue = this.queues.ensure(guildId, () => new AsyncQueue());
 		await queue.wait();
@@ -60,7 +59,7 @@ export class UserCommand extends Command {
 				const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewFailedToSend, {
 					channel: channelMention(settings.channel.toString())
 				});
-				return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
+				return response.update({ content });
 			}
 
 			message = postResult.unwrap();
@@ -93,11 +92,11 @@ export class UserCommand extends Command {
 		const details = errors.length === 0 ? '' : `\n\n- ${errors.join('\n- ')}`;
 
 		const content = header + details;
-		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
+		return response.update({ content });
 	}
 
-	private makeUserData(interaction: Command.Interaction): MessageData['user'] {
-		const user = getUser(interaction);
+	private makeUserData(interaction: Command.ChatInputInteraction): MessageData['user'] {
+		const { user } = interaction;
 
 		return {
 			id: user.id,
@@ -107,13 +106,13 @@ export class UserCommand extends Command {
 		};
 	}
 
-	private makeMessage(interaction: Command.Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
+	private makeMessage(interaction: Command.ChatInputInteraction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
 		const resolved = settings.embed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
 		return { ...resolved, components: this.makeComponents(interaction, settings, data), allowed_mentions: EmptyMentions };
 	}
 
-	private makeComponents(interaction: Command.Interaction, settings: Guild, data: MessageData) {
-		type MessageComponent = NonNullable<Command.MessageResponseOptions['components']>[number];
+	private makeComponents(interaction: Command.ChatInputInteraction, settings: Guild, data: MessageData) {
+		type MessageComponent = NonNullable<ChannelId.Messages.post.Body['components']>[number];
 
 		const components: MessageComponent[] = [];
 		if (!settings.buttons) return components;
@@ -183,7 +182,7 @@ export class UserCommand extends Command {
 		return components;
 	}
 
-	private makeEmbedMessage(interaction: Command.Interaction, data: MessageData): ChannelId.Messages.post.Body {
+	private makeEmbedMessage(interaction: Command.ChatInputInteraction, data: MessageData): ChannelId.Messages.post.Body {
 		const name = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageEmbedTitle, data);
 		const embed = new EmbedBuilder()
 			.setColor(SuggestionStatusColors.Unresolved)
@@ -192,12 +191,12 @@ export class UserCommand extends Command {
 		return { embeds: [embed.toJSON()] };
 	}
 
-	private makeContentMessage(interaction: Command.Interaction, data: MessageData): ChannelId.Messages.post.Body {
+	private makeContentMessage(interaction: Command.ChatInputInteraction, data: MessageData): ChannelId.Messages.post.Body {
 		const content = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageContent, data);
 		return { content };
 	}
 
-	private async *handleEdit(interaction: Command.Interaction, id: number, rawInput: string): Command.GeneratorResponse {
+	private async handleEdit(interaction: Command.ChatInputInteraction, id: number, rawInput: string) {
 		const guildId = BigInt(interaction.guild_id!);
 		const suggestion = await this.container.prisma.suggestion.findUnique({
 			where: { id_guildId: { id, guildId } }
@@ -206,27 +205,27 @@ export class UserCommand extends Command {
 		// If the suggestion does not exist, return early:
 		if (suggestion === null) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyDoesNotExist);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was made by a different author, return early:
-		const userId = BigInt(getUser(interaction).id);
+		const userId = BigInt(interaction.user.id);
 		if (suggestion.authorId !== userId) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyMismatchingAuthor);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was archived, return early:
 		if (suggestion.archivedAt !== null) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyArchived);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was already replied to, its contents become immutable to avoid changing the contents after
 		// a decision. As such, return early:
 		if (suggestion.repliedAt !== null) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyReplied);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// Get the guild settings to get the channel:
@@ -238,10 +237,10 @@ export class UserCommand extends Command {
 		// If the settings were deleted or the channel not configured, everything becomes readonly. As such, return early:
 		if (!settings?.channel) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		yield this.defer({ flags: MessageFlags.Ephemeral });
+		const response = await interaction.defer({ flags: MessageFlags.Ephemeral });
 
 		const result = await Result.fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
 		if (result.isErr()) {
@@ -251,7 +250,7 @@ export class UserCommand extends Command {
 			});
 
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyMessageDeleted);
-			return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
+			return response.update({ content });
 		}
 
 		const message = result.unwrap();
@@ -266,11 +265,7 @@ export class UserCommand extends Command {
 		await ChannelId.MessageId.patch(message.channel_id, message.id, data);
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifySuccess, { id });
-		return this.updateMessage({ content, flags: MessageFlags.Ephemeral });
-	}
-
-	private updateMessage(data: Command.MessageResponseOptions) {
-		return data;
+		return response.update({ content });
 	}
 }
 

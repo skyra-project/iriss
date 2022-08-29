@@ -9,44 +9,37 @@ import type { Guild } from '@prisma/client';
 import { Result } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
-import {
-	ComponentType,
-	MessageFlags,
-	TextInputStyle,
-	type APIMessage,
-	type APIMessageComponentInteraction,
-	type APIMessageComponentSelectMenuInteraction
-} from 'discord-api-types/v10';
+import { ComponentType, MessageFlags, TextInputStyle, type APIMessage } from 'discord-api-types/v10';
 
 type IdParserResult = Values<Get<Id.Suggestions>>;
 
 export class Handler extends InteractionHandler {
-	public async run(interaction: APIMessageComponentInteraction, [action, idString, status]: IdParserResult): InteractionHandler.AsyncResponse {
+	public async run(interaction: InteractionHandler.MessageComponentInteraction, [action, idString, status]: IdParserResult) {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id: guildId } });
 
 		const canRun = await has(interaction, 'resolve');
 		if (!canRun) {
 			const content = resolveUserKey(interaction, LanguageKeys.InteractionHandlers.Suggestions.MissingResolvePermissions);
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		if (action === 'archive') return this.handleArchive(interaction, settings!, Number(idString));
 		if (action === 'thread') return this.handleThread(interaction, idString);
 		if (action === 'resolve') {
-			status ??= this.getResolveSelectMenuValue(interaction as APIMessageComponentSelectMenuInteraction);
-			return this.handleResolve(interaction as APIMessageComponentSelectMenuInteraction, idString, status);
+			status ??= this.getResolveSelectMenuValue(interaction);
+			return this.handleResolve(interaction, idString, status);
 		}
 		throw new TypeError('Unreachable');
 	}
 
-	private async handleArchive(interaction: APIMessageComponentInteraction, settings: Guild, id: number): InteractionHandler.AsyncResponse {
+	private async handleArchive(interaction: InteractionHandler.MessageComponentInteraction, settings: Guild, id: number) {
 		const t = getSupportedUserLanguageT(interaction);
 
 		const result = await useArchive(interaction, { settings });
 		if (result.isErr()) {
 			const content = t(result.unwrapErr());
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		await this.container.prisma.suggestion.update({
@@ -59,14 +52,14 @@ export class Handler extends InteractionHandler {
 		const value = result.unwrap();
 		const warnings = value.errors.length === 0 ? '' : `\n\n- ${value.errors.map((error) => t(error)).join('\n- ')}`;
 		const content = header + warnings;
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private handleResolve(interaction: APIMessageComponentInteraction, id: IntegerString, status: Status): InteractionHandler.Response {
+	private handleResolve(interaction: InteractionHandler.MessageComponentInteraction, id: IntegerString, status: Status) {
 		const t = getSupportedUserLanguageT(interaction);
 		const title = t(LanguageKeys.InteractionHandlers.Suggestions.ModalTitle, { id });
 		const information = this.getResolveModalInformation(status);
-		return this.modal({
+		return interaction.sendModal({
 			custom_id: makeCustomId(Id.SuggestionsModal, status, id),
 			title,
 			components: [
@@ -110,16 +103,17 @@ export class Handler extends InteractionHandler {
 		}
 	}
 
-	private getResolveSelectMenuValue(interaction: APIMessageComponentSelectMenuInteraction): Status {
+	// TODO: We need discriminated MCI types
+	private getResolveSelectMenuValue(interaction: InteractionHandler.MessageComponentInteraction): Status {
 		const [status] = interaction.data.values as [Status];
 		return status;
 	}
 
-	private async handleThread(interaction: APIMessageComponentInteraction, idString: string): InteractionHandler.AsyncResponse {
+	private async handleThread(interaction: InteractionHandler.MessageComponentInteraction, idString: string) {
 		const threadResult = await useThread(interaction, idString);
 		if (threadResult.isErr()) {
 			const content = resolveUserKey(interaction, threadResult.unwrapErr());
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		type MessageComponent = NonNullable<APIMessage['components']>[number];
@@ -145,6 +139,6 @@ export class Handler extends InteractionHandler {
 		});
 
 		const content = header + details;
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 }

@@ -20,11 +20,11 @@ export class UserCommand extends Command {
 			applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true)
 		)
 	)
-	public async handleArchive(interaction: Command.Interaction, options: ArchiveOptions): Command.AsyncResponse {
+	public async handleArchive(interaction: Command.ChatInputInteraction, options: ArchiveOptions) {
 		const result = await this.getInformation(interaction, options.id);
 		if (result.isErr()) {
 			const content = resolveUserKey(interaction, result.unwrapErr());
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const data = result.unwrap();
@@ -36,7 +36,7 @@ export class UserCommand extends Command {
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Resolve.ArchiveSuccess, {
 			id: hyperlink(`#${options.id}`, hideLinkEmbed(url(data.guildId, data.message.channel_id, data.message.id)))
 		});
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	@RegisterSubCommand((builder) =>
@@ -44,7 +44,7 @@ export class UserCommand extends Command {
 			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
 			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
 	)
-	public handleAccept(interaction: Command.Interaction, options: ReplyOptions): Command.AsyncResponse {
+	public handleAccept(interaction: Command.ChatInputInteraction, options: ReplyOptions) {
 		return this.sharedHandler(interaction, options, Status.Accept);
 	}
 
@@ -53,7 +53,7 @@ export class UserCommand extends Command {
 			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
 			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
 	)
-	public handleConsider(interaction: Command.Interaction, options: ReplyOptions): Command.AsyncResponse {
+	public handleConsider(interaction: Command.ChatInputInteraction, options: ReplyOptions) {
 		return this.sharedHandler(interaction, options, Status.Consider);
 	}
 
@@ -62,15 +62,15 @@ export class UserCommand extends Command {
 			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
 			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
 	)
-	public handleDeny(interaction: Command.Interaction, options: ReplyOptions): Command.AsyncResponse {
+	public handleDeny(interaction: Command.ChatInputInteraction, options: ReplyOptions) {
 		return this.sharedHandler(interaction, options, Status.Deny);
 	}
 
-	private async sharedHandler(interaction: Command.Interaction, options: ReplyOptions, action: Status): Command.AsyncResponse {
+	private async sharedHandler(interaction: Command.ChatInputInteraction, options: ReplyOptions, action: Status) {
 		const result = await this.getInformation(interaction, options.id);
 		if (result.isErr()) {
 			const content = resolveUserKey(interaction, result.unwrapErr());
-			return this.message({ content, flags: MessageFlags.Ephemeral });
+			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const { message, settings, guildId } = result.unwrap();
@@ -83,10 +83,10 @@ export class UserCommand extends Command {
 			err: () => LanguageKeys.Commands.Resolve.Failure
 		});
 		const content = resolveUserKey(interaction, key, { id: hyperlink(`#${options.id}`, url(guildId, message.channel_id, message.id)) });
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private async getInformation(interaction: Command.Interaction, id: number) {
+	private async getInformation(interaction: Command.ChatInputInteraction, id: number) {
 		const guildId = BigInt(interaction.guild_id!);
 
 		const suggestion = await this.container.prisma.suggestion.findUnique({ where: { id_guildId: { id, guildId } } });

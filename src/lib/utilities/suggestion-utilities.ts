@@ -2,7 +2,7 @@ import type { AnyInteraction } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { ensure } from '#lib/utilities/assertions';
 import { getColor, Status } from '#lib/utilities/id-creator';
-import { getGuildId, getUser } from '#lib/utilities/interactions';
+import { getGuildId, getMessage } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ChannelId, type Snowflake } from '#lib/utilities/rest';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
@@ -114,7 +114,7 @@ export function getOriginalContent(message: APIMessage) {
 }
 
 export async function useThread(interaction: AnyInteraction, id: string | number, options: useThread.Options = {}) {
-	const message = options.message ?? ensure(interaction.message);
+	const message = options.message ?? ensure(getMessage(interaction));
 	const input = options.input ?? getOriginalContent(message);
 
 	const name = `${id}-${slug(removeMaskedHyperlinks(input))}`.slice(0, 100);
@@ -129,7 +129,7 @@ export async function useThread(interaction: AnyInteraction, id: string | number
 	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
 
 	const thread = threadCreationResult.unwrap();
-	const result = await Result.fromAsync(ChannelId.ThreadMemberId.put(thread.id, getUser(interaction).id));
+	const result = await Result.fromAsync(ChannelId.ThreadMemberId.put(thread.id, interaction.user.id));
 	const memberAddResult = result.mapErr(() => LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
 
 	return Result.ok({ thread, memberAddResult });
@@ -148,7 +148,7 @@ function removeMaskedHyperlinks(input: string) {
 }
 
 export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
-	const message = options.message ?? ensure(interaction.message);
+	const message = options.message ?? ensure(getMessage(interaction));
 
 	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(getGuildId(interaction)) } }));
 
@@ -244,7 +244,7 @@ export async function useMessageUpdate(interaction: AnyInteraction, message: API
 function useMessageUpdateContent(interaction: AnyInteraction, message: APIMessage, settings: Guild, action: Status, input: string) {
 	input = usePlainContent(input);
 
-	const user = getUser(interaction);
+	const { user } = interaction;
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const formattedHeader = `${bold(header)}:\n`;
 	const { content } = message;
@@ -260,7 +260,7 @@ function useMessageUpdateContent(interaction: AnyInteraction, message: APIMessag
 async function useMessageUpdateEmbed(interaction: AnyInteraction, message: APIMessage, settings: Guild, action: Status, input: string) {
 	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel_id));
 
-	const user = getUser(interaction);
+	const { user } = interaction;
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const [embed] = message.embeds;
 
