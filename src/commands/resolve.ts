@@ -24,7 +24,7 @@ export class UserCommand extends Command {
 		const result = await this.getInformation(interaction, options.id);
 		if (result.isErr()) {
 			const content = resolveUserKey(interaction, result.unwrapErr());
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const data = result.unwrap();
@@ -36,7 +36,7 @@ export class UserCommand extends Command {
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Resolve.ArchiveSuccess, {
 			id: hyperlink(`#${options.id}`, hideLinkEmbed(url(data.guildId, data.message.channel_id, data.message.id)))
 		});
-		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	@RegisterSubCommand((builder) =>
@@ -70,7 +70,7 @@ export class UserCommand extends Command {
 		const result = await this.getInformation(interaction, options.id);
 		if (result.isErr()) {
 			const content = resolveUserKey(interaction, result.unwrapErr());
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const { message, settings, guildId } = result.unwrap();
@@ -83,7 +83,7 @@ export class UserCommand extends Command {
 			err: () => LanguageKeys.Commands.Resolve.Failure
 		});
 		const content = resolveUserKey(interaction, key, { id: hyperlink(`#${options.id}`, url(guildId, message.channel_id, message.id)) });
-		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private async getInformation(interaction: Command.ChatInputInteraction, id: number) {

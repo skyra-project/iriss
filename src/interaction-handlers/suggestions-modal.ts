@@ -11,10 +11,9 @@ import { MessageFlags } from 'discord-api-types/v10';
 type IdParserResult = Values<Get<Id.SuggestionsModal>>;
 
 export class Handler extends InteractionHandler {
-	public async *run(interaction: InteractionHandler.ModalInteraction, [action, idString]: IdParserResult) {
-		// TODO: Uhhh, modals *do* have messages after all?
+	public async run(interaction: InteractionHandler.ModalInteraction, [action, idString]: IdParserResult) {
 		const body = await useMessageUpdate(interaction, interaction.message!, action, interaction.data.components![0].components[0].value);
-		yield this.updateMessage(body);
+		await interaction.update(body);
 
 		const guildId = BigInt(interaction.guild_id!);
 		const result = await Result.fromAsync(
@@ -34,6 +33,7 @@ export class Handler extends InteractionHandler {
 			}),
 			{ id }
 		);
-		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 }

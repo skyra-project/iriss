@@ -1,9 +1,9 @@
-import type { AnyInteraction } from '#lib/common/types';
 import { TempCollection } from '#lib/structures/TempCollection';
 import { has as hasPermissions } from '#lib/utilities/permissions';
 import { ApplicationId, GuildId } from '#lib/utilities/rest';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
+import type { Interactions } from '@skyra/http-framework';
 import {
 	ApplicationCommandPermissionType,
 	PermissionFlagsBits,
@@ -13,7 +13,7 @@ import {
 
 let commands: ApplicationId.Commands.get.Result;
 
-export async function has(interaction: AnyInteraction, commandName: string) {
+export async function has(interaction: Interactions.Any, commandName: string) {
 	// Unreachable, function is used against guild-only commands:
 	if (!interaction.guild_id) return false;
 
@@ -30,14 +30,14 @@ export async function has(interaction: AnyInteraction, commandName: string) {
 	return hasUser(interaction, permissions) ?? hasRole(interaction, permissions);
 }
 
-function hasUser(interaction: AnyInteraction, permissions: APIApplicationCommandPermission[]) {
+function hasUser(interaction: Interactions.Any, permissions: APIApplicationCommandPermission[]) {
 	const { id } = interaction.user;
 	const entry = permissions.find((permission) => permission.type === ApplicationCommandPermissionType.User && permission.id === id);
 
 	return entry ? entry.permission : null;
 }
 
-function hasRole(interaction: AnyInteraction, permissions: APIApplicationCommandPermission[]) {
+function hasRole(interaction: Interactions.Any, permissions: APIApplicationCommandPermission[]) {
 	const roles = new Set(interaction.member!.roles).add(interaction.guild_id!);
 	const grants: string[] = [];
 	const denies: string[] = [];
@@ -59,7 +59,7 @@ function hasRole(interaction: AnyInteraction, permissions: APIApplicationCommand
 }
 
 const roleCache = new TempCollection<string, GuildId.Roles.get.Result>(30_000, 5_000);
-async function determineHasRole(interaction: AnyInteraction, grants: readonly string[], denies: readonly string[]) {
+async function determineHasRole(interaction: Interactions.Any, grants: readonly string[], denies: readonly string[]) {
 	const guildId = interaction.guild_id!;
 	const roles = await roleCache.ensureAsync(guildId, (id) => GuildId.Roles.get(id));
 

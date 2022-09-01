@@ -60,7 +60,7 @@ export class UserCommand extends Command {
 		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
 		if (!isNullish(options.reactions)) {
 			const result = this.parseReactionsString(interaction, options.reactions);
-			if (result.isErr()) return interaction.sendMessage({ content: result.unwrapErr(), flags: MessageFlags.Ephemeral });
+			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), flags: MessageFlags.Ephemeral });
 
 			entries.push(['reactions', result.unwrap()]);
 		}
@@ -133,7 +133,7 @@ export class UserCommand extends Command {
 		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
 		const content = this.viewGenerateContent(interaction, settings);
-		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private viewGenerateContent(interaction: Command.ChatInputInteraction, settings?: Partial<Guild> | null) {
@@ -169,7 +169,7 @@ export class UserCommand extends Command {
 			}
 		});
 
-		return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
 	private parseReactionsString(interaction: Command.ChatInputInteraction, input: string) {

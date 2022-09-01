@@ -36,7 +36,7 @@ export class UserCommand extends Command {
 		});
 		if (!settings?.channel) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const response = await interaction.defer({ flags: MessageFlags.Ephemeral });
@@ -205,27 +205,27 @@ export class UserCommand extends Command {
 		// If the suggestion does not exist, return early:
 		if (suggestion === null) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyDoesNotExist);
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was made by a different author, return early:
 		const userId = BigInt(interaction.user.id);
 		if (suggestion.authorId !== userId) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyMismatchingAuthor);
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was archived, return early:
 		if (suggestion.archivedAt !== null) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyArchived);
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// If the suggestion was already replied to, its contents become immutable to avoid changing the contents after
 		// a decision. As such, return early:
 		if (suggestion.repliedAt !== null) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifyReplied);
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		// Get the guild settings to get the channel:
@@ -237,7 +237,7 @@ export class UserCommand extends Command {
 		// If the settings were deleted or the channel not configured, everything becomes readonly. As such, return early:
 		if (!settings?.channel) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
-			return interaction.sendMessage({ content, flags: MessageFlags.Ephemeral });
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
 		const response = await interaction.defer({ flags: MessageFlags.Ephemeral });
