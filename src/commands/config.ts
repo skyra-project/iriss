@@ -54,13 +54,13 @@ export class UserCommand extends Command {
 				)
 			)
 	)
-	public async runEdit(interaction: Command.Interaction, options: EditOptions): Command.AsyncResponse {
+	public async runEdit(interaction: Command.ChatInputInteraction, options: EditOptions) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
 		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
 		if (!isNullish(options.reactions)) {
 			const result = this.parseReactionsString(interaction, options.reactions);
-			if (result.isErr()) return this.message({ content: result.unwrapErr(), flags: MessageFlags.Ephemeral });
+			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), flags: MessageFlags.Ephemeral });
 
 			entries.push(['reactions', result.unwrap()]);
 		}
@@ -93,7 +93,7 @@ export class UserCommand extends Command {
 				.setRequired(true)
 		)
 	)
-	public runReset(interaction: Command.Interaction, options: ResetOptions): Command.AsyncResponse {
+	public runReset(interaction: Command.ChatInputInteraction, options: ResetOptions) {
 		switch (options.key) {
 			case 'all': {
 				const data: Omit<Required<Guild>, 'id'> = {
@@ -128,15 +128,15 @@ export class UserCommand extends Command {
 	}
 
 	@RegisterSubCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.View))
-	public async runView(interaction: Command.Interaction): Command.AsyncResponse {
+	public async runView(interaction: Command.ChatInputInteraction) {
 		const id = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
 		const content = this.viewGenerateContent(interaction, settings);
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private viewGenerateContent(interaction: Command.Interaction, settings?: Partial<Guild> | null) {
+	private viewGenerateContent(interaction: Command.ChatInputInteraction, settings?: Partial<Guild> | null) {
 		settings ??= {};
 
 		const t = getSupportedUserLanguageT(interaction);
@@ -155,7 +155,7 @@ export class UserCommand extends Command {
 		return t(LanguageKeys.Commands.Config.ViewContent, { channel, autoThread, buttons, compact, displayUpdateHistory, embed, reactions });
 	}
 
-	private async updateDatabase(interaction: Command.Interaction, data: Partial<Guild>) {
+	private async updateDatabase(interaction: Command.ChatInputInteraction, data: Partial<Guild>) {
 		const id = BigInt(interaction.guild_id!);
 		const result = await Result.fromAsync(
 			this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null })
@@ -169,10 +169,10 @@ export class UserCommand extends Command {
 			}
 		});
 
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	private parseReactionsString(interaction: Command.Interaction, input: string) {
+	private parseReactionsString(interaction: Command.ChatInputInteraction, input: string) {
 		const reactions = input.split(' ');
 		if (reactions.length > 3) {
 			return Result.err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidAmount));
