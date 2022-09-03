@@ -1,8 +1,7 @@
-import type { AnyInteraction } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { ensure } from '#lib/utilities/assertions';
 import { getColor, Status } from '#lib/utilities/id-creator';
-import { getGuildId, getUser } from '#lib/utilities/interactions';
+import { getGuildId, getMessage } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ChannelId, type Snowflake } from '#lib/utilities/rest';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
@@ -11,7 +10,7 @@ import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { Result } from '@sapphire/result';
-import { container } from '@skyra/http-framework';
+import { container, Interactions } from '@skyra/http-framework';
 import { resolveKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
 import { ChannelType, type APIMessage } from 'discord-api-types/v10';
 import slug from 'limax';
@@ -113,8 +112,8 @@ export function getOriginalContent(message: APIMessage) {
 	return index === -1 ? message.content : message.content.slice(newLine, index);
 }
 
-export async function useThread(interaction: AnyInteraction, id: string | number, options: useThread.Options = {}) {
-	const message = options.message ?? ensure(interaction.message);
+export async function useThread(interaction: Interactions.Any, id: string | number, options: useThread.Options = {}) {
+	const message = options.message ?? ensure(getMessage(interaction));
 	const input = options.input ?? getOriginalContent(message);
 
 	const name = `${id}-${slug(removeMaskedHyperlinks(input))}`.slice(0, 100);
@@ -129,7 +128,7 @@ export async function useThread(interaction: AnyInteraction, id: string | number
 	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
 
 	const thread = threadCreationResult.unwrap();
-	const result = await Result.fromAsync(ChannelId.ThreadMemberId.put(thread.id, getUser(interaction).id));
+	const result = await Result.fromAsync(ChannelId.ThreadMemberId.put(thread.id, interaction.user.id));
 	const memberAddResult = result.mapErr(() => LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
 
 	return Result.ok({ thread, memberAddResult });
@@ -147,8 +146,8 @@ function removeMaskedHyperlinks(input: string) {
 	return input.replaceAll(maskedLinkRegExp, '$1');
 }
 
-export async function useArchive(interaction: AnyInteraction, options: useArchive.Options = {}) {
-	const message = options.message ?? ensure(interaction.message);
+export async function useArchive(interaction: Interactions.Any, options: useArchive.Options = {}) {
+	const message = options.message ?? ensure(getMessage(interaction));
 
 	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(getGuildId(interaction)) } }));
 
@@ -233,7 +232,7 @@ export async function useEmbedContent(content: string, guildId: Snowflake, chann
 	return parts.map((part) => (typeof part === 'string' ? part : urls.get(part)!)).join('');
 }
 
-export async function useMessageUpdate(interaction: AnyInteraction, message: APIMessage, action: Status, input: string, settings?: Guild) {
+export async function useMessageUpdate(interaction: Interactions.Any, message: APIMessage, action: Status, input: string, settings?: Guild) {
 	settings ??= (await container.prisma.guild.findUnique({ where: { id: BigInt(interaction.guild_id!) } }))!;
 
 	return message.embeds.length === 0
@@ -241,10 +240,10 @@ export async function useMessageUpdate(interaction: AnyInteraction, message: API
 		: useMessageUpdateEmbed(interaction, message, settings, action, input);
 }
 
-function useMessageUpdateContent(interaction: AnyInteraction, message: APIMessage, settings: Guild, action: Status, input: string) {
+function useMessageUpdateContent(interaction: Interactions.Any, message: APIMessage, settings: Guild, action: Status, input: string) {
 	input = usePlainContent(input);
 
-	const user = getUser(interaction);
+	const { user } = interaction;
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const formattedHeader = `${bold(header)}:\n`;
 	const { content } = message;
@@ -257,10 +256,10 @@ function useMessageUpdateContent(interaction: AnyInteraction, message: APIMessag
 	return { content: `${index === -1 ? content : content.slice(0, index)}${contentSeparator}${formattedHeader}${input}` };
 }
 
-async function useMessageUpdateEmbed(interaction: AnyInteraction, message: APIMessage, settings: Guild, action: Status, input: string) {
+async function useMessageUpdateEmbed(interaction: Interactions.Any, message: APIMessage, settings: Guild, action: Status, input: string) {
 	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel_id));
 
-	const user = getUser(interaction);
+	const { user } = interaction;
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
 	const [embed] = message.embeds;
 

@@ -6,14 +6,14 @@ import { hyperlink, inlineCode } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { InteractionHandler } from '@skyra/http-framework';
 import { resolveUserKey } from '@skyra/http-framework-i18n';
-import { MessageFlags, type APIModalSubmitGuildInteraction } from 'discord-api-types/v10';
+import { MessageFlags } from 'discord-api-types/v10';
 
 type IdParserResult = Values<Get<Id.SuggestionsModal>>;
 
 export class Handler extends InteractionHandler {
-	public async *run(interaction: APIModalSubmitGuildInteraction, [action, idString]: IdParserResult): InteractionHandler.GeneratorResponse {
+	public async run(interaction: InteractionHandler.ModalInteraction, [action, idString]: IdParserResult) {
 		const body = await useMessageUpdate(interaction, interaction.message!, action, interaction.data.components![0].components[0].value);
-		yield this.updateMessage(body);
+		await interaction.update(body);
 
 		const guildId = BigInt(interaction.guild_id!);
 		const result = await Result.fromAsync(
@@ -33,6 +33,7 @@ export class Handler extends InteractionHandler {
 			}),
 			{ id }
 		);
-		return this.message({ content, flags: MessageFlags.Ephemeral });
+
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 }
