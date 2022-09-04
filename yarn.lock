@@ -634,6 +634,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sapphire/utilities@npm:^3.9.3":
+  version: 3.9.3
+  resolution: "@sapphire/utilities@npm:3.9.3"
+  checksum: 9f3f977fd5c0677d5f79136e9cb68ade3317cfba3e87bb58689f4af68233a807af34eb6092ad262c946d5eaf5c4a76cd534b0b395ebbaf0f0912dd80e174f912
+  languageName: node
+  linkType: hard
+
 "@skyra/env-utilities@npm:^1.0.2":
   version: 1.0.2
   resolution: "@skyra/env-utilities@npm:1.0.2"
@@ -657,6 +664,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@skyra/http-framework-i18n@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "@skyra/http-framework-i18n@npm:0.3.5"
+  dependencies:
+    "@discordjs/collection": ^1.1.0
+    "@sapphire/utilities": ^3.9.3
+    "@skyra/i18next-backend": ^1.0.2
+    discord-api-types: ^0.37.5
+    i18next: ^21.9.1
+    tslib: ^2.4.0
+  checksum: 3f3655a04e44fc10be8659947abc51a9149042ae8f72b86f6dd2ba496708b84e8170d4860b133e20a8ade68a1ba93c282c2b0c00cb9ec6f2d47297d2497427f5
+  languageName: node
+  linkType: hard
+
 "@skyra/http-framework@npm:^0.11.0":
   version: 0.11.0
   resolution: "@skyra/http-framework@npm:0.11.0"
@@ -669,6 +690,21 @@ __metadata:
     "@sapphire/utilities": ^3.9.2
     discord-api-types: ^0.37.5
   checksum: fdf672b36db880855a04cba8bcf6d8de82d047e4902b657ba8faf9211b997162c0ab79620ddd6edfd35125743dcce899041b1d83d2d3c309b490cc66e7ce21eb
+  languageName: node
+  linkType: hard
+
+"@skyra/http-framework@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "@skyra/http-framework@npm:0.11.1"
+  dependencies:
+    "@discordjs/builders": ^1.2.0
+    "@discordjs/collection": ^1.1.0
+    "@discordjs/rest": ^1.1.0
+    "@sapphire/pieces": ^3.5.1
+    "@sapphire/result": ^2.4.1
+    "@sapphire/utilities": ^3.9.3
+    discord-api-types: ^0.37.5
+  checksum: b12a7e77ea041e3a6dbe7e7ac0704196cf6c56a0d9f63b3351e467fe3dacf1429b2af9d517ebbe9b4d445090134650c4b68e8d583886c64b7584353577202e0f
   languageName: node
   linkType: hard
 
@@ -697,8 +733,8 @@ __metadata:
     "@sapphire/ts-config": ^3.3.4
     "@sapphire/utilities": ^3.9.2
     "@skyra/env-utilities": ^1.0.2
-    "@skyra/http-framework": ^0.11.0
-    "@skyra/http-framework-i18n": ^0.3.4
+    "@skyra/http-framework": ^0.11.1
+    "@skyra/http-framework-i18n": ^0.3.5
     "@skyra/logger": ^1.0.1
     "@skyra/shared-http-pieces": ^0.1.0
     "@skyra/start-banner": ^1.0.2
