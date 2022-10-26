@@ -34,6 +34,6 @@ export class Handler extends InteractionHandler {
 			{ id }
 		);
 
-		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
+		return interaction.followup({ content, flags: MessageFlags.Ephemeral });
 	}
 }
