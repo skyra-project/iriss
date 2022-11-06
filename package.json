@@ -32,28 +32,28 @@
 		"@sapphire/result": "^2.6.0",
 		"@sapphire/utilities": "^3.11.0",
 		"@skyra/env-utilities": "^1.1.0",
-		"@skyra/http-framework": "^0.13.0",
+		"@skyra/http-framework": "^0.14.0",
 		"@skyra/http-framework-i18n": "^0.6.0",
 		"@skyra/logger": "^1.0.1",
-		"@skyra/shared-http-pieces": "^0.3.2",
+		"@skyra/shared-http-pieces": "^0.4.0",
 		"@skyra/start-banner": "^1.0.2",
 		"discord-api-types": "^0.37.11",
 		"gradient-string": "^2.0.2",
 		"limax": "^3.0.0",
-		"tslib": "^2.4.0"
+		"tslib": "^2.4.1"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^17.1.2",
-		"@commitlint/config-conventional": "^17.1.0",
+		"@commitlint/cli": "^17.2.0",
+		"@commitlint/config-conventional": "^17.2.0",
 		"@sapphire/eslint-config": "^4.3.8",
 		"@sapphire/prettier-config": "^1.4.4",
 		"@sapphire/ts-config": "^3.3.4",
 		"@types/gradient-string": "^1.1.2",
-		"@types/node": "^18.11.7",
-		"@typescript-eslint/eslint-plugin": "^5.41.0",
-		"@typescript-eslint/parser": "^5.41.0",
+		"@types/node": "^18.11.9",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.26.0",
+		"eslint": "^8.27.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"husky": "^8.0.1",
@@ -92,6 +92,6 @@
 	},
 	"packageManager": "yarn@3.2.4",
 	"volta": {
-		"node": "18.12.0"
+		"node": "18.12.1"
 	}
 }
