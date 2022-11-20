@@ -32,10 +32,10 @@
 		"@sapphire/result": "^2.6.0",
 		"@sapphire/utilities": "^3.11.0",
 		"@skyra/env-utilities": "^1.1.0",
-		"@skyra/http-framework": "^0.14.0",
+		"@skyra/http-framework": "^0.15.0",
 		"@skyra/http-framework-i18n": "^0.6.0",
 		"@skyra/logger": "^1.0.1",
-		"@skyra/shared-http-pieces": "^0.4.0",
+		"@skyra/shared-http-pieces": "^0.4.1",
 		"@skyra/start-banner": "^1.0.2",
 		"discord-api-types": "^0.37.11",
 		"gradient-string": "^2.0.2",
@@ -50,10 +50,10 @@
 		"@sapphire/ts-config": "^3.3.4",
 		"@types/gradient-string": "^1.1.2",
 		"@types/node": "^18.11.9",
-		"@typescript-eslint/eslint-plugin": "^5.42.1",
-		"@typescript-eslint/parser": "^5.42.1",
+		"@typescript-eslint/eslint-plugin": "^5.43.0",
+		"@typescript-eslint/parser": "^5.43.0",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.27.0",
+		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"husky": "^8.0.2",
@@ -61,7 +61,7 @@
 		"prettier": "^2.7.1",
 		"pretty-quick": "^3.1.3",
 		"prisma": "^4.6.1",
-		"typescript": "^4.8.4"
+		"typescript": "^4.9.3"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
@@ -90,7 +90,7 @@
 			"@typescript-eslint/no-base-to-string": "off"
 		}
 	},
-	"packageManager": "yarn@3.2.4",
+	"packageManager": "yarn@3.3.0",
 	"volta": {
 		"node": "18.12.1"
 	}
