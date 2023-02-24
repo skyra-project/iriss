@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Suggestion management bot for Discord",
 	"author": "Skyra Project <contact@skyra.pw>",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"private": true,
 	"main": "dist/main.js",
 	"type": "module",
