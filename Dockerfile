@@ -51,6 +51,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node --from=builder /usr/src/app/dist dist
 COPY --chown=node:node --from=builder /usr/src/app/src/locales src/locales
+COPY --chown=node:node --from=builder /usr/src/app/src/.env src/.env
 
 RUN yarn workspaces focus --all --production
 
