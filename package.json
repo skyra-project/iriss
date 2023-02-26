@@ -32,10 +32,10 @@
 		"@sapphire/result": "^2.6.0",
 		"@sapphire/utilities": "^3.11.0",
 		"@skyra/env-utilities": "^1.1.0",
-		"@skyra/http-framework": "^0.15.1",
+		"@skyra/http-framework": "^0.15.2",
 		"@skyra/http-framework-i18n": "^0.6.0",
 		"@skyra/logger": "^1.0.1",
-		"@skyra/shared-http-pieces": "^0.4.2",
+		"@skyra/shared-http-pieces": "^0.4.3",
 		"@skyra/start-banner": "^1.0.2",
 		"discord-api-types": "^0.37.11",
 		"gradient-string": "^2.0.2",
@@ -49,9 +49,9 @@
 		"@sapphire/prettier-config": "^1.4.5",
 		"@sapphire/ts-config": "^3.3.4",
 		"@types/gradient-string": "^1.1.2",
-		"@types/node": "^18.14.0",
-		"@typescript-eslint/eslint-plugin": "^5.52.0",
-		"@typescript-eslint/parser": "^5.52.0",
+		"@types/node": "^18.14.1",
+		"@typescript-eslint/eslint-plugin": "^5.53.0",
+		"@typescript-eslint/parser": "^5.53.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.34.0",
 		"eslint-config-prettier": "^8.6.0",
@@ -92,6 +92,6 @@
 	},
 	"packageManager": "yarn@3.4.1",
 	"volta": {
-		"node": "18.14.1"
+		"node": "18.14.2"
 	}
 }
