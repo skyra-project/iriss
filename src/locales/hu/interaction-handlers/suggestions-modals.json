@@ -1,1 +1,7 @@
-{}
+{
+	"contentAccepted": "Elfogadva {{tag}} ekkor: {{time}}",
+	"contentConsidered": "{{tag}} figyelembe vette ekkor: {{time}}",
+	"contentDenied": "Elutasította {{tag}} ekkor: {{time}}",
+	"updateFailure": "Nem sikerült frissíteni az üzenet tartalmát, bocsi! 😢",
+	"updateSuccess": "Az üzenet sikeresen frissítve!"
+}
