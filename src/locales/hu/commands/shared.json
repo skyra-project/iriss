@@ -1,1 +1,3 @@
-{}
+{
+	"infoEmbedDescription": "Az Iriss egy olyan bot, amely a javaslatkezelésre összpontosít. Ez egy kizárólag HTTP-alapú bot, amely a [Skyra HTTP Framework](https://www.npmjs.com/package/@skyra/http-framework) tetejére épül."
+}
