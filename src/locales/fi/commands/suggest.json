@@ -1,6 +1,7 @@
 {
 	"name": "ehdota",
 	"description": "Luo uusi ehdotus palvelimelle",
+	"postAsSuggestionName": "Lähetä ehdotuksena",
 	"componentsAccept": "Hyväksy",
 	"componentsArchive": "Arkistoi",
 	"componentsConsider": "Harkitse",
@@ -23,5 +24,6 @@
 	"optionsIdName": "id",
 	"optionsIdDescription": "Muokattavan ehdotuksen numero",
 	"optionsSuggestionName": "ehdotus",
-	"optionsSuggestionDescription": "Julkaistava ehdotus"
+	"optionsSuggestionDescription": "Julkaistava ehdotus",
+	"rePostNoContent": "En voinut lähettää viestiä ehdotuksena, koska siinä ei ole kopioitavaa sisältöä."
 }
