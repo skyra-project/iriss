@@ -1,6 +1,7 @@
 {
 	"name": "suggest",
 	"description": "Create a new suggestion for this server",
+	"postAsSuggestionName": "Post as Suggestion",
 	"componentsAccept": "Accept",
 	"componentsArchive": "Archive",
 	"componentsConsider": "Consider",
@@ -23,5 +24,6 @@
 	"optionsIdName": "id",
 	"optionsIdDescription": "The suggestion's number to edit",
 	"optionsSuggestionName": "suggestion",
-	"optionsSuggestionDescription": "The suggestion to be posted"
+	"optionsSuggestionDescription": "The suggestion to be posted",
+	"rePostNoContent": "I could not post the message as a suggestion because it does not have any content to copy from."
 }

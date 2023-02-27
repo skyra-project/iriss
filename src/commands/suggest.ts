@@ -9,9 +9,17 @@ import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { Result } from '@sapphire/result';
-import { Command, RegisterCommand } from '@skyra/http-framework';
-import { applyLocalizedBuilder, getSupportedLanguageT, getSupportedUserLanguageT, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
-import { ButtonStyle, ComponentType, MessageFlags, type APIMessage } from 'discord-api-types/v10';
+import { isNullishOrEmpty } from '@sapphire/utilities';
+import { Command, RegisterCommand, RegisterMessageCommand, type TransformedArguments } from '@skyra/http-framework';
+import {
+	applyLocalizedBuilder,
+	applyNameLocalizedBuilder,
+	getSupportedLanguageT,
+	getSupportedUserLanguageT,
+	resolveKey,
+	resolveUserKey
+} from '@skyra/http-framework-i18n';
+import { ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits, type APIMessage } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
@@ -29,7 +37,22 @@ export class UserCommand extends Command {
 			: this.handleEdit(interaction, options.id, options.suggestion);
 	}
 
-	private async handleNew(interaction: Command.ChatInputInteraction, rawInput: string) {
+	@RegisterMessageCommand((builder) =>
+		applyNameLocalizedBuilder(builder, LanguageKeys.Commands.Suggest.PostAsSuggestionName)
+			.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+			.setDMPermission(false)
+	)
+	public messageContextRun(interaction: Command.MessageInteraction, options: TransformedArguments.Message) {
+		const input = options.message.content;
+		if (isNullishOrEmpty(input)) {
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.RePostNoContent);
+			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
+		}
+
+		return this.handleNew(interaction, input);
+	}
+
+	private async handleNew(interaction: Interaction, rawInput: string) {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({
 			where: { id: guildId }
@@ -95,7 +118,7 @@ export class UserCommand extends Command {
 		return response.update({ content });
 	}
 
-	private makeUserData(interaction: Command.ChatInputInteraction): MessageData['user'] {
+	private makeUserData(interaction: Interaction): MessageData['user'] {
 		const { user } = interaction;
 
 		return {
@@ -106,12 +129,12 @@ export class UserCommand extends Command {
 		};
 	}
 
-	private makeMessage(interaction: Command.ChatInputInteraction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
+	private makeMessage(interaction: Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
 		const resolved = settings.embed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
 		return { ...resolved, components: this.makeComponents(interaction, settings, data), allowed_mentions: EmptyMentions };
 	}
 
-	private makeComponents(interaction: Command.ChatInputInteraction, settings: Guild, data: MessageData) {
+	private makeComponents(interaction: Interaction, settings: Guild, data: MessageData) {
 		type MessageComponent = NonNullable<ChannelId.Messages.post.Body['components']>[number];
 
 		const components: MessageComponent[] = [];
@@ -167,7 +190,7 @@ export class UserCommand extends Command {
 				type: ComponentType.ActionRow,
 				components: [
 					{
-						type: ComponentType.SelectMenu,
+						type: ComponentType.StringSelect,
 						custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
 						options: [
 							{ label: t(LanguageKeys.Commands.Suggest.ComponentsAccept), value: Status.Accept },
@@ -182,7 +205,7 @@ export class UserCommand extends Command {
 		return components;
 	}
 
-	private makeEmbedMessage(interaction: Command.ChatInputInteraction, data: MessageData): ChannelId.Messages.post.Body {
+	private makeEmbedMessage(interaction: Interaction, data: MessageData): ChannelId.Messages.post.Body {
 		const name = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageEmbedTitle, data);
 		const embed = new EmbedBuilder()
 			.setColor(SuggestionStatusColors.Unresolved)
@@ -191,7 +214,7 @@ export class UserCommand extends Command {
 		return { embeds: [embed.toJSON()] };
 	}
 
-	private makeContentMessage(interaction: Command.ChatInputInteraction, data: MessageData): ChannelId.Messages.post.Body {
+	private makeContentMessage(interaction: Interaction, data: MessageData): ChannelId.Messages.post.Body {
 		const content = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageContent, data);
 		return { content };
 	}
@@ -273,3 +296,5 @@ interface Options {
 	suggestion: string;
 	id?: number;
 }
+
+type Interaction = Command.ChatInputInteraction | Command.MessageInteraction;

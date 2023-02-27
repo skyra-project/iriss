@@ -2,6 +2,7 @@ import { FT, T } from '@skyra/http-framework-i18n';
 
 export const RootName = T('commands/suggest:name');
 export const RootDescription = T('commands/suggest:description');
+export const PostAsSuggestionName = T('commands/suggest:postAsSuggestionName');
 
 export const OptionsId = 'commands/suggest:optionsId';
 export const OptionsSuggestion = 'commands/suggest:optionsSuggestion';
@@ -24,6 +25,7 @@ export const NewNotConfigured = T('commands/suggest:newNotConfigured');
 export const NewSuccess = FT<{ id: number }>('commands/suggest:newSuccess');
 export const ReactionsFailed = FT<{ failed: string[] }>('commands/suggest:reactionsFailed');
 export const ReactionsFailedAndRemoved = FT<{ failed: string[]; removed: string[] }>('commands/suggest:reactionsFailedAndRemoved');
+export const RePostNoContent = T('commands/suggest:rePostNoContent');
 
 export interface MessageData {
 	id: number;
