@@ -1,1 +1,27 @@
-{}
+{
+	"name": "javasol",
+	"description": "Hozzon létre egy új javaslatot ehhez a szerverhez",
+	"componentsAccept": "Elfogad",
+	"componentsArchive": "Archivál",
+	"componentsConsider": "Fontold meg",
+	"componentsCreateThread": "Gondolatmenet létrehozása",
+	"componentsDeny": "Elutasítás",
+	"modifyArchived": "Egy archivált javaslat nem módosítható. Új javaslattal hivatkozhat rá.",
+	"modifyDoesNotExist": "Az Ön által megadott javaslat nem létezik.",
+	"modifyMessageDeleted": "Úgy tűnik, hogy a szerkeszteni kívánt javaslatot törölték, és automatikusan archiválva lett. Bocsi!",
+	"modifyMismatchingAuthor": "Nem módosíthatja valaki más javaslatát.",
+	"modifyNotConfigured": "Ez a szerver eltávolította a javaslatok csatornáját a konfigurációból, így az összes javaslat csak olvasható. Kérjük, lépjen kapcsolatba a szerver adminisztrátorokal ezzel az incidenssel kapcsolatban, ha ennek működnie kellett.",
+	"modifyReplied": "Egy megválaszolt javaslatot nem módosíthatja. Ezt a megbeszélés csatornán lehet követni.",
+	"modifySuccess": "Javaslata sikeresen frissítve (`#{{id}}`)!",
+	"newMessageContent": "[`#{{id}}`] **{{user.mention}} javasolt ekkor: {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
+	"newFailedToSend": "Sajnálom, de nem tudtam üzenetet küldeni a(z) {{channel}} csatornán. Kérlek, jelentse ezt a problémát egy adminisztrátornak. 😦",
+	"newNotConfigured": "Ez a szerver még nem konfigurálta a javaslatok csatornáját. A beállításhoz forduljon a adminisztrátorokhoz!",
+	"newSuccess": "A javaslatot sikeresen elküldtük (`#{{id}}`)!",
+	"reactionsFailed": "Nem tudtam hozzáadni a következőt: {{failed, list(conjunction)}}.",
+	"reactionsFailedAndRemoved": "Nem tudtam hozzáadni a(z) {{failed, list(conjunction)}} elemet, amelyből eltávolítottam a(z) {{removed, list(conjunction)}} elemet, mivel elvesztettem a hozzáférést, hogy reagálhassak velük.",
+	"optionsIdName": "azonosító",
+	"optionsIdDescription": "A szerkesztendő javaslat száma",
+	"optionsSuggestionName": "javaslat",
+	"optionsSuggestionDescription": "A feladandó javaslat"
+}

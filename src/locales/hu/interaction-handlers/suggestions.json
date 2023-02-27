@@ -1,1 +1,18 @@
-{}
+{
+	"missingResolvePermissions": "A gomb használatához jogosultságokkal kell rendelkeznie a /megold futtatásához.",
+	"modalTitle": "#{{id}} javaslat",
+	"modalFieldLabelAccept": "Üzenet (elfogadás)",
+	"modalFieldLabelConsider": "Üzenet (megfontolandó)",
+	"modalFieldLabelDeny": "Üzenet (elutasítás)",
+	"modalFieldPlaceholderAccept": "Nekem jól néz ki, mert...",
+	"modalFieldPlaceholderConsider": "Ezt fontolgatjuk, mert...",
+	"modalFieldPlaceholderDeny": "Attól tartok, ezt elutasítjuk, mert...",
+	"archiveSuccess": "A javaslat archiválása sikeresen megtörtént.",
+	"archiveThreadFailure": "Nem tudtam archiválni a linkelt gondolatmenetet, bocsi!",
+	"reactionRemovalFailure": "Az összes reakció eltávolítása nem sikerült, előfordulhat, hogy manuálisan kell eltávolítania őket.",
+	"archiveMessageFailure": "Nem tudtam archiválni az üzenetet, lehet, hogy törölték.",
+	"threadChannelCreationFailure": "Nem tudtam létrehozni egy gondolatmenetet, előfordulhat, hogy kapcsolatba kell lépnie egy adminisztrátorral, hogy engedélyt adjon nekem, vagy egy moderátorhoz kell fordulnia a szál létrehozásához, bocsi' 😢",
+	"threadMessageUpdateSuccess": "Sikeresen létrehozta a(z) {{channel}} gondolatmenetet, és eltávolította a gondolatmenet gombot a javaslat üzenetéből.",
+	"threadMessageUpdateFailure": "Sikeresen létrehoztam a(z) {{channel}} gondolatmenetet, azonban egy kis problémám akadt a javaslat üzenet frissítése során, így nem tudtam eltávolítani a gombot. 😦",
+	"threadMemberAddFailure": "Ezenkívül nem tudtalak hozzáadni a gondolatmenet hez, ezért lehet, hogy manuálisan kell csatlakoznod. Elnézést a kellemetlenségért. 😦"
+}

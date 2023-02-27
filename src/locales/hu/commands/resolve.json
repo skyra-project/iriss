@@ -1,1 +1,24 @@
-{}
+{
+	"name": "megold",
+	"description": "Megoldja a javaslatokat erről a szerverről",
+	"archiveName": "archivál",
+	"archiveDescription": "Egy javaslat archiválása erről a szerverről",
+	"acceptName": "elfogad",
+	"acceptDescription": "Jelöljon meg egy szervertől származó javaslatot elfogadottként",
+	"considerName": "fontolgat",
+	"considerDescription": "A szervertől származó egy javaslat megjelölése megfontoltként",
+	"denyName": "elutasítás",
+	"denyDescription": "A szervertől származó egy javaslat megjelölése elutasítottként",
+	"optionsIdName": "azonosító",
+	"optionsIdDescription": "A frissítésre vonatkozó javaslat azonosítója",
+	"optionsResponseName": "válasz",
+	"optionsResponseDescription": "A javaslat üzenethez hozzáadandó válasz",
+	"notConfigured": "Ezen a szerveren nincs beállítva egy javaslati csatorna, kérjük, állítsa be a `/konfiguráció szerkesztés csatorna #channel` paranccsal, vagy kérjen meg egy adminisztrátort, hogy tegye meg.",
+	"suggestionArchived": "A javaslat archiválva van, és nem szerkeszthető.",
+	"suggestionIdDoesNotExist": "Az Ön által megadott javaslatazonosító nem létezik.",
+	"suggestionMessageDeleted": "A javaslat üzenete törölve lett, ezért automatikusan archiválva lett.",
+	"archiveSuccess": "A(z) {{id}} javaslat sikeresen archiválva.",
+	"noReason": "*Nincs megadva ok*",
+	"success": "A(z) {{id}} javaslat sikeresen frissítve.",
+	"failure": "Nem tudtam frissíteni a(z) {{id}} javaslatot, bocsi!"
+}
