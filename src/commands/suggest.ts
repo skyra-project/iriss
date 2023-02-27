@@ -9,7 +9,7 @@ import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { Result } from '@sapphire/result';
-import { isNullishOrEmpty } from '@sapphire/utilities';
+import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterMessageCommand, type TransformedArguments } from '@skyra/http-framework';
 import {
 	applyLocalizedBuilder,
@@ -19,13 +19,15 @@ import {
 	resolveKey,
 	resolveUserKey
 } from '@skyra/http-framework-i18n';
-import { ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits, type APIMessage } from 'discord-api-types/v10';
+import { APIUser, ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits, type APIMessage } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
 @RegisterCommand((builder) =>
 	applyLocalizedBuilder(builder, LanguageKeys.Commands.Suggest.RootName, LanguageKeys.Commands.Suggest.RootDescription) //
-		.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsSuggestion).setRequired(true))
+		.addStringOption((option) =>
+			applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsSuggestion).setMaxLength(2048).setRequired(true)
+		)
 		.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsId))
 		.setDMPermission(false)
 )
@@ -33,7 +35,7 @@ export class UserCommand extends Command {
 	private readonly queues = new Collection<bigint, AsyncQueue>();
 	public override chatInputRun(interaction: Command.ChatInputInteraction, options: Options) {
 		return options.id === undefined
-			? this.handleNew(interaction, options.suggestion)
+			? this.handleNew(interaction, this.getUserData(interaction.user), options.suggestion)
 			: this.handleEdit(interaction, options.id, options.suggestion);
 	}
 
@@ -49,10 +51,10 @@ export class UserCommand extends Command {
 			return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 		}
 
-		return this.handleNew(interaction, input);
+		return this.handleNew(interaction, this.getUserData(options.message.author), cutText(input, 2048));
 	}
 
-	private async handleNew(interaction: Interaction, rawInput: string) {
+	private async handleNew(interaction: Interaction, user: MessageUserData, rawInput: string) {
 		const guildId = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({
 			where: { id: guildId }
@@ -74,7 +76,6 @@ export class UserCommand extends Command {
 			id = count + 1;
 
 			const input = settings.embed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
-			const user = this.makeUserData(interaction);
 			const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
 
 			const postResult = await Result.fromAsync(ChannelId.Messages.post(settings.channel, body));
@@ -118,15 +119,14 @@ export class UserCommand extends Command {
 		return response.update({ content });
 	}
 
-	private makeUserData(interaction: Interaction): MessageData['user'] {
-		const { user } = interaction;
-
+	private getUserData(user: APIUser) {
 		return {
 			id: user.id,
 			username: user.username,
 			discriminator: user.discriminator,
-			mention: userMention(user.id)
-		};
+			mention: userMention(user.id),
+			avatar: displayAvatarURL(user)
+		} satisfies MessageUserData;
 	}
 
 	private makeMessage(interaction: Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
@@ -209,7 +209,7 @@ export class UserCommand extends Command {
 		const name = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageEmbedTitle, data);
 		const embed = new EmbedBuilder()
 			.setColor(SuggestionStatusColors.Unresolved)
-			.setAuthor({ name, iconURL: displayAvatarURL(interaction.member!.user) })
+			.setAuthor({ name, iconURL: data.user.avatar })
 			.setDescription(data.message);
 		return { embeds: [embed.toJSON()] };
 	}
@@ -298,3 +298,4 @@ interface Options {
 }
 
 type Interaction = Command.ChatInputInteraction | Command.MessageInteraction;
+type MessageUserData = MessageData['user'];

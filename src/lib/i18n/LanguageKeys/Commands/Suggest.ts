@@ -35,6 +35,7 @@ export interface MessageData {
 		username: string;
 		discriminator: string;
 		mention: `<@${string}>`;
+		avatar: string;
 	};
 	message: string;
 }
