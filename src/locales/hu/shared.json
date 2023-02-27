@@ -1,1 +1,6 @@
-{}
+{
+	"enabled": "Engedélyezett",
+	"disabled": "Letiltva",
+	"unset": "Nincs beállítva",
+	"none": "Semmi"
+}
