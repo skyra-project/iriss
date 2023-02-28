@@ -1,6 +1,7 @@
 {
 	"name": "suggereren",
 	"description": "Een nieuwe suggestie voor deze server maken",
+	"postAsSuggestionName": "Verstuur als suggestie",
 	"componentsAccept": "Accepteren",
 	"componentsArchive": "Archiveren",
 	"componentsConsider": "Overwegen",
@@ -23,5 +24,6 @@
 	"optionsIdName": "id",
 	"optionsIdDescription": "Het nummer van de suggestie om te bewerken",
 	"optionsSuggestionName": "suggestie",
-	"optionsSuggestionDescription": "De suggestie om te verzenden"
+	"optionsSuggestionDescription": "De suggestie om te verzenden",
+	"rePostNoContent": "Ik kon het bericht niet als suggestie plaatsen, omdat het geen inhoud heeft om over te nemen."
 }

@@ -1,6 +1,7 @@
 {
 	"name": "sugerir",
 	"description": "Crea una nueva sugerencia para este servidor",
+	"postAsSuggestionName": "Publicar como Sugerencia",
 	"componentsAccept": "Acceptar",
 	"componentsArchive": "Archivar",
 	"componentsConsider": "Considerar",
@@ -23,5 +24,6 @@
 	"optionsIdName": "identificador",
 	"optionsIdDescription": "El número de la sugerencia a editar",
 	"optionsSuggestionName": "sugerir",
-	"optionsSuggestionDescription": "La sugerencia a publicar"
+	"optionsSuggestionDescription": "La sugerencia a publicar",
+	"rePostNoContent": "No pude publicar el mensaje como una sugerencia porque no tiene ningún contenido del cual copiar."
 }

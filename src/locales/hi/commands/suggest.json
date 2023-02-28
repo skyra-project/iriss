@@ -1,6 +1,7 @@
 {
 	"name": "सुझाएं",
 	"description": "इस सर्वर के लिए एक नया सुझाव बनाएं",
+	"postAsSuggestionName": "सुझाव के रूप में पोस्ट करें",
 	"componentsAccept": "स्वीकारें",
 	"componentsArchive": "आर्काइव",
 	"componentsConsider": "विचारें",
@@ -23,5 +24,6 @@
 	"optionsIdName": "क्रमांक",
 	"optionsIdDescription": "सम्पादित करने के लिये सुझाव का क्रमांक",
 	"optionsSuggestionName": "सुझाव",
-	"optionsSuggestionDescription": "पोस्ट करने का सुझाव"
+	"optionsSuggestionDescription": "पोस्ट करने का सुझाव",
+	"rePostNoContent": "मैं संदेश को सुझाव के रूप में पोस्ट नहीं कर सका क्योंकि इसमें कॉपी करने के लिए कोई सामग्री नहीं है।"
 }
