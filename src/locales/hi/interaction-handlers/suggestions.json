@@ -1,5 +1,5 @@
 {
-	"missingResolvePermissions": "इस बटन का उपयोग करने के लिए आपके पास निष्पादित/हल करने की अनुमति होनी चाहिए।",
+	"missingResolvePermissions": "इस बटन का उपयोग करने के लिए आपके पास /समाधान निष्पादित करने की अनुमति होनी चाहिए।",
 	"modalTitle": "सुझाव #{{id}}",
 	"modalFieldLabelAccept": "संदेश (स्वीकार)",
 	"modalFieldLabelConsider": "संदेश (विचार)",

@@ -1,6 +1,7 @@
 {
 	"name": "sugerează",
 	"description": "Creează o nouă sugestie pentru acest server",
+	"postAsSuggestionName": "Postați ca sugestie",
 	"componentsAccept": "Acceptă",
 	"componentsArchive": "Arhivare",
 	"componentsConsider": "Considerați",
@@ -23,5 +24,6 @@
 	"optionsIdName": "id",
 	"optionsIdDescription": "Numărul sugestiei de editat",
 	"optionsSuggestionName": "sugestie",
-	"optionsSuggestionDescription": "Sugestia de postat"
+	"optionsSuggestionDescription": "Sugestia de postat",
+	"rePostNoContent": "Nu am putut posta mesajul ca sugestie, deoarece nu are niciun conținut din care să copiez."
 }

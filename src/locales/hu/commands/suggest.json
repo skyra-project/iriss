@@ -1,6 +1,7 @@
 {
 	"name": "javasol",
 	"description": "Hozzon létre egy új javaslatot ehhez a szerverhez",
+	"postAsSuggestionName": "Tegye közzé javaslatként",
 	"componentsAccept": "Elfogad",
 	"componentsArchive": "Archivál",
 	"componentsConsider": "Fontold meg",
@@ -23,5 +24,6 @@
 	"optionsIdName": "azonosító",
 	"optionsIdDescription": "A szerkesztendő javaslat száma",
 	"optionsSuggestionName": "javaslat",
-	"optionsSuggestionDescription": "A feladandó javaslat"
+	"optionsSuggestionDescription": "A feladandó javaslat",
+	"rePostNoContent": "Nem tudtam javaslatként közzétenni az üzenetet, mert nincs benne másolási tartalom."
 }
