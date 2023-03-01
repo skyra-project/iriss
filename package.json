@@ -35,7 +35,7 @@
 		"@skyra/http-framework": "^0.15.2",
 		"@skyra/http-framework-i18n": "^0.6.0",
 		"@skyra/logger": "^1.0.1",
-		"@skyra/shared-http-pieces": "^0.4.4",
+		"@skyra/shared-http-pieces": "^0.4.5",
 		"@skyra/start-banner": "^1.0.2",
 		"discord-api-types": "^0.37.35",
 		"gradient-string": "^2.0.2",
