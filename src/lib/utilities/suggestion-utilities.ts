@@ -204,7 +204,7 @@ export async function useEmbedContent(content: string, guildId: Snowflake, chann
 
 		if (result.index !== lastIndex) {
 			buffer += content.slice(lastIndex, result.index);
-			if (buffer.length) parts.push(buffer + content.slice(lastIndex, result.index));
+			if (buffer.length) parts.push(buffer);
 
 			buffer = '';
 		}
