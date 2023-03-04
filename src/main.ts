@@ -3,21 +3,22 @@ import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { Client, container } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
-import { setInvite, setRepository } from '@skyra/shared-http-pieces';
+import { initializeSentry, setInvite, setRepository } from '@skyra/shared-http-pieces';
 import '@skyra/shared-http-pieces/register';
 import { createBanner } from '@skyra/start-banner';
 import gradient from 'gradient-string';
-setRepository('iriss');
-setInvite('948377113457745990', '326417868864');
 
 setup(new URL('../src/.env', import.meta.url));
+
+setRepository('iriss');
+setInvite('948377113457745990', '326417868864');
+initializeSentry();
 
 await load(new URL('../src/locales', import.meta.url));
 await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false });
 
 const client = new Client();
 await client.load();
-client.on('error', (error) => container.logger.error(error));
 
 void registerCommands();
 
