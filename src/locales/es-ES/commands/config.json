@@ -3,7 +3,6 @@
 	"description": "Gestiona la configuración para este servidor",
 	"viewName": "mostrar",
 	"viewDescription": "Muestra la configuración actual",
-	"viewContent": "**Configuración actual**:\n\nCanal: {{channel}}\nAuto-hilo: {{autoThread}}\nBotones: {{buttons}}\nCompacto: {{compact}}\nHistorial de Actualización: {{displayUpdateHistory}}\nInsertado: {{embed}}\nReacciones: {{reactions}}\n\n> **Nota**: Para actualizarlos, puedes usar `/config editar`.",
 	"editName": "editar",
 	"editDescription": "Edita un valor de configuración",
 	"editOptionsChannelDescription": "El canal en el que publicar nuevas sugerencias",
