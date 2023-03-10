@@ -14,6 +14,7 @@
 	"modifyNotConfigured": "Ez a szerver eltávolította a javaslatok csatornáját a konfigurációból, így az összes javaslat csak olvasható. Kérjük, lépjen kapcsolatba a szerver adminisztrátorokal ezzel az incidenssel kapcsolatban, ha ennek működnie kellett.",
 	"modifyReplied": "Egy megválaszolt javaslatot nem módosíthatja. Ezt a megbeszélés csatornán lehet követni.",
 	"modifySuccess": "Javaslata sikeresen frissítve (`#{{id}}`)!",
+	"cooldown": "A lehűlési idő miatt le van tiltva ennek a parancsnak a használata a következő időpontig: {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} javasolt ekkor: {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Sajnálom, de nem tudtam üzenetet küldeni a(z) {{channel}} csatornán. Kérlek, jelentse ezt a problémát egy adminisztrátornak. 😦",
