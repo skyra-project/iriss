@@ -14,6 +14,7 @@
 	"modifyNotConfigured": "Este servidor ha eliminado el canal de sugerencias de la configuración, y como tal, todas las sugerencias son ahora de solo lectura. Póngase en contacto con los administradores del servidor sobre este incidente si se debe a un error.",
 	"modifyReplied": "No puedes modificar una sugerencia que ha sido respondida. Puedes seguirla en el canal de discusión.",
 	"modifySuccess": "¡Actualizada correctamente su sugerencia (`#{{id}}`)!",
+	"cooldown": "Usted no puede usar este comando debido al tiempo de enfriamiento hasta {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ha sugerido el {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Lo siento, pero no pude publicar un mensaje en {{channel}}. Por favor, reporta este problema a un administrador. 😦",

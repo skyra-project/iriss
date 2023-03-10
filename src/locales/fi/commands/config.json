@@ -3,7 +3,6 @@
 	"description": "Hallitse palvelimen asetuksia",
 	"viewName": "näytä",
 	"viewDescription": "Näytä tämänhetkiset asetukset",
-	"viewContent": "**Nykyiset asetukset**:\n\nKanava: {{channel}}\nAutomaattinen thread: {{autoThread}}\nPainikkeet: {{buttons}}\nTiivis: {{compact}}\nNäytä Päivitys Historia: {{displayUpdateHistory}}\nUpotus: {{embed}}\nReaktiot: {{reactions}}\n\n> **Huom**: Päivittääksesi asetuksia, voit käyttää komentoa `/asetukset muokkaa`.",
 	"editName": "muokkaa",
 	"editDescription": "Muokkaa asetusta",
 	"editOptionsChannelDescription": "Jos asetettu, kanava johon uudet ehdotukset lähetetään",

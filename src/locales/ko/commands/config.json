@@ -3,7 +3,6 @@
 	"description": "서버 설정 변경하기",
 	"viewName": "보기",
 	"viewDescription": "현재 설정 보기",
-	"viewContent": "**현재 설정**:\n\n채널: {{channel}}\n자동-스레드: {{autoThread}}\n버튼: {{buttons}}\n콤팩트: {{compact}}\n업데이트 내역 표시: {{displayUpdateHistory}}\n임베드: {{embed}}\n반응: {{reactions}}\n\n> **팁**: 설정을 변경하시려면 `/설정 편집`을 사용하세요.",
 	"editName": "변경",
 	"editDescription": "설정값 변경",
 	"editOptionsChannelDescription": "설정되었다면, 새 제안을 보낼 채널",

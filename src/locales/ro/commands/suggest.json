@@ -14,6 +14,7 @@
 	"modifyNotConfigured": "Acest server a eliminat canalul de sugestii din configurație, și, ca atare, toate sugestiile sunt acum doar pentru citire. Vă rugăm să contactați administratorii serverului cu privire la acest incident dacă asta ar fi trebuit să funcționeze.",
 	"modifyReplied": "Nu puteți modifica o sugestie care a fost răspunsă. O puteți urmări în canalul de discuții.",
 	"modifySuccess": "Sugestie actualizată cu succes (`#{{id}}`)!",
+	"cooldown": "Ești blocat din folosirea acestei comanzi din cauza perioadei de așteptare care ține până la {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} a sugerat la {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Îmi pare rău, dar nu am putut posta un mesaj în {{channel}}. Te rog să raportezi această problemă unui administrator. 😦",

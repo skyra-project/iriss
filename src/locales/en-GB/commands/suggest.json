@@ -14,6 +14,7 @@
 	"modifyNotConfigured": "This server has removed the suggestions channel from the configuration, and as such, all suggestions are now read-only. Please contact the server's administrators about this incident if this was supposed to work.",
 	"modifyReplied": "You cannot modify a suggestion that was replied. You may follow it up in the discussion channel.",
 	"modifySuccess": "Successfully updated your suggestion (`#{{id}}`)!",
+	"cooldown": "You are blocked from using this command due to cooldown until {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} suggested on {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "I'm sorry, but I wasn't able to post a message in {{channel}}. Please report this issue to an administrator. 😦",

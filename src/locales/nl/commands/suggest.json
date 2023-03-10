@@ -14,6 +14,7 @@
 	"modifyNotConfigured": "Deze server heeft het suggestie kanaal uit de configuratie verwijderd en daarom zijn alle suggesties nu alleen-lezen. Neem contact op met de beheerders over dit incident als dit had moeten werken.",
 	"modifyReplied": "Je kunt een geantwoorde suggestie niet wijzigen. Je kunt het in het discussiekanaal opvolgen.",
 	"modifySuccess": "Je suggestie is succesvol gewijzigd (`#{{id}}`)!",
+	"cooldown": "Tot {{time}} ben je niet in staat dit commando te gebruiken als gevolg van een cooldown.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} suggereert op {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Het spijt me, maar ik kon geen bericht plaatsen in {{channel}}. Rapporteer dit probleem alstublieft aan een beheerder. 😦",
