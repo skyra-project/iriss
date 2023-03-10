@@ -3,7 +3,6 @@
 	"description": "Manage the configuration for this server",
 	"viewName": "view",
 	"viewDescription": "View the current configuration",
-	"viewContent": "**Current settings**:\n\nChannel: {{channel}}\nAuto-thread: {{autoThread}}\nButtons: {{buttons}}\nCompact: {{compact}}\nDisplay Update History: {{displayUpdateHistory}}\nEmbed: {{embed}}\nReactions: {{reactions}}\n\n> **Note**: To update them, you can use `/config edit`.",
 	"editName": "edit",
 	"editDescription": "Edit a configuration value",
 	"editOptionsChannelDescription": "If set, the channel to post new suggestions at",
