@@ -3,7 +3,6 @@
 	"description": "Beheer de configuratie voor deze server",
 	"viewName": "weergeven",
 	"viewDescription": "Bekijk de huidige configuratie",
-	"viewContent": "**Huidige instellingen**:\n\nKanaal: {{channel}}\nAuto-thread: {{autoThread}}\nKnoppen: {{buttons}}\nCompact: {{compact}}\nToon Update Geschiedenis: {{displayUpdateHistory}}\nEmbed: {{embed}}\nReacties: {{reactions}}\n\n> **Opmerking**: Om deze te updaten gebruik `/configuratie aanpassen`.",
 	"editName": "aanpassen",
 	"editDescription": "Bewerk een configuratie waarde",
 	"editOptionsChannelDescription": "Indien ingesteld, zullen nieuwe suggesties in dit kanaal geplaatst worden",
