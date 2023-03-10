@@ -3,13 +3,14 @@ import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
 import { ChannelId } from '#lib/utilities/rest';
 import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
+import { millisecondsToSeconds } from '#lib/utilities/time';
 import { displayAvatarURL } from '#lib/utilities/user';
-import { channelMention, EmbedBuilder, time, userMention } from '@discordjs/builders';
+import { channelMention, EmbedBuilder, time, TimestampStyles, userMention } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { Result } from '@sapphire/result';
-import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
+import { cutText, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterMessageCommand, type TransformedArguments } from '@skyra/http-framework';
 import {
 	applyLocalizedBuilder,
@@ -72,6 +73,14 @@ export class UserCommand extends Command {
 		let id: number;
 		let message: APIMessage;
 		try {
+			const cooldown = await this.checkOrSetRateLimit(settings, interaction.user.id);
+			if (cooldown !== null) {
+				const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.Cooldown, {
+					time: time(millisecondsToSeconds(Date.now() + cooldown), TimestampStyles.LongTime)
+				});
+				return response.update({ content });
+			}
+
 			const count = await useCount(guildId);
 			id = count + 1;
 
@@ -289,6 +298,29 @@ export class UserCommand extends Command {
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifySuccess, { id });
 		return response.update({ content });
+	}
+
+	private async checkOrSetRateLimit(settings: Guild, userId: string) {
+		// If there is no cooldown, skip:
+		if (isNullishOrZero(settings.cooldown)) return null;
+
+		const key = `i:c:${settings.id}:${userId}`;
+		const cooldown = await this.container.redis.pttl(key);
+
+		// If the maximum cooldown changed between calls, trim to maximum:
+		if (cooldown > settings.cooldown) {
+			// Set the new expire, if the operation was successful (1),
+			// return the limit, otherwise fallback to new cooldown:
+			const result = await this.container.redis.pexpire(key, settings.cooldown);
+			if (result === 1) return settings.cooldown;
+		} else if (cooldown > 0) {
+			// Within settings limit and 0 — positive cooldown, return it:
+			return cooldown;
+		}
+
+		// Set a TTL-only key and return null:
+		await this.container.redis.set(key, Buffer.allocUnsafe(0), 'PX', settings.cooldown);
+		return null;
 	}
 }
 

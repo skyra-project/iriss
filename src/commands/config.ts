@@ -2,10 +2,11 @@ import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { getTextFormat, parse, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { channelMention, inlineCode } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
-import { Result } from '@sapphire/result';
-import { isNullish } from '@sapphire/utilities';
+import { Duration, Time } from '@sapphire/duration';
+import { err, ok, Result } from '@sapphire/result';
+import { isNullish, isNullishOrZero } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
-import { applyLocalizedBuilder, createSelectMenuChoiceName, getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
+import { applyLocalizedBuilder, createSelectMenuChoiceName, getSupportedUserLanguageT, resolveUserKey, TFunction } from '@skyra/http-framework-i18n';
 import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
@@ -32,6 +33,9 @@ export class UserCommand extends Command {
 			)
 			.addBooleanOption((input) =>
 				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyCompact, LanguageKeys.Commands.Config.EditOptionsCompactDescription)
+			)
+			.addStringOption((input) =>
+				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyCooldown, LanguageKeys.Commands.Config.EditOptionsCooldownDescription)
 			)
 			.addBooleanOption((input) =>
 				applyLocalizedBuilder(
@@ -64,6 +68,12 @@ export class UserCommand extends Command {
 
 			entries.push(['reactions', result.unwrap()]);
 		}
+		if (!isNullish(options.cooldown)) {
+			const result = this.parseCooldownString(interaction, options.cooldown);
+			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), flags: MessageFlags.Ephemeral });
+
+			entries.push(['cooldown', result.unwrap()]);
+		}
 
 		if (!isNullish(options['auto-thread'])) entries.push(['autoThread', options['auto-thread']]);
 		if (!isNullish(options.buttons)) entries.push(['buttons', options.buttons]);
@@ -85,6 +95,7 @@ export class UserCommand extends Command {
 					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyButtons, { value: 'buttons' }),
 					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyChannel, { value: 'channel' }),
 					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyCompact, { value: 'compact' }),
+					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyCooldown, { value: 'cooldown' }),
 					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyDisplayUpdateHistory, { value: 'display-update-history' }),
 					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyEmbed, { value: 'embed' }),
 					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyReactions, { value: 'reactions' }),
@@ -101,6 +112,7 @@ export class UserCommand extends Command {
 					buttons: true,
 					channel: null,
 					compact: false,
+					cooldown: 0,
 					displayUpdateHistory: false,
 					embed: true,
 					reactions: [],
@@ -116,6 +128,8 @@ export class UserCommand extends Command {
 				return this.updateDatabase(interaction, { channel: null });
 			case 'compact':
 				return this.updateDatabase(interaction, { compact: false });
+			case 'cooldown':
+				return this.updateDatabase(interaction, { cooldown: 0 });
 			case 'display-update-history':
 				return this.updateDatabase(interaction, { displayUpdateHistory: false });
 			case 'embed':
@@ -146,13 +160,37 @@ export class UserCommand extends Command {
 		const autoThread = bool[Number(settings.autoThread ?? false)];
 		const buttons = bool[Number(settings.buttons ?? true)];
 		const compact = bool[Number(settings.compact ?? false)];
+		const cooldown = inlineCode(this.getCooldownContent(t, settings.cooldown ?? 0));
 		const displayUpdateHistory = bool[Number(settings.displayUpdateHistory ?? false)];
 		const embed = bool[Number(settings.embed ?? true)];
 		const reactions = settings.reactions?.length
 			? settings.reactions.map((reaction) => getTextFormat(reaction as SerializedEmoji)).join(' ')
 			: inlineCode(t(LanguageKeys.Shared.None));
 
-		return t(LanguageKeys.Commands.Config.ViewContent, { channel, autoThread, buttons, compact, displayUpdateHistory, embed, reactions });
+		return t(LanguageKeys.Commands.Config.ViewContent, {
+			channel,
+			autoThread,
+			buttons,
+			compact,
+			cooldown,
+			displayUpdateHistory,
+			embed,
+			reactions
+		});
+	}
+
+	private getCooldownContent(t: TFunction, cooldown: number) {
+		if (isNullishOrZero(cooldown)) return t(LanguageKeys.Shared.None);
+
+		const list = [] as string[];
+		for (const [ms, unit] of UserCommand.CooldownUnits) {
+			if (cooldown < ms) continue;
+
+			list.push(new Intl.NumberFormat(t.lng, { unit, style: 'unit', unitDisplay: 'long' }).format(Math.floor(cooldown / ms)));
+			cooldown %= ms;
+		}
+
+		return new Intl.ListFormat(t.lng, { type: 'conjunction' }).format(list);
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputInteraction, data: Partial<Guild>) {
@@ -182,14 +220,31 @@ export class UserCommand extends Command {
 		for (const reaction of reactions) {
 			const parsed = parse(reaction);
 			if (parsed === null) {
-				return Result.err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidEmoji, { value: reaction }));
+				return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidEmoji, { value: reaction }));
 			}
 
 			entries.push(parsed);
 		}
 
-		return Result.ok(entries);
+		return ok(entries);
 	}
+
+	private parseCooldownString(interaction: Command.ChatInputInteraction, input: string) {
+		const { offset } = new Duration(input);
+		if (!Number.isInteger(offset)) {
+			return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditCooldownInvalidDuration, { value: input }));
+		}
+		if (offset < Time.Second) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditCooldownDurationTooShort));
+		if (offset > Time.Hour * 6) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditCooldownDurationTooLong));
+
+		return ok(offset);
+	}
+
+	private static CooldownUnits = [
+		[Time.Hour, 'hour'],
+		[Time.Minute, 'minute'],
+		[Time.Second, 'second']
+	] as const satisfies readonly (readonly [Time, string])[];
 }
 
 interface EditOptions {
@@ -197,6 +252,7 @@ interface EditOptions {
 	'auto-thread'?: boolean;
 	buttons?: boolean;
 	compact?: boolean;
+	cooldown?: string;
 	'display-update-history'?: boolean;
 	embed?: boolean;
 	reactions?: string;

@@ -1,4 +1,4 @@
-import { FT, T } from '@skyra/http-framework-i18n';
+import { FT, T, Value } from '@skyra/http-framework-i18n';
 
 // Root
 export const RootName = T('commands/config:name');
@@ -10,6 +10,7 @@ export const ViewContent = FT<{
 	autoThread: string;
 	buttons: string;
 	compact: string;
+	cooldown: string;
 	displayUpdateHistory: string;
 	embed: string;
 	reactions: string;
@@ -20,12 +21,16 @@ export const EditOptionsChannelDescription = T('commands/config:editOptionsChann
 export const EditOptionsAutoThreadDescription = T('commands/config:editOptionsAutoThreadDescription');
 export const EditOptionsButtonsDescription = T('commands/config:editOptionsButtonsDescription');
 export const EditOptionsCompactDescription = T('commands/config:editOptionsCompactDescription');
+export const EditOptionsCooldownDescription = T('commands/config:editOptionsCooldownDescription');
 export const EditOptionsDisplayUpdateHistoryDescription = T('commands/config:editOptionsDisplayUpdateHistoryDescription');
 export const EditOptionsEmbedDescription = T('commands/config:editOptionsEmbedDescription');
 export const EditOptionsReactionsDescription = T('commands/config:editOptionsReactionsDescription');
 export const EditOptionsRemoveReactionsDescription = T('commands/config:editOptionsRemoveReactionsDescription');
 export const EditReactionsInvalidAmount = T('commands/config:editReactionsInvalidAmount');
-export const EditReactionsInvalidEmoji = FT<{ value: string }>('commands/config:editReactionsInvalidEmoji');
+export const EditReactionsInvalidEmoji = FT<Value>('commands/config:editReactionsInvalidEmoji');
+export const EditCooldownInvalidDuration = FT<Value>('commands/config:editCooldownInvalidDuration');
+export const EditCooldownDurationTooShort = T('commands/config:editCooldownDurationTooShort');
+export const EditCooldownDurationTooLong = T('commands/config:editCooldownDurationTooLong');
 
 export const Reset = 'commands/config:reset';
 export const ResetOptionsKey = 'commands/config:resetOptionsKey';
@@ -35,6 +40,7 @@ export const KeyChannel = T('commands/config:keyChannel');
 export const KeyAutoThread = T('commands/config:keyAutoThread');
 export const KeyButtons = T('commands/config:keyButtons');
 export const KeyCompact = T('commands/config:keyCompact');
+export const KeyCooldown = T('commands/config:keyCooldown');
 export const KeyDisplayUpdateHistory = T('commands/config:keyDisplayUpdateHistory');
 export const KeyEmbed = T('commands/config:keyEmbed');
 export const KeyReactions = T('commands/config:keyReactions');

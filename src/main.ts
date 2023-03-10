@@ -1,18 +1,12 @@
-import '#lib/setup/all';
+import { setup } from '#lib/setup/all';
 import { registerCommands } from '#lib/utilities/register-commands';
-import { envParseInteger, envParseString, setup } from '@skyra/env-utilities';
+import { envParseInteger, envParseString } from '@skyra/env-utilities';
 import { Client, container } from '@skyra/http-framework';
 import { init, load } from '@skyra/http-framework-i18n';
-import { initializeSentry, setInvite, setRepository } from '@skyra/shared-http-pieces';
-import '@skyra/shared-http-pieces/register';
 import { createBanner } from '@skyra/start-banner';
 import gradient from 'gradient-string';
 
-setup(new URL('../src/.env', import.meta.url));
-
-setRepository('iriss');
-setInvite('948377113457745990', '326417868864');
-initializeSentry();
+setup();
 
 await load(new URL('../src/locales', import.meta.url));
 await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false });

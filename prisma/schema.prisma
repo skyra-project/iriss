@@ -29,6 +29,8 @@ model Guild {
   reactions            String[]
   /// Whether or not reactions should be removed automatically on archive.
   removeReactions      Boolean      @default(false)
+  /// The cooldown in milliseconds.
+  cooldown             Int          @default(0)
   /// The suggestions available
   suggestions          Suggestion[]
 }

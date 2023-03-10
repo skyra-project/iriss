@@ -18,6 +18,7 @@ export const ModifyMismatchingAuthor = T('commands/suggest:modifyMismatchingAuth
 export const ModifyNotConfigured = T('commands/suggest:modifyNotConfigured');
 export const ModifyReplied = T('commands/suggest:modifyReplied');
 export const ModifySuccess = FT<{ id: number }>('commands/suggest:modifySuccess');
+export const Cooldown = FT<{ time: string }>('commands/suggest:cooldown');
 export const NewMessageContent = FT<MessageData>('commands/suggest:newMessageContent');
 export const NewMessageEmbedTitle = FT<MessageData>('commands/suggest:newMessageEmbedTitle');
 export const NewFailedToSend = FT<{ channel: string }>('commands/suggest:newFailedToSend');
