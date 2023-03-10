@@ -3,7 +3,6 @@
 	"description": "Gestionați configurația pentru acest server",
 	"viewName": "vizualizare",
 	"viewDescription": "Vezi configurația curentă",
-	"viewContent": "**Setările curente**:\n\nCanal: {{channel}}\nFir automat: {{autoThread}}\nButonuri: {{buttons}}\nCompact: {{compact}}\nAfișează istoria actualizării: {{displayUpdateHistory}}\nEmbed: {{embed}}\nReacții: {{reactions}}\n\n> **Notă**: Pentru a le actualiza, poți folosi `/configurare modifică`.",
 	"editName": "modifică",
 	"editDescription": "Editați o valoare de configurare",
 	"editOptionsChannelDescription": "Dacă este setat, canalul pentru a posta sugestii noi",
