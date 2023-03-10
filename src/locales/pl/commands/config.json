@@ -3,7 +3,6 @@
 	"description": "Zarządzaj ustawieniami tego serwera",
 	"viewName": "wyświetl",
 	"viewDescription": "Wyświetl bieżące ustawienia",
-	"viewContent": "**Bieżące ustawienia**:\n\nKanał: {{channel}}\nAuto-wątek: {{autoThread}}\nPrzyciski: {{buttons}}\nTryb kompaktowy: {{compact}}\nWyświetlanie historii: {{displayUpdateHistory}}\nEmbed: {{embed}}\nReakcje: {{reactions}}\n\n> **Porada**: Aby zaktualizować ustawienia, użyj `/ustawienia edytuj`.",
 	"editName": "edytuj",
 	"editDescription": "Zmień opcję",
 	"editOptionsChannelDescription": "Jeśli jest ustawiony, kanał do publikowania nowych sugestii",
