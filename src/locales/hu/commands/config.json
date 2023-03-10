@@ -3,7 +3,6 @@
 	"description": "Kezelje a szerver konfigurációját",
 	"viewName": "megtekint",
 	"viewDescription": "Az aktuális konfiguráció megtekintése",
-	"viewContent": "**Jelenlegi beállítások**:\n\nCsatorna: {{channel}}\nAutomatikus gondolatmenet: {{autoThread}}\nGombok: {{buttons}}\nKompakt: {{compact}}\nFrissítési előzmények megjelenítése: {{displayUpdateHistory}}\nEmbed: {{embed}}\nReakciók: {{reactions}}\n\n> **Megjegyzés**: Frissítésükhöz használja a `/konfiguráció szerkesztés` parancsot.",
 	"editName": "szerkesztés",
 	"editDescription": "Szerkesszen egy konfigurációs értéket",
 	"editOptionsChannelDescription": "Ha be van állítva, az új javaslatok közzétételére szolgáló csatorna",
