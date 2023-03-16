@@ -10,6 +10,7 @@
 	"editOptionsAutoThreadDescription": "Automatikusan létre hozni egy szál csatornát az új javaslati üzeneteknek (alapértelmezett: False)",
 	"editOptionsButtonsDescription": "A kezelőgombok használata az új javaslati üzeneteknél (alapértelmezett: True)",
 	"editOptionsCompactDescription": "A kompakt mód használata az új javaslati üzeneteknél (alapértelmezett: False)",
+	"editOptionsCooldownDescription": "Ha be van állítva, a lehűlési idő, mielőtt ú javaslatot tehetnének közzé (alapértelmezett: Nincs)",
 	"editOptionsDisplayUpdateHistoryDescription": "A javaslatokra adott 3 utolsó választ megjelenítése (alapértelmezett: False)",
 	"editOptionsEmbedDescription": "Használjon embed-eket az új javaslati üzeneteknél (alapértelmezett: True)",
 	"editOptionsReactionsDescription": "Ha be van állítva, az új javaslati üzeneteknél használandó reakciók, legtobb 3, szóköz elválasztja",
