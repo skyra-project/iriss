@@ -10,7 +10,7 @@
 	"editOptionsAutoThreadDescription": "Автоматически создавать ветку из новых предложений (по умолчанию: False)",
 	"editOptionsButtonsDescription": "Добавлять кнопки управления на новые предложения (по умолчанию: True)",
 	"editOptionsCompactDescription": "Использовать компактный режим для новых предложений (по умолчанию: False)",
-	"editOptionsCooldownDescription": "Продолжительность кулдауна для пользователя перед отправкой другого предложения (по умолчанию: Нет).",
+	"editOptionsCooldownDescription": "Продолжительность кулдауна для пользователя перед отправкой другого предложения (по умолчанию: Нет)",
 	"editOptionsDisplayUpdateHistoryDescription": "Показывать до 3 последних ответов на предложение (по умолчанию: False)",
 	"editOptionsEmbedDescription": "Использовать вложения для новых предложений (по умолчанию: True)",
 	"editOptionsReactionsDescription": "Реакции, которые будут использоваться для новых предложений, максимум 3, разделённые пробелом",
