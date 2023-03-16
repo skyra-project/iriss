@@ -10,7 +10,6 @@
 	"editOptionsAutoThreadDescription": "Whether to automatically create a thread channel on new suggestion messages (default: False)",
 	"editOptionsButtonsDescription": "Whether to add management buttons on new suggestion messages (default: True)",
 	"editOptionsCompactDescription": "Whether to use compact mode on new suggestion messages (default: False)",
-	"editOptionsCooldownDescription": "If set, the cooldown period for users before they can post another suggestion (default: None).",
 	"editOptionsDisplayUpdateHistoryDescription": "Whether to display up to the 3 last responses on suggestions (default: False)",
 	"editOptionsEmbedDescription": "Whether to use embeds on new suggestion messages (default: True)",
 	"editOptionsReactionsDescription": "If set, the reactions to use on new suggestion messages, up to 3, separated by a space",
