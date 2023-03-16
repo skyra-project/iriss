@@ -10,6 +10,7 @@
 	"editOptionsAutoThreadDescription": "Si crear automáticamente un canal de hilo en las próximas sugerencias (por defecto: Falso)",
 	"editOptionsButtonsDescription": "Si añadir botones de administración en las próximas sugerencias (por defecto: Verdadero)",
 	"editOptionsCompactDescription": "Si usar el modo compacto en las próximas sugerencias (por defecto: Verdadero)",
+	"editOptionsCooldownDescription": "Si se establece, el período de enfriamiento por usuario entre sugerencias (por defecto: Ninguno)",
 	"editOptionsDisplayUpdateHistoryDescription": "Si mostrar hasta las 3 últimas respuestas en las sugerencias (por defecto: Falso)",
 	"editOptionsEmbedDescription": "Si usar insertados en las próximas sugerencias (por defecto: Verdadero)",
 	"editOptionsReactionsDescription": "Las reacciones a usar en las próximas sugerencias, hasta 3, separados por un espacio",
