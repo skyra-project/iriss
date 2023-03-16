@@ -10,6 +10,7 @@
 	"editOptionsAutoThreadDescription": "नए सुझाव संदेशों पर स्वचालित रूप से थ्रेड चैनल बनाना है या नहीं (डिफ़ॉल्ट: नहीं)",
 	"editOptionsButtonsDescription": "नए सुझाव संदेशों पर प्रबंधन बटन जोड़ना है या नहीं (डिफ़ॉल्ट: हाँ)",
 	"editOptionsCompactDescription": "नए सुझाव संदेशों पर कॉम्पैक्ट मोड का उपयोग करना है या नहीं (डिफ़ॉल्ट: नहीं)",
+	"editOptionsCooldownDescription": "यदि सेट है, कूलडाउन अवधि इससे पहले कि उपयोगकर्ता कोई अन्य सुझाव पोस्ट कर सकें (डिफ़ॉल्ट: नहीं)",
 	"editOptionsDisplayUpdateHistoryDescription": "सुझावों पर 3 अंतिम प्रतिक्रियाओं को प्रदर्शित करना है या नहीं (डिफ़ॉल्ट: नहीं)",
 	"editOptionsEmbedDescription": "नए सुझाव संदेशों पर एम्बेड का उपयोग करना है या नहीं (डिफ़ॉल्ट: हाँ)",
 	"editOptionsReactionsDescription": "नए सुझाव संदेशों पर उपयोग की जाने वाली प्रतिक्रियाएं, रिक्त स्थान द्वारा अलग किए गए 3 तक",
