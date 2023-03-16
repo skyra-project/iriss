@@ -10,6 +10,7 @@
 	"editOptionsAutoThreadDescription": "Daca să se creeze automat unu fir pentru mesajele de sugestie noi (implicit: Fals)",
 	"editOptionsButtonsDescription": "Daca să se adauge automat gestionarea butoanelor la mesajele de sugestie noi (implicit: Adevărat)",
 	"editOptionsCompactDescription": "Dacă se se utilizeze modul compact la mesajele de sugestie noi (implicit: Fals)",
+	"editOptionsCooldownDescription": "Dacă este setat, perioada de așteptare înainte de a putea posta o altă sugestie (implicit: Niciuna)",
 	"editOptionsDisplayUpdateHistoryDescription": "Dacă să se afișeze până la ultimele 3 răspunsuri la sugestii (implicit: Fals)",
 	"editOptionsEmbedDescription": "Dacă să se utilizeze embed-uri la mesajele de sugestie noi (implicit: Adevărat)",
 	"editOptionsReactionsDescription": "Dacă este setat, reacţiile de utilizat pe mesaje de sugestii noi, până la 3, separate de un spaţiu",
