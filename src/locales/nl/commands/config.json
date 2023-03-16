@@ -10,6 +10,7 @@
 	"editOptionsAutoThreadDescription": "Of er automatisch een thread moet worden aangemaakt op nieuwe suggesties (standaard: Nee)",
 	"editOptionsButtonsDescription": "Of er beheer knoppen toegevoegd moeten worden aan nieuwe suggesties (standaard: Ja)",
 	"editOptionsCompactDescription": "Of de compacte modus gebruikt moet worden voor nieuwe suggesties (standaard: Nee)",
+	"editOptionsCooldownDescription": "Indien ingesteld, de tijd voordat een gebruiker een nieuwe suggestie kan plaatsen (standaard: Geen)",
 	"editOptionsDisplayUpdateHistoryDescription": "Of tot en met de laatste 3 reacties getoond moeten worden op nieuw suggesties (standaard: Nee)",
 	"editOptionsEmbedDescription": "Of er embeds gebruikt moeten worden voor nieuwe suggesties (standaard: Nee)",
 	"editOptionsReactionsDescription": "Indien ingesteld, de reacties om te gebruiken op nieuwe suggesties, t/m 3, gescheiden met een spatie",
