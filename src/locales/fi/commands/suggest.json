@@ -14,6 +14,7 @@
 	"modifyNotConfigured": "Palvelin on poistanut ehdotuskanavan asetuksista, joten kaikki ehdotukset ovat nyt vain-luku tilassa. Otathan yhteyttä palvelimen ylläpitoon mikäli tämä ei ole toivottua.",
 	"modifyReplied": "Et voi muokata ehdotusta johon on vastattu. Voit jatkaa keskustelua keskustelu kanavalla.",
 	"modifySuccess": "Ehdotuksesi päivitettiin onnistuneesti (`#{{id}}`)!",
+	"cooldown": "Olet estetty käyttämästä tätä komentoa jäähyn vuoksi {{time}} asti.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ehdotti aikana {{timestamp}}**:\n{{message}}",
 	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Pahoitteluni, mutta en voinut lähettää viestiä kanavalle {{channel}}. Ilmoitathan tästä ylläpitäjälle. 😦",
