@@ -247,50 +247,50 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/builders@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@discordjs/builders@npm:1.5.0"
+"@discordjs/builders@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "@discordjs/builders@npm:1.6.1"
   dependencies:
-    "@discordjs/formatters": ^0.2.0
+    "@discordjs/formatters": ^0.3.0
     "@discordjs/util": ^0.2.0
     "@sapphire/shapeshift": ^3.8.1
-    discord-api-types: ^0.37.35
+    discord-api-types: ^0.37.37
     fast-deep-equal: ^3.1.3
     ts-mixer: ^6.0.3
     tslib: ^2.5.0
-  checksum: 054bf380879412f19ae2ead6731fdce91ff3d3e91c93fa6c689392bffe75748c68ecb9fcd96e5d6119f8b793a485f5a5d4da943c8fdd8048827226755e3f048c
+  checksum: 057b5585d17e6273d99aa4cb356ca845d54785d95c0af05418f30eb933cf0b80043f7941effe7a593142c6817f47b893c5a973dfd95f3db24e0570666781e2d9
   languageName: node
   linkType: hard
 
-"@discordjs/collection@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@discordjs/collection@npm:1.4.0"
-  checksum: fb6da43b3df8eeade104490a024918cb58690db58ef8bdc2e2812ffee7e166c9baae0c244306a8187179ffa17cab679dcd50ea7fde9bf137c76275a608acd6b3
+"@discordjs/collection@npm:^1.4.0, @discordjs/collection@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@discordjs/collection@npm:1.5.0"
+  checksum: 072043743c5e5ef99033f1c227fd92f437a0665b8f0a5bfa26bacc6610963d03b54c45da0e0116ce30e4612efc52b2db0a0827f79091a135409237722db5400a
   languageName: node
   linkType: hard
 
-"@discordjs/formatters@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@discordjs/formatters@npm:0.2.0"
+"@discordjs/formatters@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@discordjs/formatters@npm:0.3.0"
   dependencies:
-    discord-api-types: ^0.37.35
-  checksum: cc721d1904501910288b48ae4c20df5fb1beff78f2463f780463f7fa7efe661bb739e324fb9e8b2c09aded3ce7cfcc2f58cd3793c0d61da96f87c50f666bf998
+    discord-api-types: ^0.37.37
+  checksum: cdf0d842f268a1b8c072522f58b0c77853e825964acb1e3b189f53d740d0d4ee4ed3b4be177ce4ab30a665bc1e6953348ab0d29b5fd52a0651e74eb63ad4be6d
   languageName: node
   linkType: hard
 
-"@discordjs/rest@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@discordjs/rest@npm:1.6.0"
+"@discordjs/rest@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@discordjs/rest@npm:1.7.0"
   dependencies:
-    "@discordjs/collection": ^1.4.0
+    "@discordjs/collection": ^1.5.0
     "@discordjs/util": ^0.2.0
     "@sapphire/async-queue": ^1.5.0
     "@sapphire/snowflake": ^3.4.0
-    discord-api-types: ^0.37.35
+    discord-api-types: ^0.37.37
     file-type: ^18.2.1
     tslib: ^2.5.0
-    undici: ^5.20.0
-  checksum: 4370919696401b052602b34bc0a421811efb1360eed7f904206e20216cba052a63bf08e0307222523f8c5d8066b08264ae95a8037b2e86969cffba68e18aaefe
+    undici: ^5.21.0
+  checksum: 5d52ae02b77abafbcd70c650a9760625a7afab37875a7fc85404e1053e12745aeca819747ad4dbbaab78b1df0a33a050b980b1e91ba356c496bb0ea93d32e10f
   languageName: node
   linkType: hard
 
@@ -691,71 +691,71 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/tracing@npm:7.45.0":
-  version: 7.45.0
-  resolution: "@sentry-internal/tracing@npm:7.45.0"
+"@sentry-internal/tracing@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry-internal/tracing@npm:7.47.0"
   dependencies:
-    "@sentry/core": 7.45.0
-    "@sentry/types": 7.45.0
-    "@sentry/utils": 7.45.0
+    "@sentry/core": 7.47.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     tslib: ^1.9.3
-  checksum: 64cb8ddca80d4c3a8b7d7fab8ebfc38e5eeb56753b72fc7fbcc6003a190f0492fe89075f7e7d7a2621f4746c52613c79eec2695368cc44da134b0be42bd0f71b
+  checksum: 46cb6cdd5b64841acd7b38cdde156e15dcf2c225ccd36219ea5796b7ebad34a3c0db1f4c7545e1fec1a1e5897d4368003b1101845404bcd1c27a21c09784cbd3
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.45.0":
-  version: 7.45.0
-  resolution: "@sentry/core@npm:7.45.0"
+"@sentry/core@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/core@npm:7.47.0"
   dependencies:
-    "@sentry/types": 7.45.0
-    "@sentry/utils": 7.45.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     tslib: ^1.9.3
-  checksum: c0453edf833b7ed86bcde6d341090bd3f4cfdb08b50a5e96cbe9d240d3955ea90c4af5550af37f95e8b987c13fa178cb004dd7bea9071145e63ce0dc7c635ec6
+  checksum: 1cfd41020e5707c7e142dbb7c99118a264bcc5fa64fc06f1e51d8c6166dea0a50fd5896ce5287a4805d088257dc3757cc53ab4f5092166cd759ffeeea1cd8d2e
   languageName: node
   linkType: hard
 
-"@sentry/integrations@npm:^7.45.0":
-  version: 7.45.0
-  resolution: "@sentry/integrations@npm:7.45.0"
+"@sentry/integrations@npm:^7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/integrations@npm:7.47.0"
   dependencies:
-    "@sentry/types": 7.45.0
-    "@sentry/utils": 7.45.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     localforage: ^1.8.1
     tslib: ^1.9.3
-  checksum: a7a0ffb98f5568ff5ae22f4dc2b8d1a15624b124c260fb546c76c967737e25e8481bb039008d8ed13c3c9165971d12717827252a0d9129bd49e4c94090f65cf3
+  checksum: 227886380e14f23c58d1d33c782024aaddfbc5c185e5b3058b32fcb612d3abe7094ccbd585805ecc366c55d39dc9b4593a8c07e7bf6159c5ccea2e81406f8ad9
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^7.45.0":
-  version: 7.45.0
-  resolution: "@sentry/node@npm:7.45.0"
+"@sentry/node@npm:^7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/node@npm:7.47.0"
   dependencies:
-    "@sentry-internal/tracing": 7.45.0
-    "@sentry/core": 7.45.0
-    "@sentry/types": 7.45.0
-    "@sentry/utils": 7.45.0
+    "@sentry-internal/tracing": 7.47.0
+    "@sentry/core": 7.47.0
+    "@sentry/types": 7.47.0
+    "@sentry/utils": 7.47.0
     cookie: ^0.4.1
     https-proxy-agent: ^5.0.0
     lru_map: ^0.3.3
     tslib: ^1.9.3
-  checksum: cbe52b335419271d1e0926b28c476c590b9fb576914ed56af7b123f061d219b093a2bf1bcc9ac4131af891beb9286f5084e13575cfede9947dfa229d47a23065
+  checksum: 485a3267313cf4475986a4406e213a5139f03a57be4336d088e7d9004f647ea3ff28b13eab4e49e2c0d208dbf5a9ad4188b201f60f094354bcfd0b4c9a07f5d8
   languageName: node
   linkType: hard
 
-"@sentry/types@npm:7.45.0":
-  version: 7.45.0
-  resolution: "@sentry/types@npm:7.45.0"
-  checksum: feb7de474f486f52f8f2594dc0559872c51c770b8511d90383eb4aadac8dffc2ddfb8fd7747cfd1486e629eba47bc7c9fae72fdad28cddaaeaf8dd1a52fabdfa
+"@sentry/types@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/types@npm:7.47.0"
+  checksum: 42f1f58bebb2689d609ebc614a04462cb15f749d304dcadc2c93b851ecb88a20d59853b01f22b91f37c7cfb41ed7d0992843043ada7a7592ea1043191092e350
   languageName: node
   linkType: hard
 
-"@sentry/utils@npm:7.45.0":
-  version: 7.45.0
-  resolution: "@sentry/utils@npm:7.45.0"
+"@sentry/utils@npm:7.47.0":
+  version: 7.47.0
+  resolution: "@sentry/utils@npm:7.47.0"
   dependencies:
-    "@sentry/types": 7.45.0
+    "@sentry/types": 7.47.0
     tslib: ^1.9.3
-  checksum: 5d4d2ab4fe85d7231a35859cbeecc3d0c95368c818f15d8d6332f8c57604a67c0e12d5a81c23e5dcb1c53b4e44faf753028592792eb98e4af1440ee375b2292e
+  checksum: d37d6299ef28c7ce32b1af7644f59ab5a5fd7a8155e97b3758c87d11a4b2cb406d4e3d2b260afcd200dadef99582f92b08ef6b89543f11611d2e034b3940d7b3
   languageName: node
   linkType: hard
 
@@ -768,33 +768,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/http-framework-i18n@npm:^0.6.1":
-  version: 0.6.1
-  resolution: "@skyra/http-framework-i18n@npm:0.6.1"
+"@skyra/http-framework-i18n@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@skyra/http-framework-i18n@npm:0.6.2"
   dependencies:
-    "@discordjs/collection": ^1.4.0
+    "@discordjs/collection": ^1.5.0
     "@sapphire/utilities": ^3.11.0
     "@skyra/i18next-backend": ^2.0.2
-    discord-api-types: ^0.37.37
-    i18next: ^22.4.13
+    discord-api-types: ^0.37.38
+    i18next: ^22.4.14
     tslib: ^2.5.0
-  checksum: e4340618c7b2341891d1d94dd2bf7e1fd73ca6fade81adb4aa0ef9b82831792f37d81e2ce692c0526a31bbc21f7959b9e0a8f810f6b2201b31331aa01bcd52f7
+  checksum: 7341bbdb7c60db9424c9ddfd6c327890d09be2999884fbf6fda2a507f525b2c7ad00ae7fef16cae0dc03d4f1a9c2a2efc15eccb4681ab02fce9842b8c87608a4
   languageName: node
   linkType: hard
 
-"@skyra/http-framework@npm:^0.15.4":
-  version: 0.15.4
-  resolution: "@skyra/http-framework@npm:0.15.4"
+"@skyra/http-framework@npm:^0.15.5":
+  version: 0.15.5
+  resolution: "@skyra/http-framework@npm:0.15.5"
   dependencies:
-    "@discordjs/builders": ^1.5.0
-    "@discordjs/collection": ^1.4.0
-    "@discordjs/rest": ^1.6.0
+    "@discordjs/builders": ^1.6.1
+    "@discordjs/collection": ^1.5.0
+    "@discordjs/rest": ^1.7.0
     "@sapphire/pieces": ^3.6.1
     "@sapphire/result": ^2.6.0
     "@sapphire/utilities": ^3.11.0
-    "@vladfrangu/async_event_emitter": ^2.1.4
-    discord-api-types: ^0.37.37
-  checksum: 54f8c6b3170dfd8875bffc74ae988d2076058f1edd6dc3c1d23334a3762c12c925e333f07f03bcac497ceb6de15d8ee9cca9c6bfff28d46fdef2a19c29c4d373
+    "@vladfrangu/async_event_emitter": ^2.2.1
+    discord-api-types: ^0.37.38
+  checksum: 40d52eee3458d3ed1780860f0daf4935986c61a28022d7d125e6f9c0828aeb089c8feef7ca3181affb23a69fa18d35ffcea1302db98c9013635b78c79a4eafdf
   languageName: node
   linkType: hard
 
@@ -813,8 +813,8 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.5.1
     "@commitlint/config-conventional": ^17.4.4
-    "@discordjs/builders": ^1.5.0
-    "@discordjs/collection": ^1.4.0
+    "@discordjs/builders": ^1.6.1
+    "@discordjs/collection": ^1.5.0
     "@prisma/client": ^4.12.0
     "@sapphire/async-queue": ^1.5.0
     "@sapphire/duration": ^1.1.0
@@ -824,17 +824,17 @@ __metadata:
     "@sapphire/ts-config": ^3.3.4
     "@sapphire/utilities": ^3.11.0
     "@skyra/env-utilities": ^1.1.0
-    "@skyra/http-framework": ^0.15.4
-    "@skyra/http-framework-i18n": ^0.6.1
+    "@skyra/http-framework": ^0.15.5
+    "@skyra/http-framework-i18n": ^0.6.2
     "@skyra/logger": ^1.0.1
-    "@skyra/shared-http-pieces": ^0.6.1
+    "@skyra/shared-http-pieces": ^0.6.2
     "@skyra/start-banner": ^1.0.2
     "@types/gradient-string": ^1.1.2
     "@types/node": ^18.15.11
     "@typescript-eslint/eslint-plugin": ^5.57.1
     "@typescript-eslint/parser": ^5.57.1
     cz-conventional-changelog: ^3.3.0
-    discord-api-types: ^0.37.37
+    discord-api-types: ^0.37.38
     eslint: ^8.38.0
     eslint-config-prettier: ^8.8.0
     eslint-plugin-prettier: ^4.2.1
@@ -860,19 +860,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/shared-http-pieces@npm:^0.6.1":
-  version: 0.6.1
-  resolution: "@skyra/shared-http-pieces@npm:0.6.1"
+"@skyra/shared-http-pieces@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@skyra/shared-http-pieces@npm:0.6.2"
   dependencies:
-    "@discordjs/builders": ^1.5.0
-    "@discordjs/collection": ^1.4.0
-    "@sentry/integrations": ^7.45.0
-    "@sentry/node": ^7.45.0
-    "@skyra/http-framework": ^0.15.4
-    "@skyra/http-framework-i18n": ^0.6.1
-    discord-api-types: ^0.37.37
+    "@discordjs/builders": ^1.6.1
+    "@discordjs/collection": ^1.5.0
+    "@sentry/integrations": ^7.47.0
+    "@sentry/node": ^7.47.0
+    "@skyra/http-framework": ^0.15.5
+    "@skyra/http-framework-i18n": ^0.6.2
+    discord-api-types: ^0.37.38
     tslib: ^2.5.0
-  checksum: c5bb0856bd4a1157716509f7679ac005829093bc72794bfb7c7ee306d68077ce4fc66cb80fcbab6184686afca05aa0c14e140b2e0f580a862cd6bc0dd0ad0436
+  checksum: 8fe38f3ed33278677c5a08863742db8e12eff096578dfce81b1709502b0637530a0d8f4f7c68d002a5e83ff46bbdbd5cc614a708cef1ed3bd6ff8944de9c6abb
   languageName: node
   linkType: hard
 
@@ -1097,10 +1097,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vladfrangu/async_event_emitter@npm:^2.1.4":
-  version: 2.1.4
-  resolution: "@vladfrangu/async_event_emitter@npm:2.1.4"
-  checksum: 604d228a4fa46c0686d4377c2ca63035aa266382133f351f098d85782df4e451ebba2c528a7d54aa955c7fdb824a642a7ec63d5a85cf46f6cbaea46ea56a0959
+"@vladfrangu/async_event_emitter@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@vladfrangu/async_event_emitter@npm:2.2.1"
+  checksum: d56c6c9dc0588f5632e5d6ed373fcbcdf5fe6de6cf51dadea86899701fcf53631f41f7473b1f5d9da300bbca20ab9cd192c5c436bb77ce9df9aa60ff59a7b0f2
   languageName: node
   linkType: hard
 
@@ -1806,10 +1806,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.35, discord-api-types@npm:^0.37.37":
-  version: 0.37.37
-  resolution: "discord-api-types@npm:0.37.37"
-  checksum: 6b680f52c19aebf0dd1a714ef109a55bfe6786d10fd410f7bf1ee9244041f8b10ba81a988799a832382b34b2ae5ef3027ee31f6d1cf4555f1647252635c6eaaa
+"discord-api-types@npm:^0.37.37, discord-api-types@npm:^0.37.38":
+  version: 0.37.38
+  resolution: "discord-api-types@npm:0.37.38"
+  checksum: 58972778639234307ae6c0ce5b841a8a3a29c38116aa9f96051e65a88f6bbc4f1df671c5a985712d816764507308f8ebc97b1c98dad8de7bf756e05819db84ca
   languageName: node
   linkType: hard
 
@@ -2584,12 +2584,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^22.4.13":
-  version: 22.4.13
-  resolution: "i18next@npm:22.4.13"
+"i18next@npm:^22.4.14":
+  version: 22.4.14
+  resolution: "i18next@npm:22.4.14"
   dependencies:
     "@babel/runtime": ^7.20.6
-  checksum: a40ca4ce749854a806a01e3e60ee492f2911b1f7acb6ed338bb023211259ef8c39e914734d10197d3279941459767897ceb1989c8e24cd73730fdf211e079037
+  checksum: 963b70c7e1fee9666ef4d9ea87a63d0c9483007e2a0ea9520356e43a2cd550f3eb1cab24c57a102f3e84fd737fdff41bafc953dafc3bd6589dc9ea52ddb49905
   languageName: node
   linkType: hard
 
@@ -4451,12 +4451,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.20.0":
-  version: 5.21.0
-  resolution: "undici@npm:5.21.0"
+"undici@npm:^5.21.0":
+  version: 5.21.2
+  resolution: "undici@npm:5.21.2"
   dependencies:
     busboy: ^1.6.0
-  checksum: 013d5fd503b631d607942c511c2ab3f3fa78ebcab302acab998b43176b4815503ec15ed9752c5a47918b3bff8a0137768001d3eb57625b2bb6f6d30d8a794d6c
+  checksum: baceaa9e610966631e86ad2869b657556dd465438eed55e8079cec2a306ecbeecfde2d6e37e43baf96a4c59588ebef50476131e96e018dcc0a7f5db7e6a06c85
   languageName: node
   linkType: hard
 

@@ -257,7 +257,7 @@ function useMessageUpdateContent(interaction: Interactions.Any, message: APIMess
 }
 
 async function useMessageUpdateEmbed(interaction: Interactions.Any, message: APIMessage, settings: Guild, action: Status, input: string) {
-	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel_id));
+	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel?.id));
 
 	const { user } = interaction;
 	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
