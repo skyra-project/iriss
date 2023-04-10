@@ -122,7 +122,7 @@ export class Handler extends InteractionHandler {
 			...interaction.message.components!.slice(1)
 		];
 
-		const patchResult = await Result.fromAsync(ChannelId.MessageId.patch(interaction.channel_id, interaction.message.id, { components }));
+		const patchResult = await Result.fromAsync(ChannelId.MessageId.patch(interaction.channel.id, interaction.message.id, { components }));
 
 		const t = getSupportedUserLanguageT(interaction);
 		const key = patchResult.match({
