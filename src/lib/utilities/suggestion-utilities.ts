@@ -10,7 +10,7 @@ import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { Result } from '@sapphire/result';
-import { container, Interactions } from '@skyra/http-framework';
+import { container, type Interactions } from '@skyra/http-framework';
 import { resolveKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
 import { ChannelType, type APIMessage } from 'discord-api-types/v10';
 import slug from 'limax';
