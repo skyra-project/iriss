@@ -5,8 +5,14 @@ import type { Guild } from '@prisma/client';
 import { Duration, Time } from '@sapphire/duration';
 import { err, ok, Result } from '@sapphire/result';
 import { isNullish, isNullishOrZero } from '@sapphire/utilities';
-import { Command, RegisterCommand, RegisterSubCommand, TransformedArguments } from '@skyra/http-framework';
-import { applyLocalizedBuilder, createSelectMenuChoiceName, getSupportedUserLanguageT, resolveUserKey, TFunction } from '@skyra/http-framework-i18n';
+import { Command, RegisterCommand, RegisterSubCommand, type TransformedArguments } from '@skyra/http-framework';
+import {
+	applyLocalizedBuilder,
+	createSelectMenuChoiceName,
+	getSupportedUserLanguageT,
+	resolveUserKey,
+	type TFunction
+} from '@skyra/http-framework-i18n';
 import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>

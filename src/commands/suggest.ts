@@ -1,11 +1,11 @@
 import { EmptyMentions, SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import { Id, makeCustomId, makeIntegerString, Status } from '#lib/utilities/id-creator';
+import { Id, Status, makeCustomId, makeIntegerString } from '#lib/utilities/id-creator';
 import { ChannelId } from '#lib/utilities/rest';
 import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
 import { millisecondsToSeconds } from '#lib/utilities/time';
 import { displayAvatarURL } from '#lib/utilities/user';
-import { channelMention, EmbedBuilder, time, TimestampStyles, userMention } from '@discordjs/builders';
+import { EmbedBuilder, TimestampStyles, channelMention, time, userMention } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
@@ -20,7 +20,7 @@ import {
 	resolveKey,
 	resolveUserKey
 } from '@skyra/http-framework-i18n';
-import { APIUser, ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits, type APIMessage } from 'discord-api-types/v10';
+import { ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits, type APIMessage, type APIUser } from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
