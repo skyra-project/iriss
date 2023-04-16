@@ -1,19 +1,247 @@
+import { EmptyMentions, SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import type { Snowflake } from '#lib/types/discord.d.ts';
 import { ensure } from '#lib/utilities/assertions';
-import { getColor, Status } from '#lib/utilities/id-creator';
+import { Id, Status, getColor, makeCustomId, makeIntegerString } from '#lib/utilities/id-creator';
 import { getGuildId, getMessage } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
-import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
+import { millisecondsToSeconds } from '#lib/utilities/time';
+import { displayAvatarURL } from '#lib/utilities/user';
+import { EmbedBuilder, TimestampStyles, bold, channelMention, hyperlink, inlineCode, time, userMention } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
-import { err, ok, Result } from '@sapphire/result';
-import { container, type Interactions } from '@skyra/http-framework';
-import { resolveKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
-import { ChannelType, type APIMessage, type APIThreadChannel } from 'discord-api-types/v10';
+import { AsyncQueue } from '@sapphire/async-queue';
+import { Result, err, ok } from '@sapphire/result';
+import { isNullishOrZero } from '@sapphire/utilities';
+import {
+	ChatInputCommandInteraction,
+	MessageContextMenuCommandInteraction,
+	ModalSubmitInteraction,
+	container,
+	type Interaction,
+	type Interactions
+} from '@skyra/http-framework';
+import {
+	getSupportedLanguageT,
+	getSupportedUserLanguageT,
+	resolveKey,
+	resolveUserKey,
+	type TFunction,
+	type TypedT
+} from '@skyra/http-framework-i18n';
+import {
+	ButtonStyle,
+	ChannelType,
+	ComponentType,
+	MessageFlags,
+	type APIMessage,
+	type APIThreadChannel,
+	type APIUser,
+	type RESTPostAPIChannelMessageJSONBody
+} from 'discord-api-types/v10';
 import slug from 'limax';
+
+const suggestionQueues = new Collection<bigint, AsyncQueue>();
+export async function createSuggestion(
+	interaction: ChatInputCommandInteraction | ModalSubmitInteraction | MessageContextMenuCommandInteraction,
+	user: MessageUserData,
+	rawInput: string
+) {
+	const guildId = BigInt(interaction.guild_id!);
+	const settings = await container.prisma.guild.findUnique({ where: { id: guildId } });
+	if (!settings?.channel) {
+		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewNotConfigured);
+		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
+	}
+
+	const response = await interaction.defer({ flags: MessageFlags.Ephemeral });
+
+	const queue = suggestionQueues.ensure(guildId, () => new AsyncQueue());
+	await queue.wait();
+
+	let id: number;
+	let message: APIMessage;
+	try {
+		const cooldown = await checkOrSetRateLimit(settings, interaction.user.id);
+		if (cooldown !== null) {
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.Cooldown, {
+				time: time(millisecondsToSeconds(Date.now() + cooldown), TimestampStyles.LongTime)
+			});
+			return response.update({ content });
+		}
+
+		const count = await useCount(guildId);
+		id = count + 1;
+
+		const input = settings.embed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
+		const body = makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
+
+		const postResult = await Result.fromAsync(container.api.channels.createMessage(settings.channel.toString(), body));
+		if (postResult.isErr()) {
+			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewFailedToSend, {
+				channel: channelMention(settings.channel.toString())
+			});
+			return response.update({ content });
+		}
+
+		message = postResult.unwrap();
+		await container.prisma.suggestion.create({
+			data: { id, guildId, authorId: BigInt(user.id), messageId: BigInt(message.id) },
+			select: null
+		});
+
+		addCount(guildId);
+	} finally {
+		queue.shift();
+	}
+
+	const t = getSupportedUserLanguageT(interaction);
+	const errors: string[] = [];
+
+	if (settings.reactions.length) {
+		const result = await useReactions(t, settings, message);
+		result.inspectErr((error) => errors.push(error));
+	}
+
+	if (settings.autoThread) {
+		const result = await useThread(interaction, id, { message, input: rawInput });
+		result.inspect((value) => value.memberAddResult.inspectErr((error) => errors.push(t(error)))).inspectErr((error) => errors.push(t(error)));
+	}
+
+	const header = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewSuccess, { id });
+	const details = errors.length === 0 ? '' : `\n\n- ${errors.join('\n- ')}`;
+
+	const content = header + details;
+	return response.update({ content });
+}
+
+export function getUserData(user: APIUser) {
+	return {
+		id: user.id,
+		username: user.username,
+		discriminator: user.discriminator,
+		mention: userMention(user.id),
+		avatar: displayAvatarURL(user)
+	} satisfies MessageUserData;
+}
+
+export type MessageData = LanguageKeys.Commands.Suggest.MessageData;
+export type MessageUserData = MessageData['user'];
+
+export async function checkOrSetRateLimit(settings: Guild, userId: string) {
+	// If there is no cooldown, skip:
+	if (isNullishOrZero(settings.cooldown)) return null;
+
+	const key = `i:c:${settings.id}:${userId}`;
+	const cooldown = await container.redis.pttl(key);
+
+	// If the maximum cooldown changed between calls, trim to maximum:
+	if (cooldown > settings.cooldown) {
+		// Set the new expire, if the operation was successful (1),
+		// return the limit, otherwise fallback to new cooldown:
+		const result = await container.redis.pexpire(key, settings.cooldown);
+		if (result === 1) return settings.cooldown;
+	} else if (cooldown > 0) {
+		// Within settings limit and 0 — positive cooldown, return it:
+		return cooldown;
+	}
+
+	// Set a TTL-only key and return null:
+	await container.redis.set(key, Buffer.allocUnsafe(0), 'PX', settings.cooldown);
+	return null;
+}
+
+function makeMessage(interaction: Interaction, settings: Guild, data: MessageData): RESTPostAPIChannelMessageJSONBody {
+	const resolved = settings.embed ? makeEmbedMessage(interaction, data) : makeContentMessage(interaction, data);
+	return { ...resolved, components: makeComponents(interaction, settings, data), allowed_mentions: EmptyMentions };
+}
+
+function makeComponents(interaction: Interaction, settings: Guild, data: MessageData) {
+	type MessageComponent = NonNullable<APIMessage['components']>[number];
+
+	const components: MessageComponent[] = [];
+	if (!settings.buttons) return components;
+
+	const id = makeIntegerString(data.id);
+	const t = getSupportedLanguageT(interaction);
+	const manageRow: MessageComponent = {
+		type: ComponentType.ActionRow,
+		components: [
+			{
+				type: ComponentType.Button,
+				custom_id: makeCustomId(Id.Suggestions, 'archive', id),
+				style: ButtonStyle.Danger,
+				label: t(LanguageKeys.Commands.Suggest.ComponentsArchive)
+			}
+		]
+	};
+	if (!settings.autoThread) {
+		manageRow.components.unshift({
+			type: ComponentType.Button,
+			custom_id: makeCustomId(Id.Suggestions, 'thread', id),
+			style: ButtonStyle.Primary,
+			label: t(LanguageKeys.Commands.Suggest.ComponentsCreateThread)
+		});
+	}
+
+	components.push(manageRow);
+
+	if (settings.compact) {
+		manageRow.components.push(
+			{
+				type: ComponentType.Button,
+				custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Accept),
+				style: ButtonStyle.Success,
+				label: t(LanguageKeys.Commands.Suggest.ComponentsAccept)
+			},
+			{
+				type: ComponentType.Button,
+				custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Consider),
+				style: ButtonStyle.Secondary,
+				label: t(LanguageKeys.Commands.Suggest.ComponentsConsider)
+			},
+			{
+				type: ComponentType.Button,
+				custom_id: makeCustomId(Id.Suggestions, 'resolve', id, Status.Deny),
+				style: ButtonStyle.Danger,
+				label: t(LanguageKeys.Commands.Suggest.ComponentsDeny)
+			}
+		);
+	} else {
+		components.push({
+			type: ComponentType.ActionRow,
+			components: [
+				{
+					type: ComponentType.StringSelect,
+					custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
+					options: [
+						{ label: t(LanguageKeys.Commands.Suggest.ComponentsAccept), value: Status.Accept },
+						{ label: t(LanguageKeys.Commands.Suggest.ComponentsConsider), value: Status.Consider },
+						{ label: t(LanguageKeys.Commands.Suggest.ComponentsDeny), value: Status.Deny }
+					]
+				}
+			]
+		});
+	}
+
+	return components;
+}
+
+function makeEmbedMessage(interaction: Interaction, data: MessageData): RESTPostAPIChannelMessageJSONBody {
+	const name = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageEmbedTitle, data);
+	const embed = new EmbedBuilder()
+		.setColor(SuggestionStatusColors.Unresolved)
+		.setAuthor({ name, iconURL: data.user.avatar })
+		.setDescription(data.message);
+	return { embeds: [embed.toJSON()] };
+}
+
+function makeContentMessage(interaction: Interaction, data: MessageData): RESTPostAPIChannelMessageJSONBody {
+	const content = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageContent, data);
+	return { content };
+}
 
 const countCache = new Collection<bigint, number>();
 const promiseCountCache = new Collection<bigint, Promise<number>>();
