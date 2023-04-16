@@ -11,7 +11,7 @@ import { MessageFlags } from 'discord-api-types/v10';
 type IdParserResult = Values<Get<Id.SuggestionsModal>>;
 
 export class Handler extends InteractionHandler {
-	public async run(interaction: InteractionHandler.ModalInteraction, [action, idString]: IdParserResult) {
+	public async run(interaction: InteractionHandler.ModalInteraction, [action, idString]: IdParserResult): Promise<unknown> {
 		const body = await useMessageUpdate(interaction, interaction.message!, action, interaction.data.components![0].components[0].value);
 		await interaction.update(body);
 

@@ -1,5 +1,5 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
-import type { Snowflake } from '#lib/types/discord';
+import type { Snowflake } from '#lib/types/discord.d.ts';
 import { ensure } from '#lib/utilities/assertions';
 import { getColor, Status } from '#lib/utilities/id-creator';
 import { getGuildId, getMessage } from '#lib/utilities/interactions';
@@ -9,10 +9,10 @@ import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/uti
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
-import { Result } from '@sapphire/result';
+import { err, ok, Result } from '@sapphire/result';
 import { container, type Interactions } from '@skyra/http-framework';
 import { resolveKey, type TFunction, type TypedT } from '@skyra/http-framework-i18n';
-import { ChannelType, type APIMessage } from 'discord-api-types/v10';
+import { ChannelType, type APIMessage, type APIThreadChannel } from 'discord-api-types/v10';
 import slug from 'limax';
 
 const countCache = new Collection<bigint, number>();
@@ -54,7 +54,7 @@ const useReactionsOk = [
 
 const useReactionsErr = [ErrorCodes.UnknownEmoji] as const;
 
-export async function useReactions(t: TFunction, settings: Guild, message: APIMessage) {
+export async function useReactions(t: TFunction, settings: Guild, message: APIMessage): Promise<Result<unknown, string>> {
 	const failed: string[] = [];
 	const removed: string[] = [];
 	for (const reaction of settings.reactions) {
@@ -84,13 +84,13 @@ export async function useReactions(t: TFunction, settings: Guild, message: APIMe
 		}
 	}
 
-	if (!failed.length) return Result.ok();
-	if (!removed.length) return Result.err(t(LanguageKeys.Commands.Suggest.ReactionsFailed, { failed }));
+	if (!failed.length) return ok();
+	if (!removed.length) return err(t(LanguageKeys.Commands.Suggest.ReactionsFailed, { failed }));
 
 	const passing = settings.reactions.filter((reaction) => !removed.includes(reaction));
 	await container.prisma.guild.update({ where: { id: settings.id }, data: { reactions: passing }, select: null });
 
-	return Result.err(
+	return err(
 		t(LanguageKeys.Commands.Suggest.ReactionsFailedAndRemoved, {
 			failed,
 			removed
@@ -112,7 +112,11 @@ export function getOriginalContent(message: APIMessage) {
 	return index === -1 ? message.content : message.content.slice(newLine, index);
 }
 
-export async function useThread(interaction: Interactions.Any, id: string | number, options: useThread.Options = {}) {
+export async function useThread(
+	interaction: Interactions.Any,
+	id: string | number,
+	options: useThread.Options = {}
+): Promise<Result<{ thread: APIThreadChannel; memberAddResult: Result<void, TypedT> }, TypedT>> {
 	const message = options.message ?? ensure(getMessage(interaction));
 	const input = options.input ?? getOriginalContent(message);
 
@@ -121,13 +125,13 @@ export async function useThread(interaction: Interactions.Any, id: string | numb
 		container.api.threads.create(message.channel_id, { type: ChannelType.PrivateThread, name }, message.id)
 	);
 
-	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
+	if (threadCreationResult.isErr()) return err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
 
-	const thread = threadCreationResult.unwrap();
+	const thread = threadCreationResult.unwrap() as APIThreadChannel;
 	const result = await Result.fromAsync(container.api.threads.addMember(thread.id, interaction.user.id));
 	const memberAddResult = result.mapErr(() => LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
 
-	return Result.ok({ thread, memberAddResult });
+	return ok({ thread, memberAddResult });
 }
 
 export namespace useThread {
@@ -142,7 +146,7 @@ function removeMaskedHyperlinks(input: string) {
 	return input.replaceAll(maskedLinkRegExp, '$1');
 }
 
-export async function useArchive(interaction: Interactions.Any, options: useArchive.Options = {}) {
+export async function useArchive(interaction: Interactions.Any, options: useArchive.Options = {}): Promise<Result<{ errors: TypedT[] }, TypedT>> {
 	const message = options.message ?? ensure(getMessage(interaction));
 
 	const settings = options.settings ?? ensure(await container.prisma.guild.findUnique({ where: { id: BigInt(getGuildId(interaction)) } }));
@@ -163,8 +167,8 @@ export async function useArchive(interaction: Interactions.Any, options: useArch
 
 	const messageUpdateResult = await Result.fromAsync(container.api.channels.editMessage(channelId, messageId, { components: [] }));
 	return messageUpdateResult.match({
-		ok: () => Result.ok({ errors }),
-		err: () => Result.err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure)
+		ok: () => ok({ errors }),
+		err: () => err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure)
 	});
 }
 

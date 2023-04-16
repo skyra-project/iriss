@@ -41,7 +41,7 @@ type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 )
 export class UserCommand extends Command {
 	private readonly queues = new Collection<bigint, AsyncQueue>();
-	public override chatInputRun(interaction: Command.ChatInputInteraction, options: Options) {
+	public override chatInputRun(interaction: Command.ChatInputInteraction, options: Options): Promise<unknown> {
 		return options.id === undefined
 			? this.handleNew(interaction, this.getUserData(interaction.user), options.suggestion)
 			: this.handleEdit(interaction, options.id, options.suggestion);
@@ -52,7 +52,7 @@ export class UserCommand extends Command {
 			.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
 			.setDMPermission(false)
 	)
-	public messageContextRun(interaction: Command.MessageInteraction, options: TransformedArguments.Message) {
+	public messageContextRun(interaction: Command.MessageInteraction, options: TransformedArguments.Message): Promise<unknown> {
 		const input = options.message.content;
 		if (isNullishOrEmpty(input)) {
 			const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.RePostNoContent);
