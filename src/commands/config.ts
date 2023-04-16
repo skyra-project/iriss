@@ -15,54 +15,28 @@ import {
 } from '@skyra/http-framework-i18n';
 import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
+const Root = LanguageKeys.Commands.Config;
+
 @RegisterCommand((builder) =>
-	applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.RootName, LanguageKeys.Commands.Config.RootDescription)
+	applyLocalizedBuilder(builder, Root.RootName, Root.RootDescription)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
 	@RegisterSubCommand((builder) =>
-		applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.Edit)
-			.addBooleanOption((input) =>
-				applyLocalizedBuilder(
-					input,
-					LanguageKeys.Commands.Config.KeyAutoThread,
-					LanguageKeys.Commands.Config.EditOptionsAutoThreadDescription
-				)
-			)
-			.addBooleanOption((input) =>
-				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyButtons, LanguageKeys.Commands.Config.EditOptionsButtonsDescription)
-			)
+		applyLocalizedBuilder(builder, Root.Edit)
+			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyAutoThread, Root.EditOptionsAutoThreadDescription))
+			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyButtons, Root.EditOptionsButtonsDescription))
 			.addChannelOption((input) =>
-				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyChannel, LanguageKeys.Commands.Config.EditOptionsChannelDescription) //
+				applyLocalizedBuilder(input, Root.KeyChannel, Root.EditOptionsChannelDescription) //
 					.addChannelTypes(ChannelType.GuildText)
 			)
-			.addBooleanOption((input) =>
-				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyCompact, LanguageKeys.Commands.Config.EditOptionsCompactDescription)
-			)
-			.addStringOption((input) =>
-				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyCooldown, LanguageKeys.Commands.Config.EditOptionsCooldownDescription)
-			)
-			.addBooleanOption((input) =>
-				applyLocalizedBuilder(
-					input,
-					LanguageKeys.Commands.Config.KeyDisplayUpdateHistory,
-					LanguageKeys.Commands.Config.EditOptionsDisplayUpdateHistoryDescription
-				)
-			)
-			.addBooleanOption((input) =>
-				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyEmbed, LanguageKeys.Commands.Config.EditOptionsEmbedDescription)
-			)
-			.addStringOption((input) =>
-				applyLocalizedBuilder(input, LanguageKeys.Commands.Config.KeyReactions, LanguageKeys.Commands.Config.EditOptionsReactionsDescription)
-			)
-			.addBooleanOption((input) =>
-				applyLocalizedBuilder(
-					input,
-					LanguageKeys.Commands.Config.KeyRemoveReactions,
-					LanguageKeys.Commands.Config.EditOptionsRemoveReactionsDescription
-				)
-			)
+			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyCompact, Root.EditOptionsCompactDescription))
+			.addStringOption((input) => applyLocalizedBuilder(input, Root.KeyCooldown, Root.EditOptionsCooldownDescription))
+			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyDisplayUpdateHistory, Root.EditOptionsDisplayUpdateHistoryDescription))
+			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyEmbed, Root.EditOptionsEmbedDescription))
+			.addStringOption((input) => applyLocalizedBuilder(input, Root.KeyReactions, Root.EditOptionsReactionsDescription))
+			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyRemoveReactions, Root.EditOptionsRemoveReactionsDescription))
 	)
 	public async runEdit(interaction: Command.ChatInputInteraction, options: EditOptions) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
@@ -93,19 +67,19 @@ export class UserCommand extends Command {
 	}
 
 	@RegisterSubCommand((builder) =>
-		applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.Reset).addStringOption((input) =>
-			applyLocalizedBuilder(input, LanguageKeys.Commands.Config.ResetOptionsKey)
+		applyLocalizedBuilder(builder, Root.Reset).addStringOption((input) =>
+			applyLocalizedBuilder(input, Root.ResetOptionsKey)
 				.addChoices(
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.ResetOptionsKeyChoicesAll, { value: 'all' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyAutoThread, { value: 'auto-thread' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyButtons, { value: 'buttons' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyChannel, { value: 'channel' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyCompact, { value: 'compact' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyCooldown, { value: 'cooldown' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyDisplayUpdateHistory, { value: 'display-update-history' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyEmbed, { value: 'embed' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyReactions, { value: 'reactions' }),
-					createSelectMenuChoiceName(LanguageKeys.Commands.Config.KeyRemoveReactions, { value: 'remove-reactions' })
+					createSelectMenuChoiceName(Root.ResetOptionsKeyChoicesAll, { value: 'all' }),
+					createSelectMenuChoiceName(Root.KeyAutoThread, { value: 'auto-thread' }),
+					createSelectMenuChoiceName(Root.KeyButtons, { value: 'buttons' }),
+					createSelectMenuChoiceName(Root.KeyChannel, { value: 'channel' }),
+					createSelectMenuChoiceName(Root.KeyCompact, { value: 'compact' }),
+					createSelectMenuChoiceName(Root.KeyCooldown, { value: 'cooldown' }),
+					createSelectMenuChoiceName(Root.KeyDisplayUpdateHistory, { value: 'display-update-history' }),
+					createSelectMenuChoiceName(Root.KeyEmbed, { value: 'embed' }),
+					createSelectMenuChoiceName(Root.KeyReactions, { value: 'reactions' }),
+					createSelectMenuChoiceName(Root.KeyRemoveReactions, { value: 'remove-reactions' })
 				)
 				.setRequired(true)
 		)
@@ -147,7 +121,7 @@ export class UserCommand extends Command {
 		}
 	}
 
-	@RegisterSubCommand((builder) => applyLocalizedBuilder(builder, LanguageKeys.Commands.Config.View))
+	@RegisterSubCommand((builder) => applyLocalizedBuilder(builder, Root.View))
 	public async runView(interaction: Command.ChatInputInteraction) {
 		const id = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
@@ -173,7 +147,7 @@ export class UserCommand extends Command {
 			? settings.reactions.map((reaction) => getTextFormat(reaction as SerializedEmoji)).join(' ')
 			: inlineCode(t(LanguageKeys.Shared.None));
 
-		return t(LanguageKeys.Commands.Config.ViewContent, {
+		return t(Root.ViewContent, {
 			channel,
 			autoThread,
 			buttons,
@@ -206,10 +180,10 @@ export class UserCommand extends Command {
 		);
 
 		const content = result.match({
-			ok: () => resolveUserKey(interaction, LanguageKeys.Commands.Config.EditSuccess),
+			ok: () => resolveUserKey(interaction, Root.EditSuccess),
 			err: (error) => {
 				this.container.logger.error(error);
-				return resolveUserKey(interaction, LanguageKeys.Commands.Config.EditFailure);
+				return resolveUserKey(interaction, Root.EditFailure);
 			}
 		});
 
@@ -217,16 +191,16 @@ export class UserCommand extends Command {
 	}
 
 	private parseReactionsString(interaction: Command.ChatInputInteraction, input: string) {
-		const reactions = input.split(' ');
+		const reactions = input.split(UserCommand.CooldownSeparator);
 		if (reactions.length > 3) {
-			return Result.err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidAmount));
+			return Result.err(resolveUserKey(interaction, Root.EditReactionsInvalidAmount));
 		}
 
 		const entries: string[] = [];
 		for (const reaction of reactions) {
 			const parsed = parse(reaction);
 			if (parsed === null) {
-				return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditReactionsInvalidEmoji, { value: reaction }));
+				return err(resolveUserKey(interaction, Root.EditReactionsInvalidEmoji, { value: reaction }));
 			}
 
 			entries.push(parsed);
@@ -238,19 +212,21 @@ export class UserCommand extends Command {
 	private parseCooldownString(interaction: Command.ChatInputInteraction, input: string) {
 		const { offset } = new Duration(input);
 		if (!Number.isInteger(offset)) {
-			return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditCooldownInvalidDuration, { value: input }));
+			return err(resolveUserKey(interaction, Root.EditCooldownInvalidDuration, { value: input }));
 		}
-		if (offset < Time.Second) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditCooldownDurationTooShort));
-		if (offset > Time.Hour * 6) return err(resolveUserKey(interaction, LanguageKeys.Commands.Config.EditCooldownDurationTooLong));
+		if (offset < Time.Second) return err(resolveUserKey(interaction, Root.EditCooldownDurationTooShort));
+		if (offset > Time.Hour * 6) return err(resolveUserKey(interaction, Root.EditCooldownDurationTooLong));
 
 		return ok(offset);
 	}
 
-	private static CooldownUnits = [
+	private static readonly CooldownUnits = [
 		[Time.Hour, 'hour'],
 		[Time.Minute, 'minute'],
 		[Time.Second, 'second']
 	] as const satisfies readonly (readonly [Time, string])[];
+
+	private static readonly CooldownSeparator = /\s+/;
 }
 
 interface EditOptions {
