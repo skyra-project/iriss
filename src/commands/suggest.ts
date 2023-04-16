@@ -1,7 +1,6 @@
 import { EmptyMentions, SuggestionStatusColors } from '#lib/common/constants';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { Id, Status, makeCustomId, makeIntegerString } from '#lib/utilities/id-creator';
-import { ChannelId } from '#lib/utilities/rest';
 import { addCount, useCount, useEmbedContent, usePlainContent, useReactions, useThread } from '#lib/utilities/suggestion-utilities';
 import { millisecondsToSeconds } from '#lib/utilities/time';
 import { displayAvatarURL } from '#lib/utilities/user';
@@ -20,7 +19,15 @@ import {
 	resolveKey,
 	resolveUserKey
 } from '@skyra/http-framework-i18n';
-import { ButtonStyle, ComponentType, MessageFlags, PermissionFlagsBits, type APIMessage, type APIUser } from 'discord-api-types/v10';
+import {
+	ButtonStyle,
+	ComponentType,
+	MessageFlags,
+	PermissionFlagsBits,
+	type APIMessage,
+	type APIUser,
+	type RESTPostAPIChannelMessageJSONBody
+} from 'discord-api-types/v10';
 
 type MessageData = LanguageKeys.Commands.Suggest.MessageData;
 
@@ -87,7 +94,7 @@ export class UserCommand extends Command {
 			const input = settings.embed ? await useEmbedContent(rawInput, guildId, settings.channel, count) : usePlainContent(rawInput);
 			const body = this.makeMessage(interaction, settings, { id, message: input, timestamp: time(), user });
 
-			const postResult = await Result.fromAsync(ChannelId.Messages.post(settings.channel, body));
+			const postResult = await Result.fromAsync(this.container.api.channels.createMessage(settings.channel.toString(), body));
 			if (postResult.isErr()) {
 				const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.NewFailedToSend, {
 					channel: channelMention(settings.channel.toString())
@@ -138,13 +145,13 @@ export class UserCommand extends Command {
 		} satisfies MessageUserData;
 	}
 
-	private makeMessage(interaction: Interaction, settings: Guild, data: MessageData): ChannelId.Messages.post.Body {
+	private makeMessage(interaction: Interaction, settings: Guild, data: MessageData): RESTPostAPIChannelMessageJSONBody {
 		const resolved = settings.embed ? this.makeEmbedMessage(interaction, data) : this.makeContentMessage(interaction, data);
 		return { ...resolved, components: this.makeComponents(interaction, settings, data), allowed_mentions: EmptyMentions };
 	}
 
 	private makeComponents(interaction: Interaction, settings: Guild, data: MessageData) {
-		type MessageComponent = NonNullable<ChannelId.Messages.post.Body['components']>[number];
+		type MessageComponent = NonNullable<APIMessage['components']>[number];
 
 		const components: MessageComponent[] = [];
 		if (!settings.buttons) return components;
@@ -214,7 +221,7 @@ export class UserCommand extends Command {
 		return components;
 	}
 
-	private makeEmbedMessage(interaction: Interaction, data: MessageData): ChannelId.Messages.post.Body {
+	private makeEmbedMessage(interaction: Interaction, data: MessageData): RESTPostAPIChannelMessageJSONBody {
 		const name = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageEmbedTitle, data);
 		const embed = new EmbedBuilder()
 			.setColor(SuggestionStatusColors.Unresolved)
@@ -223,7 +230,7 @@ export class UserCommand extends Command {
 		return { embeds: [embed.toJSON()] };
 	}
 
-	private makeContentMessage(interaction: Interaction, data: MessageData): ChannelId.Messages.post.Body {
+	private makeContentMessage(interaction: Interaction, data: MessageData): RESTPostAPIChannelMessageJSONBody {
 		const content = resolveKey(interaction, LanguageKeys.Commands.Suggest.NewMessageContent, data);
 		return { content };
 	}
@@ -274,7 +281,7 @@ export class UserCommand extends Command {
 
 		const response = await interaction.defer({ flags: MessageFlags.Ephemeral });
 
-		const result = await Result.fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
+		const result = await Result.fromAsync(this.container.api.channels.getMessage(settings.channel.toString(), suggestion.messageId.toString()));
 		if (result.isErr()) {
 			await this.container.prisma.suggestion.update({
 				where: { id_guildId: suggestion },
@@ -286,7 +293,7 @@ export class UserCommand extends Command {
 		}
 
 		const message = result.unwrap();
-		let data: ChannelId.MessageId.patch.Body;
+		let data: RESTPostAPIChannelMessageJSONBody;
 		if (message.embeds.length) {
 			const description = await useEmbedContent(rawInput, guildId, settings.channel);
 			data = { embeds: [{ ...message.embeds[0], description }] };
@@ -294,7 +301,7 @@ export class UserCommand extends Command {
 			const content = message.content.slice(0, message.content.indexOf('\n')) + usePlainContent(rawInput);
 			data = { content, allowed_mentions: EmptyMentions };
 		}
-		await ChannelId.MessageId.patch(message.channel_id, message.id, data);
+		await this.container.api.channels.editMessage(message.channel_id, message.id, data);
 
 		const content = resolveUserKey(interaction, LanguageKeys.Commands.Suggest.ModifySuccess, { id });
 		return response.update({ content });

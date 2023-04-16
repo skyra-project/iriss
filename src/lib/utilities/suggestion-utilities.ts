@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
+import type { Snowflake } from '#lib/types/discord';
 import { ensure } from '#lib/utilities/assertions';
 import { getColor, Status } from '#lib/utilities/id-creator';
 import { getGuildId, getMessage } from '#lib/utilities/interactions';
 import { url } from '#lib/utilities/message';
-import { ChannelId, type Snowflake } from '#lib/utilities/rest';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { bold, hyperlink, inlineCode, time } from '@discordjs/builders';
@@ -59,7 +59,7 @@ export async function useReactions(t: TFunction, settings: Guild, message: APIMe
 	const removed: string[] = [];
 	for (const reaction of settings.reactions) {
 		const result = await fromDiscord(
-			ChannelId.MessageId.ReactionId.put(message.channel_id, message.id, getReactionFormat(reaction as SerializedEmoji)),
+			container.api.channels.addMessageReaction(message.channel_id, message.id, getReactionFormat(reaction as SerializedEmoji)),
 			{ ok: useReactionsOk, err: useReactionsErr }
 		);
 
@@ -118,17 +118,13 @@ export async function useThread(interaction: Interactions.Any, id: string | numb
 
 	const name = `${id}-${slug(removeMaskedHyperlinks(input))}`.slice(0, 100);
 	const threadCreationResult = await Result.fromAsync(
-		ChannelId.MessageId.Threads.post(message.channel_id, message.id, {
-			type: ChannelType.GuildPrivateThread,
-			name,
-			auto_archive_duration: 1440 // 1 day,
-		})
+		container.api.threads.create(message.channel_id, { type: ChannelType.PrivateThread, name }, message.id)
 	);
 
 	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
 
 	const thread = threadCreationResult.unwrap();
-	const result = await Result.fromAsync(ChannelId.ThreadMemberId.put(thread.id, interaction.user.id));
+	const result = await Result.fromAsync(container.api.threads.addMember(thread.id, interaction.user.id));
 	const memberAddResult = result.mapErr(() => LanguageKeys.InteractionHandlers.Suggestions.ThreadMemberAddFailure);
 
 	return Result.ok({ thread, memberAddResult });
@@ -156,16 +152,16 @@ export async function useArchive(interaction: Interactions.Any, options: useArch
 
 	const errors: TypedT[] = [];
 	if (message.thread) {
-		const result = await Result.fromAsync(ChannelId.patch(message.thread.id, { archived: true }));
+		const result = await Result.fromAsync(container.api.channels.edit(message.thread.id, { archived: true }));
 		if (result.isErr()) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ArchiveThreadFailure);
 	}
 
 	if (settings.removeReactions) {
-		const result = await Result.fromAsync(ChannelId.MessageId.Reactions.remove(message.channel_id, message.id));
+		const result = await Result.fromAsync(container.api.channels.deleteAllMessageReactions(message.channel_id, message.id));
 		if (result.isErr()) errors.push(LanguageKeys.InteractionHandlers.Suggestions.ReactionRemovalFailure);
 	}
 
-	const messageUpdateResult = await Result.fromAsync(ChannelId.MessageId.patch(channelId, messageId, { components: [] }));
+	const messageUpdateResult = await Result.fromAsync(container.api.channels.editMessage(channelId, messageId, { components: [] }));
 	return messageUpdateResult.match({
 		ok: () => Result.ok({ errors }),
 		err: () => Result.err(LanguageKeys.InteractionHandlers.Suggestions.ArchiveMessageFailure)

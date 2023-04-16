@@ -262,10 +262,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/collection@npm:^1.5.0":
+"@discordjs/collection@npm:^1.4.0, @discordjs/collection@npm:^1.5.0":
   version: 1.5.0
   resolution: "@discordjs/collection@npm:1.5.0"
   checksum: 072043743c5e5ef99033f1c227fd92f437a0665b8f0a5bfa26bacc6610963d03b54c45da0e0116ce30e4612efc52b2db0a0827f79091a135409237722db5400a
+  languageName: node
+  linkType: hard
+
+"@discordjs/core@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@discordjs/core@npm:0.5.0"
+  dependencies:
+    "@discordjs/rest": ^1.6.0
+    "@discordjs/util": ^0.2.0
+    "@discordjs/ws": ^0.7.0
+    "@sapphire/snowflake": ^3.4.0
+    "@vladfrangu/async_event_emitter": ^2.1.4
+    discord-api-types: ^0.37.37
+  checksum: 798374c554885e6cdb3ff36296056d74276b20351085783cf1f5fc4244a51d349096dff1a083823fec6eca7d6fe138c098012e82df5304ec17e1d68352408620
   languageName: node
   linkType: hard
 
@@ -278,7 +292,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/rest@npm:^1.7.0":
+"@discordjs/rest@npm:^1.6.0, @discordjs/rest@npm:^1.7.0":
   version: 1.7.0
   resolution: "@discordjs/rest@npm:1.7.0"
   dependencies:
@@ -298,6 +312,23 @@ __metadata:
   version: 0.2.0
   resolution: "@discordjs/util@npm:0.2.0"
   checksum: 1e6c02a2881c98ccee2ffd34f487b751e1f16bce007e0a3e9fa538170c1ddb3d68e2b1d88c84b3406191ba9dfec3a999a828603a142c359703fc53482269e7fa
+  languageName: node
+  linkType: hard
+
+"@discordjs/ws@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@discordjs/ws@npm:0.7.0"
+  dependencies:
+    "@discordjs/collection": ^1.4.0
+    "@discordjs/rest": ^1.6.0
+    "@discordjs/util": ^0.2.0
+    "@sapphire/async-queue": ^1.5.0
+    "@types/ws": ^8.5.4
+    "@vladfrangu/async_event_emitter": ^2.1.4
+    discord-api-types: ^0.37.35
+    tslib: ^2.5.0
+    ws: ^8.12.1
+  checksum: c71272c2b2fa2bcfad46829e31e859e75100e4257f8fe837cb3bce6594d425d8418e9c5519026a5cc8b110364fdd50f8abb839c229ba61011d561578be93b11d
   languageName: node
   linkType: hard
 
@@ -816,6 +847,7 @@ __metadata:
     "@commitlint/config-conventional": ^17.6.1
     "@discordjs/builders": ^1.6.1
     "@discordjs/collection": ^1.5.0
+    "@discordjs/core": ^0.5.0
     "@prisma/client": ^4.12.0
     "@sapphire/async-queue": ^1.5.0
     "@sapphire/duration": ^1.1.0
@@ -977,6 +1009,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ws@npm:^8.5.4":
+  version: 8.5.4
+  resolution: "@types/ws@npm:8.5.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: fefbad20d211929bb996285c4e6f699b12192548afedbe4930ab4384f8a94577c9cd421acaad163cacd36b88649509970a05a0b8f20615b30c501ed5269038d1
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:^5.58.0":
   version: 5.58.0
   resolution: "@typescript-eslint/eslint-plugin@npm:5.58.0"
@@ -1098,7 +1139,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vladfrangu/async_event_emitter@npm:^2.2.1":
+"@vladfrangu/async_event_emitter@npm:^2.1.4, @vladfrangu/async_event_emitter@npm:^2.2.1":
   version: 2.2.1
   resolution: "@vladfrangu/async_event_emitter@npm:2.2.1"
   checksum: d56c6c9dc0588f5632e5d6ed373fcbcdf5fe6de6cf51dadea86899701fcf53631f41f7473b1f5d9da300bbca20ab9cd192c5c436bb77ce9df9aa60ff59a7b0f2
@@ -1807,7 +1848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.37, discord-api-types@npm:^0.37.38":
+"discord-api-types@npm:^0.37.35, discord-api-types@npm:^0.37.37, discord-api-types@npm:^0.37.38":
   version: 0.37.38
   resolution: "discord-api-types@npm:0.37.38"
   checksum: 58972778639234307ae6c0ce5b841a8a3a29c38116aa9f96051e65a88f6bbc4f1df671c5a985712d816764507308f8ebc97b1c98dad8de7bf756e05819db84ca
@@ -4535,6 +4576,21 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.12.1":
+  version: 8.13.0
+  resolution: "ws@npm:8.13.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 53e991bbf928faf5dc6efac9b8eb9ab6497c69feeb94f963d648b7a3530a720b19ec2e0ec037344257e05a4f35bd9ad04d9de6f289615ffb133282031b18c61c
   languageName: node
   linkType: hard
 

@@ -1,17 +1,18 @@
 import { TempCollection } from '#lib/structures/TempCollection';
 import { has as hasPermissions } from '#lib/utilities/permissions';
-import { ApplicationId, GuildId } from '#lib/utilities/rest';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import type { Interactions } from '@skyra/http-framework';
+import { container, type Interactions } from '@skyra/http-framework';
 import {
 	ApplicationCommandPermissionType,
 	PermissionFlagsBits,
 	type APIApplicationCommand,
-	type APIApplicationCommandPermission
+	type APIApplicationCommandPermission,
+	type RESTGetAPIApplicationCommandsResult,
+	type RESTGetAPIGuildRolesResult
 } from 'discord-api-types/v10';
 
-let commands: ApplicationId.Commands.get.Result;
+let commands: RESTGetAPIApplicationCommandsResult;
 
 export async function has(interaction: Interactions.Any, commandName: string) {
 	// Unreachable, function is used against guild-only commands:
@@ -58,21 +59,22 @@ function hasRole(interaction: Interactions.Any, permissions: APIApplicationComma
 	return determineHasRole(interaction, grants, denies);
 }
 
-const roleCache = new TempCollection<string, GuildId.Roles.get.Result>(30_000, 5_000);
+const roleCache = new TempCollection<string, RESTGetAPIGuildRolesResult>(30_000, 5_000);
 async function determineHasRole(interaction: Interactions.Any, grants: readonly string[], denies: readonly string[]) {
 	const guildId = interaction.guild_id!;
-	const roles = await roleCache.ensureAsync(guildId, (id) => GuildId.Roles.get(id));
+	const roles = await roleCache.ensureAsync(guildId, (id) => container.api.guilds.getRoles(id));
 
 	const owned = roles.filter((role) => grants.includes(role.id) || denies.includes(role.id));
 	const highest = owned.reduce((highest, role) => (role.position > highest.position ? role : highest));
 	return grants.includes(highest.id);
 }
 
+const applicationId = envParseString('DISCORD_CLIENT_ID');
 const commandPermissionsCache = new TempCollection<string, APIApplicationCommandPermission[]>(30_000, 5_000);
 export async function get(guildId: string, commandName: string) {
 	commands ??= await (envIsDefined('REGISTRY_GUILD_ID')
-		? ApplicationId.GuildId.Commands.get(envParseString('REGISTRY_GUILD_ID'))
-		: ApplicationId.Commands.get());
+		? container.api.applicationCommands.getGuildCommands(applicationId, envParseString('REGISTRY_GUILD_ID'))
+		: container.api.applicationCommands.getGlobalCommands(applicationId));
 
 	const command = commands.find((command) => command.name === commandName);
 	if (!command) throw new TypeError(`Found no command under the name of '${commandName}'`);
@@ -82,7 +84,7 @@ export async function get(guildId: string, commandName: string) {
 }
 
 async function makeCall(guildId: string, command: APIApplicationCommand): Promise<APIApplicationCommandPermission[]> {
-	const result = await fromDiscord(ApplicationId.GuildId.CommandId.Permissions.get(guildId, command.id), {
+	const result = await fromDiscord(container.api.applicationCommands.getGuildCommandPermissions(applicationId, guildId, command.id), {
 		ok: [ErrorCodes.UnknownApplicationCommandPermissions]
 	});
 

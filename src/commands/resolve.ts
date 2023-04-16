@@ -1,7 +1,6 @@
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { Status } from '#lib/utilities/id-creator';
 import { url } from '#lib/utilities/message';
-import { ChannelId } from '#lib/utilities/rest';
 import { useArchive, useMessageUpdate } from '#lib/utilities/suggestion-utilities';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
@@ -76,7 +75,7 @@ export class UserCommand extends Command {
 		const { message, settings, guildId } = result.unwrap();
 		const input = options.response ?? resolveKey(interaction, LanguageKeys.Commands.Resolve.NoReason);
 		const body = await useMessageUpdate(interaction, message, action, input, settings);
-		const updateResult = await Result.fromAsync(ChannelId.MessageId.patch(message.channel_id, message.id, body));
+		const updateResult = await Result.fromAsync(this.container.api.channels.editMessage(message.channel_id, message.id, body));
 
 		const key = updateResult.match({
 			ok: () => LanguageKeys.Commands.Resolve.Success,
@@ -96,7 +95,9 @@ export class UserCommand extends Command {
 		const settings = (await this.container.prisma.guild.findUnique({ where: { id: guildId } }))!;
 		if (!settings?.channel) return Result.err(LanguageKeys.Commands.Resolve.NotConfigured);
 
-		const messageResult = await Result.fromAsync(ChannelId.MessageId.get(settings.channel, suggestion.messageId));
+		const messageResult = await Result.fromAsync(
+			this.container.api.channels.getMessage(settings.channel.toString(), suggestion.messageId.toString())
+		);
 		if (messageResult.isErr()) {
 			await this.container.prisma.suggestion.update({ where: { id_guildId: { id, guildId } }, data: { archivedAt: new Date() } });
 			return Result.err(LanguageKeys.Commands.Resolve.SuggestionMessageDeleted);
