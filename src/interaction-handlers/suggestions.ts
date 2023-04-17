@@ -1,8 +1,7 @@
 import type { IntegerString } from '#lib/common/types';
 import { LanguageKeys } from '#lib/i18n/LanguageKeys';
 import { has } from '#lib/utilities/command-permissions';
-import { Id, makeCustomId, Status, type Get, type Values } from '#lib/utilities/id-creator';
-import { ChannelId } from '#lib/utilities/rest';
+import { Id, Status, makeCustomId, type Get, type Values } from '#lib/utilities/id-creator';
 import { useArchive, useThread } from '#lib/utilities/suggestion-utilities';
 import { channelMention } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -122,7 +121,9 @@ export class Handler extends InteractionHandler {
 			...interaction.message.components!.slice(1)
 		];
 
-		const patchResult = await Result.fromAsync(ChannelId.MessageId.patch(interaction.channel.id, interaction.message.id, { components }));
+		const patchResult = await Result.fromAsync(
+			this.container.api.channels.editMessage(interaction.channel.id, interaction.message.id, { components })
+		);
 
 		const t = getSupportedUserLanguageT(interaction);
 		const key = patchResult.match({

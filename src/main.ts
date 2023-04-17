@@ -1,4 +1,5 @@
 import { setup } from '#lib/setup/all';
+import { setupAPI } from '#lib/setup/api';
 import { registerCommands } from '#lib/utilities/register-commands';
 import { envParseInteger, envParseString } from '@skyra/env-utilities';
 import { Client, container } from '@skyra/http-framework';
@@ -12,6 +13,7 @@ await load(new URL('../src/locales', import.meta.url));
 await init({ fallbackLng: 'en-US', returnNull: false, returnEmptyString: false });
 
 const client = new Client();
+setupAPI();
 await client.load();
 
 void registerCommands();
