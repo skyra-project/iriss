@@ -37,7 +37,7 @@
 		"@skyra/logger": "^2.0.0",
 		"@skyra/shared-http-pieces": "^1.0.0",
 		"@skyra/start-banner": "^2.0.0",
-		"discord-api-types": "^0.37.38",
+		"discord-api-types": "^0.37.39",
 		"gradient-string": "^2.0.2",
 		"ioredis": "^5.3.2",
 		"limax": "^4.0.0",

@@ -39,7 +39,7 @@ export function getTextFormat(emoji: SerializedEmoji) {
 }
 
 export function getReactionFormat(emoji: SerializedEmoji) {
-	if (isTwemoji(emoji)) return encodeURIComponent(emoji.slice(1));
+	if (isTwemoji(emoji)) return emoji.slice(1);
 
 	const index = emoji.lastIndexOf('.');
 	if (index === -1) throw new Error(`Invalid SerializedEmoji '${emoji}'`);
