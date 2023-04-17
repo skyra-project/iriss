@@ -14,6 +14,22 @@ import {
 
 let commands: RESTGetAPIApplicationCommandsResult;
 
+export async function getRegisteredCommands() {
+	commands ??= await (envIsDefined('REGISTRY_GUILD_ID')
+		? container.api.applicationCommands.getGuildCommands(applicationId, envParseString('REGISTRY_GUILD_ID'))
+		: container.api.applicationCommands.getGlobalCommands(applicationId));
+
+	return commands;
+}
+
+export async function getRegisteredCommand(name: string) {
+	const commands = await getRegisteredCommands();
+	const command = commands.find((command) => command.name === name);
+	if (command) return command;
+
+	throw new TypeError(`Found no command under the name of '${name}'`);
+}
+
 export async function has(interaction: Interactions.Any, commandName: string) {
 	// Unreachable, function is used against guild-only commands:
 	if (!interaction.guild_id) return false;
@@ -72,13 +88,7 @@ async function determineHasRole(interaction: Interactions.Any, grants: readonly 
 const applicationId = envParseString('DISCORD_CLIENT_ID');
 const commandPermissionsCache = new TempCollection<string, APIApplicationCommandPermission[]>(30_000, 5_000);
 export async function get(guildId: string, commandName: string) {
-	commands ??= await (envIsDefined('REGISTRY_GUILD_ID')
-		? container.api.applicationCommands.getGuildCommands(applicationId, envParseString('REGISTRY_GUILD_ID'))
-		: container.api.applicationCommands.getGlobalCommands(applicationId));
-
-	const command = commands.find((command) => command.name === commandName);
-	if (!command) throw new TypeError(`Found no command under the name of '${commandName}'`);
-
+	const command = await getRegisteredCommand(commandName);
 	const permissions = await commandPermissionsCache.ensureAsync(`${guildId}.${command.id}`, () => makeCall(guildId, command));
 	return { command, permissions };
 }
