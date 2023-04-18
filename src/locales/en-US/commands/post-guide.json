@@ -5,7 +5,7 @@
 	"optionsHideDescription": "Whether or not the guide should be hidden",
 	"optionsTargetName": "target",
 	"optionsTargetDescription": "The user to mention in the message, if any",
-	"message": "To submit a new suggestion, simply use the {{command}} command with {{bot}}, or click the \"Submit a Suggestion\" button attached.\n\nYour message will be posted at {{channel}}.",
+	"message": "To submit a new suggestion, simply use the {{command}} command with {{bot}}, or click the \"Submit a Suggestion\" button attached.\n\nYour message will be posted in {{channel}}.",
 	"buttonSubmit": "Submit a Suggestion",
 	"buttonSupport": "Support Server"
 }
