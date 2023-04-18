@@ -1,0 +1,11 @@
+{
+	"name": "post-gids",
+	"description": "Plaatst een handleiding over het publiceren van nieuwe suggesties",
+	"optionsHideName": "verbergen",
+	"optionsHideDescription": "Of de gids al dan niet verborgen moet worden",
+	"optionsTargetName": "doel",
+	"optionsTargetDescription": "De gebruiker om te vermelden in het bericht, indien van toepassing",
+	"message": "Om een nieuwe suggestie in te dienen, gebruik het {{command}} commando met {{bot}}, of klik op de knop \"Suggestie indienen\".\n\nJe bericht wordt geplaatst in {{channel}}.",
+	"buttonSubmit": "Suggestie indienen",
+	"buttonSupport": "Ondersteunings Server"
+}
