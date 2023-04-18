@@ -2,6 +2,7 @@
 	"name": "показать-руководство",
 	"description": "Показывает руководство по публикации новых предложений",
 	"optionsHideName": "скрыть",
+	"optionsHideDescription": "Скрывать руководство или нет",
 	"optionsTargetName": "пользователь",
 	"optionsTargetDescription": "Упоминаемый в сообщении пользователь, если есть",
 	"buttonSubmit": "Отправить предложение",
