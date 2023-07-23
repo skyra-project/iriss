@@ -30,7 +30,7 @@
 		"@sapphire/async-queue": "^1.5.0",
 		"@sapphire/duration": "^1.1.0",
 		"@sapphire/result": "^2.6.4",
-		"@sapphire/utilities": "^3.12.0",
+		"@sapphire/utilities": "^3.13.0",
 		"@skyra/env-utilities": "^1.2.1",
 		"@skyra/http-framework": "^1.0.3",
 		"@skyra/http-framework-i18n": "^1.0.2",
@@ -44,13 +44,13 @@
 		"tslib": "^2.6.0"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^17.6.6",
-		"@commitlint/config-conventional": "^17.6.6",
+		"@commitlint/cli": "^17.6.7",
+		"@commitlint/config-conventional": "^17.6.7",
 		"@sapphire/eslint-config": "^4.4.3",
 		"@sapphire/prettier-config": "^1.4.5",
-		"@sapphire/ts-config": "^4.0.0",
+		"@sapphire/ts-config": "^4.0.1",
 		"@types/gradient-string": "^1.1.2",
-		"@types/node": "^18.16.19",
+		"@types/node": "^18.17.0",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
 		"cz-conventional-changelog": "^3.3.0",
@@ -93,6 +93,6 @@
 	},
 	"packageManager": "yarn@3.6.1",
 	"volta": {
-		"node": "18.16.1"
+		"node": "18.17.0"
 	}
 }
