@@ -26,7 +26,7 @@
 		"@discordjs/builders": "^1.6.3",
 		"@discordjs/collection": "^1.5.1",
 		"@discordjs/core": "^0.6.0",
-		"@prisma/client": "^4.16.2",
+		"@prisma/client": "^5.0.0",
 		"@sapphire/async-queue": "^1.5.0",
 		"@sapphire/duration": "^1.1.0",
 		"@sapphire/result": "^2.6.4",
@@ -60,7 +60,7 @@
 		"husky": "^8.0.3",
 		"lint-staged": "^13.2.3",
 		"prettier": "^3.0.0",
-		"prisma": "^4.16.2",
+		"prisma": "^5.0.0",
 		"typescript": "^5.1.6"
 	},
 	"resolutions": {
