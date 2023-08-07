@@ -1,1 +1,8 @@
-{}
+{
+	"name": "configuration",
+	"description": "Gérer la configuration de ce serveur",
+	"viewName": "voir",
+	"viewDescription": "Voir la configuration actuelle",
+	"editName": "modifier",
+	"editDescription": "Modifier une valeur de la configuration"
+}
