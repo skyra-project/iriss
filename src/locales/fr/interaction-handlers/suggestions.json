@@ -1,1 +1,12 @@
-{}
+{
+	"modalFieldPlaceholderConsider": "Nous envisageons de le faire parce que...",
+	"modalFieldPlaceholderDeny": "Je crains que nous ne le refusions car...",
+	"archiveSuccess": "La suggestion a été archivée avec succès.",
+	"archiveThreadFailure": "Je n'ai pas pu archiver le fil de discussion, désolé !",
+	"reactionRemovalFailure": "La suppression de toutes les réactions a échoué, vous devrez peut-être les supprimer manuellement.",
+	"archiveMessageFailure": "Je n'ai pas pu archiver le message, il a peut-être été supprimé.",
+	"threadChannelCreationFailure": "Je n'ai pas pu créer le fil de discussion, il faudrait peut-être contacter un administrateur pour me donner des autorisations, ou un modérateur pour créer un fil de discussion, désolé ! 😢",
+	"threadMessageUpdateSuccess": "Création du fil de discussion {{channel}} et suppression du bouton de fil de discussion dans le message de suggestion.",
+	"threadMessageUpdateFailure": "J'ai réussi à créer le fil {{channel}}, mais j'ai eu un petit problème de mise à jour du message de suggestion, ce qui m'a empêché de supprimer le bouton. 😦",
+	"threadMemberAddFailure": "De plus, je n'ai pas réussi à vous ajouter au fil de discussion, il se peut donc que vous deviez vous joindre manuellement. Désolé pour la gêne occasionnée.😦"
+}
