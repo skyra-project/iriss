@@ -350,7 +350,7 @@ export async function useThread(
 
 	const name = `${id}-${slug(removeMaskedHyperlinks(input))}`.slice(0, 100);
 	const threadCreationResult = await Result.fromAsync(
-		container.api.threads.create(message.channel_id, { type: ChannelType.PrivateThread, name }, message.id)
+		container.api.channels.createThread(message.channel_id, { type: ChannelType.PublicThread, name }, message.id)
 	);
 
 	if (threadCreationResult.isErr()) return err(LanguageKeys.InteractionHandlers.Suggestions.ThreadChannelCreationFailure);
