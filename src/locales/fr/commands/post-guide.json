@@ -1,1 +1,11 @@
-{}
+{
+	"name": "post-guide",
+	"description": "Publication d'un guide sur la manière de publier de nouvelles suggestions",
+	"optionsHideName": "cacher",
+	"optionsHideDescription": "Si le guide doit être caché ou non",
+	"optionsTargetName": "cible",
+	"optionsTargetDescription": "L'utilisateur à mentionner dans le message, le cas échéant",
+	"message": "Pour soumettre une nouvelle suggestion, il suffit d'utiliser la commande {{command}} avec {{bot}}, ou de cliquer sur le bouton \"Soumettre une suggestion\" ci-joint.\n\nVotre message sera publié dans {{channel}}.",
+	"buttonSubmit": "Soumettre une suggestion",
+	"buttonSupport": "Serveur de support"
+}
