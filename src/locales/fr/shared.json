@@ -1,1 +1,6 @@
-{}
+{
+	"enabled": "Activé",
+	"disabled": "Désactivé",
+	"unset": "Non-défini",
+	"none": "Aucun"
+}
