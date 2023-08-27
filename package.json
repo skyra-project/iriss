@@ -26,7 +26,7 @@
 		"@discordjs/builders": "^1.6.4",
 		"@discordjs/collection": "^1.5.2",
 		"@discordjs/core": "^1.0.1",
-		"@prisma/client": "^5.1.1",
+		"@prisma/client": "^5.2.0",
 		"@sapphire/async-queue": "^1.5.0",
 		"@sapphire/duration": "^1.1.0",
 		"@sapphire/result": "^2.6.4",
@@ -50,18 +50,18 @@
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^4.0.1",
 		"@types/gradient-string": "^1.1.2",
-		"@types/node": "^18.17.6",
-		"@typescript-eslint/eslint-plugin": "^6.4.0",
-		"@typescript-eslint/parser": "^6.4.0",
+		"@types/node": "^18.17.11",
+		"@typescript-eslint/eslint-plugin": "^6.4.1",
+		"@typescript-eslint/parser": "^6.4.1",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.47.0",
+		"eslint": "^8.48.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.0",
 		"husky": "^8.0.3",
-		"lint-staged": "^14.0.0",
+		"lint-staged": "^14.0.1",
 		"prettier": "^3.0.2",
-		"prisma": "^5.1.1",
-		"typescript": "^5.1.6"
+		"prisma": "^5.2.0",
+		"typescript": "^5.2.2"
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
@@ -91,7 +91,7 @@
 			"@typescript-eslint/no-base-to-string": "off"
 		}
 	},
-	"packageManager": "yarn@3.6.2",
+	"packageManager": "yarn@3.6.3",
 	"volta": {
 		"node": "18.17.1"
 	}
