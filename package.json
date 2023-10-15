@@ -19,8 +19,7 @@
 		"test": "eslint --ext ts src",
 		"lint": "eslint --fix --ext ts src",
 		"format": "prettier --write --loglevel=warn \"src/**/*.{js,ts,json}\"",
-		"update": "yarn upgrade-interactive",
-		"postinstall": "husky install .github/husky"
+		"update": "yarn upgrade-interactive"
 	},
 	"dependencies": {
 		"@discordjs/builders": "^1.6.4",
@@ -57,7 +56,6 @@
 		"eslint": "^8.48.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.0",
-		"husky": "^8.0.3",
 		"lint-staged": "^15.0.1",
 		"prettier": "^3.0.3",
 		"prisma": "^5.2.0",

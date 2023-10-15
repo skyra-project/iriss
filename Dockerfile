@@ -6,7 +6,7 @@ FROM node:18-alpine as base
 
 WORKDIR /usr/src/app
 
-ENV HUSKY=0
+ENV YARN_DISABLE_GIT_HOOKS=1
 ENV CI=true
 ENV LOG_LEVEL=info
 ENV FORCE_COLOR=true
@@ -17,8 +17,6 @@ COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node .yarn/ .yarn/
-
-RUN sed -i 's/"postinstall": "husky install .github\/husky"/"postinstall": ""/' ./package.json
 
 ENTRYPOINT ["dumb-init", "--"]
 
