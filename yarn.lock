@@ -620,7 +620,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/integrations@npm:^7.66.0":
+"@sentry/integrations@npm:^7.74.1":
   version: 7.74.1
   resolution: "@sentry/integrations@npm:7.74.1"
   dependencies:
@@ -633,7 +633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^7.66.0":
+"@sentry/node@npm:^7.74.1":
   version: 7.74.1
   resolution: "@sentry/node@npm:7.74.1"
   dependencies:
@@ -676,7 +676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/http-framework-i18n@npm:^1.0.4, @skyra/http-framework-i18n@npm:^1.1.0":
+"@skyra/http-framework-i18n@npm:^1.1.0":
   version: 1.1.0
   resolution: "@skyra/http-framework-i18n@npm:1.1.0"
   dependencies:
@@ -690,7 +690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/http-framework@npm:^1.1.1, @skyra/http-framework@npm:^1.2.0":
+"@skyra/http-framework@npm:^1.2.0":
   version: 1.2.0
   resolution: "@skyra/http-framework@npm:1.2.0"
   dependencies:
@@ -737,7 +737,7 @@ __metadata:
     "@skyra/http-framework": ^1.2.0
     "@skyra/http-framework-i18n": ^1.1.0
     "@skyra/logger": ^2.0.1
-    "@skyra/shared-http-pieces": ^1.0.5
+    "@skyra/shared-http-pieces": ^1.1.0
     "@skyra/start-banner": ^2.0.0
     "@types/gradient-string": ^1.1.4
     "@types/node": ^20.8.7
@@ -768,19 +768,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/shared-http-pieces@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@skyra/shared-http-pieces@npm:1.0.5"
+"@skyra/shared-http-pieces@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@skyra/shared-http-pieces@npm:1.1.0"
   dependencies:
     "@discordjs/builders": ^1.6.5
     "@discordjs/collection": ^1.5.3
-    "@sentry/integrations": ^7.66.0
-    "@sentry/node": ^7.66.0
-    "@skyra/http-framework": ^1.1.1
-    "@skyra/http-framework-i18n": ^1.0.4
-    discord-api-types: ^0.37.56
+    "@sentry/integrations": ^7.74.1
+    "@sentry/node": ^7.74.1
+    "@skyra/http-framework": ^1.2.0
+    "@skyra/http-framework-i18n": ^1.1.0
+    discord-api-types: ^0.37.60
     tslib: ^2.6.2
-  checksum: 4eb74663dbdecb70b09e5d73afd03459657ae5d8e13e37991b0939fde76e274262264625aa00ab8b6cc533535529c263d0cdb5ddbe400d4b90efaf900f94d0a8
+  checksum: fd7d4c02cc0b62857b5030a31d7b9984a3783df2711d01ee6a3e8da65ebd306ab405172853e4c7d01ef553a1a1b45c024cf14f9e30d800314111210bac4f02f6
   languageName: node
   linkType: hard
 
@@ -1742,7 +1742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.56, discord-api-types@npm:^0.37.60":
+"discord-api-types@npm:^0.37.60":
   version: 0.37.60
   resolution: "discord-api-types@npm:0.37.60"
   checksum: d5361e37f1fa3b06964db476a4a150fbfdcfdfe0f2b46c7eb3d225caf7128a83c2c726d35aaddce93eba07ac1d819e329bd7fcb0f8988aa51b56a307119312c4
