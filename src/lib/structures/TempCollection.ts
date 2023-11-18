@@ -4,7 +4,7 @@ import { clearInterval, setInterval } from 'node:timers';
 export class TempCollection<K, V> {
 	public readonly maxAge: number;
 	public readonly sweepInterval: number;
-	private timer: NodeJS.Timer | null = null;
+	private timer: NodeJS.Timeout | null = null;
 	private readonly entries = new Collection<K, { expiresAt: number; value: V }>();
 
 	public constructor(maxAge: number, sweepInterval: number) {
