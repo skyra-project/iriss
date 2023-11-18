@@ -18,47 +18,47 @@
 		"start": "node --enable-source-maps dist/main.js",
 		"test": "eslint --ext ts src",
 		"lint": "eslint --fix --ext ts src",
-		"format": "prettier --write --loglevel=warn \"src/**/*.{js,ts,json}\"",
+		"format": "prettier --write --log-level=warn \"src/**/*.{js,ts,json}\"",
 		"update": "yarn upgrade-interactive"
 	},
 	"dependencies": {
-		"@discordjs/builders": "^1.6.5",
+		"@discordjs/builders": "^1.7.0",
 		"@discordjs/collection": "^1.5.3",
-		"@discordjs/core": "^1.0.1",
-		"@prisma/client": "^5.5.2",
+		"@discordjs/core": "^1.1.1",
+		"@prisma/client": "^5.6.0",
 		"@sapphire/async-queue": "^1.5.0",
 		"@sapphire/duration": "^1.1.0",
 		"@sapphire/result": "^2.6.4",
 		"@sapphire/utilities": "^3.13.0",
 		"@skyra/env-utilities": "^1.2.1",
-		"@skyra/http-framework": "^1.2.0",
+		"@skyra/http-framework": "^1.2.1",
 		"@skyra/http-framework-i18n": "^1.1.0",
-		"@skyra/logger": "^2.0.1",
+		"@skyra/logger": "^2.0.2",
 		"@skyra/shared-http-pieces": "^1.1.0",
 		"@skyra/start-banner": "^2.0.0",
-		"discord-api-types": "^0.37.61",
+		"discord-api-types": "^0.37.63",
 		"gradient-string": "^2.0.2",
 		"ioredis": "^5.3.2",
 		"limax": "^4.1.0",
 		"tslib": "^2.6.2"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^18.2.0",
-		"@commitlint/config-conventional": "^18.1.0",
+		"@commitlint/cli": "^18.4.2",
+		"@commitlint/config-conventional": "^18.4.2",
 		"@sapphire/eslint-config": "^5.0.2",
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.0",
-		"@types/gradient-string": "^1.1.4",
-		"@types/node": "^20.8.9",
-		"@typescript-eslint/eslint-plugin": "^6.9.0",
-		"@typescript-eslint/parser": "^6.9.0",
+		"@types/gradient-string": "^1.1.5",
+		"@types/node": "^20.9.1",
+		"@typescript-eslint/eslint-plugin": "^6.11.0",
+		"@typescript-eslint/parser": "^6.11.0",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.52.0",
+		"eslint": "^8.54.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.1",
-		"lint-staged": "^15.0.2",
-		"prettier": "^3.0.3",
-		"prisma": "^5.5.2",
+		"lint-staged": "^15.1.0",
+		"prettier": "^3.1.0",
+		"prisma": "^5.6.0",
 		"typescript": "^5.2.2"
 	},
 	"resolutions": {
@@ -89,8 +89,8 @@
 			"@typescript-eslint/no-base-to-string": "off"
 		}
 	},
-	"packageManager": "yarn@4.0.1",
+	"packageManager": "yarn@4.0.2",
 	"volta": {
-		"node": "18.17.1"
+		"node": "20.9.0"
 	}
 }
