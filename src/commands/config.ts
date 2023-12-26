@@ -5,7 +5,7 @@ import type { Guild } from '@prisma/client';
 import { Duration, Time } from '@sapphire/duration';
 import { err, ok, Result } from '@sapphire/result';
 import { isNullish, isNullishOrZero } from '@sapphire/utilities';
-import { Command, RegisterCommand, RegisterSubCommand, type TransformedArguments } from '@skyra/http-framework';
+import { Command, RegisterCommand, RegisterSubcommand, type TransformedArguments } from '@skyra/http-framework';
 import {
 	applyLocalizedBuilder,
 	createSelectMenuChoiceName,
@@ -23,7 +23,7 @@ const Root = LanguageKeys.Commands.Config;
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
-	@RegisterSubCommand((builder) =>
+	@RegisterSubcommand((builder) =>
 		applyLocalizedBuilder(builder, Root.Edit)
 			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyAutoThread, Root.EditOptionsAutoThreadDescription))
 			.addBooleanOption((input) => applyLocalizedBuilder(input, Root.KeyButtons, Root.EditOptionsButtonsDescription))
@@ -66,7 +66,7 @@ export class UserCommand extends Command {
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
-	@RegisterSubCommand((builder) =>
+	@RegisterSubcommand((builder) =>
 		applyLocalizedBuilder(builder, Root.Reset).addStringOption((input) =>
 			applyLocalizedBuilder(input, Root.ResetOptionsKey)
 				.addChoices(
@@ -121,7 +121,7 @@ export class UserCommand extends Command {
 		}
 	}
 
-	@RegisterSubCommand((builder) => applyLocalizedBuilder(builder, Root.View))
+	@RegisterSubcommand((builder) => applyLocalizedBuilder(builder, Root.View))
 	public async runView(interaction: Command.ChatInputInteraction) {
 		const id = BigInt(interaction.guild_id!);
 		const settings = await this.container.prisma.guild.findUnique({ where: { id } });

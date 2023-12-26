@@ -4,7 +4,7 @@ import { url } from '#lib/utilities/message';
 import { useArchive, useMessageUpdate } from '#lib/utilities/suggestion-utilities';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
-import { Command, RegisterCommand, RegisterSubCommand } from '@skyra/http-framework';
+import { Command, RegisterCommand, RegisterSubcommand } from '@skyra/http-framework';
 import { applyLocalizedBuilder, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
 import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
@@ -14,7 +14,7 @@ import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 		.setDMPermission(false)
 )
 export class UserCommand extends Command {
-	@RegisterSubCommand((builder) =>
+	@RegisterSubcommand((builder) =>
 		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Archive).addIntegerOption((option) =>
 			applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true)
 		)
@@ -38,7 +38,7 @@ export class UserCommand extends Command {
 		return interaction.reply({ content, flags: MessageFlags.Ephemeral });
 	}
 
-	@RegisterSubCommand((builder) =>
+	@RegisterSubcommand((builder) =>
 		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Accept)
 			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
 			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
@@ -47,7 +47,7 @@ export class UserCommand extends Command {
 		return this.sharedHandler(interaction, options, Status.Accept);
 	}
 
-	@RegisterSubCommand((builder) =>
+	@RegisterSubcommand((builder) =>
 		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Consider)
 			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
 			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
@@ -56,7 +56,7 @@ export class UserCommand extends Command {
 		return this.sharedHandler(interaction, options, Status.Consider);
 	}
 
-	@RegisterSubCommand((builder) =>
+	@RegisterSubcommand((builder) =>
 		applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.Deny)
 			.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsId).setRequired(true))
 			.addStringOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Resolve.OptionsResponse))
