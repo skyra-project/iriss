@@ -1,7 +1,7 @@
 {
 	"name": "config",
 	"description": "Gestiona la configuración para este servidor",
-	"viewName": "mostrar",
+	"viewName": "ver",
 	"viewDescription": "Muestra la configuración actual",
 	"viewContent": "**Configuración actual**:\n\nCanal: {{channel}}\nAuto-hilo: {{autoThread}}\nBotones: {{buttons}}\nCompacto: {{compact}}\nEnfriamiento: {{cooldown}}\nHistorial de Actualización: {{displayUpdateHistory}}\nInsertado: {{embed}}\nReacciones: {{reactions}}\n\n> **Nota**: Para actualizarlos, puedes usar `/config editar`.",
 	"editName": "editar",
