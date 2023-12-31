@@ -9,7 +9,7 @@
 	"considerDescription": "Marca una sugerencia de este servidor como considerada",
 	"denyName": "rechazar",
 	"denyDescription": "Marca una sugerencia de este servidor como rechazada",
-	"optionsIdName": "id",
+	"optionsIdName": "identificador",
 	"optionsIdDescription": "El identificador de la sugerencia a actualizar",
 	"optionsResponseName": "respuesta",
 	"optionsResponseDescription": "La respuesta a añadir al mensaje de sugerencia",
