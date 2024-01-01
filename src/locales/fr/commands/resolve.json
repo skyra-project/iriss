@@ -1,1 +1,21 @@
-{}
+{
+	"name": "résoudre",
+	"description": "Résout les suggestions de ce serveur",
+	"archiveName": "archiver",
+	"archiveDescription": "Archiver une suggestion de ce serveur",
+	"acceptName": "accepter",
+	"acceptDescription": "Marquer une suggestion de ce serveur comme acceptée",
+	"considerName": "considérer",
+	"considerDescription": "Marquer une suggestion de ce serveur comme prise en compte",
+	"denyName": "refuser",
+	"denyDescription": "Marquer une suggestion de ce serveur comme refusée",
+	"optionsIdName": "id",
+	"optionsIdDescription": "L'ID de la suggestion à mettre à jour",
+	"optionsResponseName": "réponse",
+	"optionsResponseDescription": "La réponse à ajouter au message de suggestion",
+	"notConfigured": "Ce serveur n'a pas de canal de suggestions configuré, veuillez le configurer avec `/config edit channel #channel` ou demander à un administrateur de le faire.",
+	"suggestionArchived": "La suggestion est archivée et ne peut pas être modifiée.",
+	"suggestionIdDoesNotExist": "L'identifiant de la suggestion que vous avez spécifié n'existe pas.",
+	"suggestionMessageDeleted": "Le message de la suggestion a été supprimé et a donc été automatiquement archivé.",
+	"archiveSuccess": "Archivage réussi de la suggestion {{id}}."
+}

@@ -1,0 +1,11 @@
+{
+	"name": "publicar-guía",
+	"description": "Publica una guía sobre cómo publicar nuevas sugerencias",
+	"optionsHideName": "ocultar",
+	"optionsHideDescription": "Si ocultar la guía o no",
+	"optionsTargetName": "objetivo",
+	"optionsTargetDescription": "El usuario a mencionar en el mensaje, si lo hubiera",
+	"message": "Para enviar una nueva sugerencia, simplemente use el comando {{command}} con {{bot}}, o haga clic en el botón \"Enviar una sugerencia\" adjunto debajo.\n\nSu mensaje será publicado en {{channel}}.",
+	"buttonSubmit": "Enviar una sugerencia",
+	"buttonSupport": "Servidor de soporte"
+}
