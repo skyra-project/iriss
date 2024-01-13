@@ -1,4 +1,10 @@
 {
+	"missingResolvePermissions": "Vous devez avoir le droit d'exécuter /resolve pour pouvoir utiliser ce bouton.",
+	"modalTitle": "Suggestion #{{id}}",
+	"modalFieldLabelAccept": "Message (Accepté)",
+	"modalFieldLabelConsider": "Message (à considérer)",
+	"modalFieldLabelDeny": "Message (Refusé)",
+	"modalFieldPlaceholderAccept": "Il me semble que c'est une bonne chose parce que...",
 	"modalFieldPlaceholderConsider": "Nous envisageons de le faire parce que...",
 	"modalFieldPlaceholderDeny": "Je crains que nous ne le refusions car...",
 	"archiveSuccess": "La suggestion a été archivée avec succès.",
