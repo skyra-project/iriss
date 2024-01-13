@@ -1,1 +1,7 @@
-{}
+{
+	"contentAccepted": "Accepté par {{tag}} le {{time}}",
+	"contentConsidered": "Considéré par {{tag}} le {{time}}",
+	"contentDenied": "Refusé par {{tag}} le {{time}}",
+	"updateFailure": "Je n'ai pas réussi à mettre à jour le contenu du message, désolé ! 😢",
+	"updateSuccess": "Le message a été mis à jour avec succès !"
+}
