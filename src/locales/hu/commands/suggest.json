@@ -16,6 +16,7 @@
 	"modifySuccess": "Javaslata sikeresen frissítve (`#{{id}}`)!",
 	"cooldown": "A lehűlési idő miatt le van tiltva ennek a parancsnak a használata a következő időpontig: {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} javasolt ekkor: {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.tag}} ({{user.id}})",
 	"newFailedToSend": "Sajnálom, de nem tudtam üzenetet küldeni a(z) {{channel}} csatornán. Kérlek, jelentse ezt a problémát egy adminisztrátornak. 😦",
 	"newNotConfigured": "Ez a szerver még nem konfigurálta a javaslatok csatornáját. A beállításhoz forduljon a adminisztrátorokhoz!",
 	"newSuccess": "A javaslatot sikeresen elküldtük (`#{{id}}`)!",
