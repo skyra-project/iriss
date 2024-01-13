@@ -33,8 +33,7 @@ export interface MessageData {
 	timestamp: `<t:${bigint}>`;
 	user: {
 		id: string;
-		username: string;
-		discriminator: string;
+		tag: string;
 		mention: `<@${string}>`;
 		avatar: string;
 	};

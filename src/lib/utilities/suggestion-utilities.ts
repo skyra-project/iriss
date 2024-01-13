@@ -8,7 +8,7 @@ import { url } from '#lib/utilities/message';
 import { ErrorCodes, fromDiscord } from '#lib/utilities/result-utilities';
 import { getReactionFormat, getTextFormat, type SerializedEmoji } from '#lib/utilities/serialized-emoji';
 import { millisecondsToSeconds } from '#lib/utilities/time';
-import { displayAvatarURL } from '#lib/utilities/user';
+import { getDisplayAvatar, getTag } from '#lib/utilities/user';
 import { EmbedBuilder, TimestampStyles, bold, channelMention, hyperlink, inlineCode, time, userMention } from '@discordjs/builders';
 import { Collection } from '@discordjs/collection';
 import type { Guild } from '@prisma/client';
@@ -120,10 +120,9 @@ export async function createSuggestion(
 export function getUserData(user: APIUser) {
 	return {
 		id: user.id,
-		username: user.username,
-		discriminator: user.discriminator,
+		tag: getTag(user),
 		mention: userMention(user.id),
-		avatar: displayAvatarURL(user)
+		avatar: getDisplayAvatar(user)
 	} satisfies MessageUserData;
 }
 
@@ -472,7 +471,7 @@ function useMessageUpdateContent(interaction: Interactions.Any, message: APIMess
 	input = usePlainContent(input);
 
 	const { user } = interaction;
-	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
+	const header = resolveKey(interaction, makeHeader(action), { tag: getTag(user), time: time() });
 	const formattedHeader = `${bold(header)}:\n`;
 	const { content } = message;
 	if (settings.displayUpdateHistory) {
@@ -488,7 +487,7 @@ async function useMessageUpdateEmbed(interaction: Interactions.Any, message: API
 	input = await useEmbedContent(input, settings.id, settings.channel ?? ensure(interaction.channel?.id));
 
 	const { user } = interaction;
-	const header = resolveKey(interaction, makeHeader(action), { tag: `${user.username}#${user.discriminator}`, time: time() });
+	const header = resolveKey(interaction, makeHeader(action), { tag: getTag(user), time: time() });
 	const [embed] = message.embeds;
 
 	const fields = settings.displayUpdateHistory //
