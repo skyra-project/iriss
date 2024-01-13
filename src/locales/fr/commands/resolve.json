@@ -17,5 +17,8 @@
 	"suggestionArchived": "La suggestion est archivée et ne peut pas être modifiée.",
 	"suggestionIdDoesNotExist": "L'identifiant de la suggestion que vous avez spécifié n'existe pas.",
 	"suggestionMessageDeleted": "Le message de la suggestion a été supprimé et a donc été automatiquement archivé.",
-	"archiveSuccess": "Archivage réussi de la suggestion {{id}}."
+	"archiveSuccess": "Archivage réussi de la suggestion {{id}}.",
+	"noReason": "*Aucune raison n'est précisée*",
+	"success": "Mise à jour réussie de la suggestion {{id}}.",
+	"failure": "Je n'ai pas pu mettre à jour la suggestion {{id}}, désolé !"
 }
