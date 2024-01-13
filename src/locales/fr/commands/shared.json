@@ -1,1 +1,3 @@
-{}
+{
+	"infoEmbedDescription": "Iriss est un bot axé sur la gestion des suggestions. Il s'agit d'un bot HTTP uniquement construit sur [Skyra HTTP Framework] (https://www.npmjs.com/package/@skyra/http-framework)."
+}
