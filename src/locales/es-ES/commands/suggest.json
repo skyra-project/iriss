@@ -16,7 +16,7 @@
 	"modifySuccess": "¡Actualizada correctamente su sugerencia (`#{{id}}`)!",
 	"cooldown": "Usted no puede usar este comando debido al tiempo de enfriamiento hasta {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ha sugerido el {{timestamp}}**:\n{{message}}",
-	"newMessageEmbedTitle": "#{{id}} - {{user.tag}} ({{user.id}})",
+	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Lo siento, pero no pude publicar un mensaje en {{channel}}. Por favor, reporta este problema a un administrador. 😦",
 	"newNotConfigured": "Este servidor no ha configurado el canal de sugerencias todavía. ¡Por favor, contacte con los administradores para configurarlo!",
 	"newSuccess": "¡Enviada con éxito su sugerencia (`#{{id}}`)!",
