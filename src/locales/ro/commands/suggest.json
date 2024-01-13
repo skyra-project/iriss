@@ -16,7 +16,6 @@
 	"modifySuccess": "Sugestie actualizată cu succes (`#{{id}}`)!",
 	"cooldown": "Ești blocat din folosirea acestei comanzi din cauza perioadei de așteptare care ține până la {{time}}.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} a sugerat la {{timestamp}}**:\n{{message}}",
-	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Îmi pare rău, dar nu am putut posta un mesaj în {{channel}}. Te rog să raportezi această problemă unui administrator. 😦",
 	"newNotConfigured": "Acest server nu a configurat încă un canal de sugestii. Te rog să contactezi administratorii serverului pentru a-l configura!",
 	"newSuccess": "Sugestie ta a fost trimisă cu succes (`#{{id}}`)!",
