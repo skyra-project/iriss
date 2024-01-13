@@ -16,7 +16,6 @@
 	"modifySuccess": "Je suggestie is succesvol gewijzigd (`#{{id}}`)!",
 	"cooldown": "Tot {{time}} ben je niet in staat dit commando te gebruiken als gevolg van een cooldown.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} suggereert op {{timestamp}}**:\n{{message}}",
-	"newMessageEmbedTitle": "#{{id}} - {{user.username}}#{{user.discriminator}} ({{user.id}})",
 	"newFailedToSend": "Het spijt me, maar ik kon geen bericht plaatsen in {{channel}}. Rapporteer dit probleem alstublieft aan een beheerder. 😦",
 	"newNotConfigured": "Deze server heeft het suggestiekanaal nog niet geconfigureerd. Neem contact op met de beheerders om deze in te stellen!",
 	"newSuccess": "Je suggestie is succesvol verstuurd (`#{{id}}`)!",
