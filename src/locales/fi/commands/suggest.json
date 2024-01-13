@@ -16,6 +16,7 @@
 	"modifySuccess": "Ehdotuksesi päivitettiin onnistuneesti (`#{{id}}`)!",
 	"cooldown": "Olet estetty käyttämästä tätä komentoa jäähyn vuoksi {{time}} asti.",
 	"newMessageContent": "[`#{{id}}`] **{{user.mention}} ehdotti aikana {{timestamp}}**:\n{{message}}",
+	"newMessageEmbedTitle": "#{{id}} - {{user.tag}} ({{user.id}})",
 	"newFailedToSend": "Pahoitteluni, mutta en voinut lähettää viestiä kanavalle {{channel}}. Ilmoitathan tästä ylläpitäjälle. 😦",
 	"newNotConfigured": "Palvelimelle ei ole vielä määritetty ehdotuskanavaa. Otathan yhteyttä ylläpitäjiin sen määrittämiseksi!",
 	"newSuccess": "Ehdotuksesi on lähetetty onnistuneesti (`#{{id}}`)!",
