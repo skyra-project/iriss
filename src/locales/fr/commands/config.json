@@ -10,7 +10,6 @@
 	"editOptionsAutoThreadDescription": "Indique s'il faut créer automatiquement un fil pour les nouvelles suggestions (par défaut : Faux)",
 	"editOptionsButtonsDescription": "Ajout ou non des boutons de gestion dans les nouveaux messages de suggestion (par défaut : Vrai)",
 	"editOptionsCompactDescription": "Utiliser ou non le mode compact pour les nouveaux messages de suggestion (par défaut : Faux)",
-	"editOptionsCooldownDescription": "Si elle est définie, la période de refroidissement pour les utilisateurs avant qu'ils ne puissent envoyer une autre suggestion (par défaut : Aucune)",
 	"editOptionsDisplayUpdateHistoryDescription": "Afficher ou non les 3 dernières réponses sur les suggestions (par défaut : Faux)",
 	"editOptionsEmbedDescription": "Utiliser ou non les embeds dans les nouveaux messages de suggestion (par défaut : Vrai)",
 	"editOptionsReactionsDescription": "S'il est défini, les réactions pour les nouvelles suggestions, jusqu'à 3, séparées par un espace",
