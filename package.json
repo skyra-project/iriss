@@ -63,6 +63,7 @@
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
+		"discord-api-types": "^0.37.69",
 		"minimist": "^1.2.8"
 	},
 	"engines": {
