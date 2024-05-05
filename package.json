@@ -22,9 +22,9 @@
 		"update": "yarn upgrade-interactive"
 	},
 	"dependencies": {
-		"@discordjs/builders": "^1.7.0",
-		"@discordjs/collection": "^2.0.0",
-		"@discordjs/core": "^1.1.1",
+		"@discordjs/builders": "^1.8.1",
+		"@discordjs/collection": "^2.1.0",
+		"@discordjs/core": "^1.2.0",
 		"@prisma/client": "^5.13.0",
 		"@sapphire/async-queue": "^1.5.2",
 		"@sapphire/duration": "^1.1.2",
@@ -49,9 +49,9 @@
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
 		"@types/gradient-string": "^1.1.6",
-		"@types/node": "^20.12.7",
-		"@typescript-eslint/eslint-plugin": "^7.7.1",
-		"@typescript-eslint/parser": "^7.7.1",
+		"@types/node": "^20.12.8",
+		"@typescript-eslint/eslint-plugin": "^7.8.0",
+		"@typescript-eslint/parser": "^7.8.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -90,7 +90,7 @@
 			"@typescript-eslint/no-base-to-string": "off"
 		}
 	},
-	"packageManager": "yarn@4.1.1",
+	"packageManager": "yarn@4.2.1",
 	"volta": {
 		"node": "20.12.2"
 	}
