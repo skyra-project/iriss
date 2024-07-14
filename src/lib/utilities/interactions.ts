@@ -7,5 +7,5 @@ export function getGuildId(interaction: Interactions.Any): string {
 }
 
 export function getMessage(interaction: Interactions.Any): APIMessage | null {
-	return 'message' in interaction ? interaction.message ?? null : null;
+	return 'message' in interaction ? (interaction.message ?? null) : null;
 }
