@@ -1,1 +1,15 @@
-{}
+{
+	"name": "avaliação",
+	"description": "Encerra uma sugestão e diz a consideração",
+	"archiveName": "arquivar",
+	"archiveDescription": "Arquiva uma sugestão",
+	"acceptName": "aprovada",
+	"acceptDescription": "Marca uma sugestão como aprovada",
+	"considerName": "em-consideração",
+	"considerDescription": "Marca uma sugestão como em consideração",
+	"denyName": "negada",
+	"denyDescription": "Marca uma sugestão como negada",
+	"optionsIdName": "id",
+	"optionsIdDescription": "ID da sugestão a atualizar",
+	"optionsResponseName": "resposta"
+}
