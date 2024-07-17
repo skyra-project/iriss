@@ -11,5 +11,13 @@
 	"denyDescription": "Marca uma sugestão como negada",
 	"optionsIdName": "id",
 	"optionsIdDescription": "ID da sugestão a atualizar",
-	"optionsResponseName": "resposta"
+	"optionsResponseName": "resposta",
+	"optionsResponseDescription": "Resposta a ser adicionada na sugestão",
+	"suggestionArchived": "Sugestões arquivadas não podem ser editadas.",
+	"suggestionIdDoesNotExist": "O ID da sugestão que você especificou não existe.",
+	"suggestionMessageDeleted": "A sugestão foi apagada, portanto, foi automaticamente arquivada.",
+	"archiveSuccess": "Sucesso em arquivar a sugestão {{id}}.",
+	"noReason": "*Nenhum motivo especificado*",
+	"success": "Sucesso em atualizar a sugestão {{id}}.",
+	"failure": "Desculpe, mas eu não consegui atualizar a sugestão {{id}}!"
 }
