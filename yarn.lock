@@ -500,10 +500,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/async-queue@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@sapphire/async-queue@npm:1.5.2"
-  checksum: 10/55e0785997ec34479509c134a3ffc5e9dc0c183b56b1cb95b0505539972a538b0bff8922c1d051ebeee227b000f79f1f499f1897229a117644833375093aa7b3
+"@sapphire/async-queue@npm:^1.5.2, @sapphire/async-queue@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "@sapphire/async-queue@npm:1.5.3"
+  checksum: 10/6a9fdeeaa3e4591c057cb67b5aae86d9c94326dcb0ea9e8e3b8eba8cbcfee2a0f672d837a51e3da2c838f9861a6117fced2b0ac8e1b719bc5caf1bbbee781fb3
   languageName: node
   linkType: hard
 
@@ -583,10 +583,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/utilities@npm:^3.15.1, @sapphire/utilities@npm:^3.15.2, @sapphire/utilities@npm:^3.16.2":
-  version: 3.16.2
-  resolution: "@sapphire/utilities@npm:3.16.2"
-  checksum: 10/9801f26cc7c37f1c4d56231d2e3967e7ac072d037dbc11b577d1ecf09fe7c6e4141bd1d1a10490f3c51eeeaf81eac0373502d41366dc68627b490597ea6d1ebe
+"@sapphire/utilities@npm:^3.15.1, @sapphire/utilities@npm:^3.15.2, @sapphire/utilities@npm:^3.17.0":
+  version: 3.17.0
+  resolution: "@sapphire/utilities@npm:3.17.0"
+  checksum: 10/cfdf604be06e1e4f7fd26f10c198586eef9012001b83dcc8178886d88145334db06e164725aadf5bfb065b39ecdefaa8286c695576e7674b5a3bc9280ce02e0d
   languageName: node
   linkType: hard
 
@@ -712,13 +712,13 @@ __metadata:
     "@discordjs/collection": "npm:^2.1.0"
     "@discordjs/core": "npm:^1.2.0"
     "@prisma/client": "npm:^5.17.0"
-    "@sapphire/async-queue": "npm:^1.5.2"
+    "@sapphire/async-queue": "npm:^1.5.3"
     "@sapphire/duration": "npm:^1.1.2"
     "@sapphire/eslint-config": "npm:^5.0.5"
     "@sapphire/prettier-config": "npm:^2.0.0"
     "@sapphire/result": "npm:^2.6.6"
     "@sapphire/ts-config": "npm:^5.0.1"
-    "@sapphire/utilities": "npm:^3.16.2"
+    "@sapphire/utilities": "npm:^3.17.0"
     "@skyra/env-utilities": "npm:^1.3.0"
     "@skyra/http-framework": "npm:^2.1.0"
     "@skyra/http-framework-i18n": "npm:^1.2.0"
@@ -726,11 +726,11 @@ __metadata:
     "@skyra/shared-http-pieces": "npm:^1.2.2"
     "@skyra/start-banner": "npm:^2.0.1"
     "@types/gradient-string": "npm:^1.1.6"
-    "@types/node": "npm:^20.14.11"
+    "@types/node": "npm:^20.14.13"
     "@typescript-eslint/eslint-plugin": "npm:^7.13.1"
     "@typescript-eslint/parser": "npm:^7.13.1"
     cz-conventional-changelog: "npm:^3.3.0"
-    discord-api-types: "npm:^0.37.92"
+    discord-api-types: "npm:^0.37.93"
     eslint: "npm:^8.57.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
@@ -796,12 +796,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.14.11":
-  version: 20.14.11
-  resolution: "@types/node@npm:20.14.11"
+"@types/node@npm:*, @types/node@npm:^20.14.13":
+  version: 20.14.13
+  resolution: "@types/node@npm:20.14.13"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/344e1ce1ed16c86ed1c4209ab4d1de67db83dd6b694a6fabe295c47144dde2c58dabddae9f39a0a2bdd246e95f8d141ccfe848e464884b48b8918df4f7788025
+  checksum: 10/749160b6bd9866e6169cb1a222e75aaf81da3868af1fda1e1e66d33c7e182be381f98a42b7d231fddf470f6389f2052ee842e776b3fdc677df798b933617866d
   languageName: node
   linkType: hard
 
@@ -1539,10 +1539,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.92":
-  version: 0.37.92
-  resolution: "discord-api-types@npm:0.37.92"
-  checksum: 10/94666e98e4b74d51d443c0ea6b4704aceeed55681a7362a6bc0770fa7509d0cf7035d68f47c9cbd8f1c9c08fe7ba27f4d0edf074476591c6302e72e3547f5102
+"discord-api-types@npm:^0.37.93":
+  version: 0.37.93
+  resolution: "discord-api-types@npm:0.37.93"
+  checksum: 10/2e7e10806cd497e502df7eed9d23dca0b1dce0a95d993fbcebf7e3c0248a795c5816ca6b326bb15bbb9a1c119f941e0866c8858ea17912c19a72b4af8e82cd99
   languageName: node
   linkType: hard
 

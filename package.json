@@ -26,17 +26,17 @@
 		"@discordjs/collection": "^2.1.0",
 		"@discordjs/core": "^1.2.0",
 		"@prisma/client": "^5.17.0",
-		"@sapphire/async-queue": "^1.5.2",
+		"@sapphire/async-queue": "^1.5.3",
 		"@sapphire/duration": "^1.1.2",
 		"@sapphire/result": "^2.6.6",
-		"@sapphire/utilities": "^3.16.2",
+		"@sapphire/utilities": "^3.17.0",
 		"@skyra/env-utilities": "^1.3.0",
 		"@skyra/http-framework": "^2.1.0",
 		"@skyra/http-framework-i18n": "^1.2.0",
 		"@skyra/logger": "^2.0.3",
 		"@skyra/shared-http-pieces": "^1.2.2",
 		"@skyra/start-banner": "^2.0.1",
-		"discord-api-types": "^0.37.92",
+		"discord-api-types": "^0.37.93",
 		"gradient-string": "^2.0.2",
 		"ioredis": "^5.4.1",
 		"limax": "^4.1.0",
@@ -49,7 +49,7 @@
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
 		"@types/gradient-string": "^1.1.6",
-		"@types/node": "^20.14.11",
+		"@types/node": "^20.14.13",
 		"@typescript-eslint/eslint-plugin": "^7.13.1",
 		"@typescript-eslint/parser": "^7.13.1",
 		"cz-conventional-changelog": "^3.3.0",
@@ -63,7 +63,7 @@
 	},
 	"resolutions": {
 		"ansi-regex": "^5.0.1",
-		"discord-api-types": "^0.37.92",
+		"discord-api-types": "^0.37.93",
 		"minimist": "^1.2.8"
 	},
 	"engines": {
@@ -92,6 +92,6 @@
 	},
 	"packageManager": "yarn@4.3.1",
 	"volta": {
-		"node": "20.15.1"
+		"node": "20.16.0"
 	}
 }
