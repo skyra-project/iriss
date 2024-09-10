@@ -6,12 +6,12 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
 import { Result } from '@sapphire/result';
 import { Command, RegisterCommand, RegisterSubcommand } from '@skyra/http-framework';
 import { applyLocalizedBuilder, resolveKey, resolveUserKey } from '@skyra/http-framework-i18n';
-import { MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
+import { InteractionContextType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
 	applyLocalizedBuilder(builder, LanguageKeys.Commands.Resolve.RootName, LanguageKeys.Commands.Resolve.RootDescription) //
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-		.setDMPermission(false)
+		.setContexts(InteractionContextType.Guild)
 )
 export class UserCommand extends Command {
 	@RegisterSubcommand((builder) =>

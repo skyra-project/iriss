@@ -6,7 +6,7 @@ import { isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import { Command, RegisterCommand, type TransformedArguments } from '@skyra/http-framework';
 import { applyLocalizedBuilder, getSupportedLanguageT, getSupportedUserLanguageT, resolveUserKey } from '@skyra/http-framework-i18n';
-import { ButtonStyle, MessageFlags } from 'discord-api-types/v10';
+import { ButtonStyle, InteractionContextType, MessageFlags } from 'discord-api-types/v10';
 
 const Root = LanguageKeys.Commands.PostGuide;
 
@@ -14,7 +14,7 @@ const Root = LanguageKeys.Commands.PostGuide;
 	applyLocalizedBuilder(builder, Root.RootName, Root.RootDescription)
 		.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsHide))
 		.addUserOption((option) => applyLocalizedBuilder(option, Root.OptionsTarget))
-		.setDMPermission(false)
+		.setContexts(InteractionContextType.Guild)
 )
 export class UserCommand extends Command {
 	private suggestId: string | null = null;

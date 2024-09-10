@@ -5,7 +5,7 @@ import { Result } from '@sapphire/result';
 import { cutText, isNullishOrEmpty } from '@sapphire/utilities';
 import { Command, RegisterCommand, RegisterMessageCommand, type TransformedArguments } from '@skyra/http-framework';
 import { applyLocalizedBuilder, applyNameLocalizedBuilder, resolveUserKey } from '@skyra/http-framework-i18n';
-import { MessageFlags, PermissionFlagsBits, type RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/v10';
+import { InteractionContextType, MessageFlags, PermissionFlagsBits, type RESTPostAPIChannelMessageJSONBody } from 'discord-api-types/v10';
 
 @RegisterCommand((builder) =>
 	applyLocalizedBuilder(builder, LanguageKeys.Commands.Suggest.RootName, LanguageKeys.Commands.Suggest.RootDescription) //
@@ -13,7 +13,7 @@ import { MessageFlags, PermissionFlagsBits, type RESTPostAPIChannelMessageJSONBo
 			applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsSuggestion).setMaxLength(2048).setRequired(true)
 		)
 		.addIntegerOption((option) => applyLocalizedBuilder(option, LanguageKeys.Commands.Suggest.OptionsId))
-		.setDMPermission(false)
+		.setContexts(InteractionContextType.Guild)
 )
 export class UserCommand extends Command {
 	public override chatInputRun(interaction: Command.ChatInputInteraction, options: Options) {
@@ -25,7 +25,7 @@ export class UserCommand extends Command {
 	@RegisterMessageCommand((builder) =>
 		applyNameLocalizedBuilder(builder, LanguageKeys.Commands.Suggest.PostAsSuggestionName)
 			.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-			.setDMPermission(false)
+			.setContexts(InteractionContextType.Guild)
 	)
 	public messageContextRun(interaction: Command.MessageInteraction, options: TransformedArguments.Message) {
 		const input = options.message.content;

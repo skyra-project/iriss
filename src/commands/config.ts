@@ -13,14 +13,14 @@ import {
 	resolveUserKey,
 	type TFunction
 } from '@skyra/http-framework-i18n';
-import { ChannelType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
+import { ChannelType, InteractionContextType, MessageFlags, PermissionFlagsBits } from 'discord-api-types/v10';
 
 const Root = LanguageKeys.Commands.Config;
 
 @RegisterCommand((builder) =>
 	applyLocalizedBuilder(builder, Root.RootName, Root.RootDescription)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-		.setDMPermission(false)
+		.setContexts(InteractionContextType.Guild)
 )
 export class UserCommand extends Command {
 	@RegisterSubcommand((builder) =>
