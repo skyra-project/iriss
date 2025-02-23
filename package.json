@@ -25,7 +25,7 @@
 		"@discordjs/builders": "^1.10.1",
 		"@discordjs/collection": "^2.1.1",
 		"@discordjs/core": "^2.0.1",
-		"@prisma/client": "^6.3.1",
+		"@prisma/client": "^6.4.1",
 		"@sapphire/async-queue": "^1.5.5",
 		"@sapphire/duration": "^1.1.4",
 		"@sapphire/result": "^2.7.2",
@@ -49,7 +49,7 @@
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
 		"@types/gradient-string": "^1.1.6",
-		"@types/node": "^22.13.4",
+		"@types/node": "^22.13.5",
 		"@typescript-eslint/eslint-plugin": "^7.13.1",
 		"@typescript-eslint/parser": "^7.13.1",
 		"cz-conventional-changelog": "^3.3.0",
@@ -57,8 +57,8 @@
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-prettier": "^5.2.3",
 		"lint-staged": "^15.4.3",
-		"prettier": "^3.5.1",
-		"prisma": "^6.3.1",
+		"prettier": "^3.5.2",
+		"prisma": "^6.4.1",
 		"typescript": "~5.4.5"
 	},
 	"resolutions": {
